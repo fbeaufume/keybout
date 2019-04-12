@@ -1,2 +1,14 @@
-# keybout
-Multiplayer keyboard racing game based on Angular, WebSocket, Spring Boot and Kotlin 
+# Keybout
+
+Keybout started as a sample WebSocket application, then evolved to a simple
+web based multiplayer game where opponents have to quickly catch words by typing them.
+
+The first version started in 2014 and used JavaScript, WebSocket, Java EE 7, Java and Maven.
+
+This second version is a full rewrite and uses Angular, TypeScript, WebSocket, Spring Boot, Kotlin and Maven.
+
+The application is under development and **not working yet**.
+
+## Usage
+
+Prerequisites: Node.js 10+, Java 8+, Maven 3.5+.
