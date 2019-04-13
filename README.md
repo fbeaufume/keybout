@@ -11,4 +11,6 @@ The application is under development and **not working yet**.
 
 ## Usage
 
-Prerequisites: Node.js 10+, Java 8+, Maven 3.5+.
+Prerequisites: Node.js 10+, Angular CLI 7 (install with `npm install -g @angular/cli`), Java 8+, Maven 3.5+.
+
+To start the frontend, run `ng serve` in `keybout-frontend`.
