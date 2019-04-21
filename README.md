@@ -16,3 +16,6 @@ Prerequisites: Node.js 10+, Angular CLI 7 (install with `npm install -g @angular
 To start the frontend, run `ng serve` in `keybout-frontend`.
 
 To start the backend, run `mvn spring-boot:run` in `keybout-backend`.
+
+To build a single fat jar containing the whole application, run `mvn package` from the home folder
+then use `keybout-backend/target/keybout-backend.jar`.
