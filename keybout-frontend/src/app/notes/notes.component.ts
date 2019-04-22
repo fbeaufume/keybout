@@ -11,8 +11,14 @@ export class NotesComponent implements OnInit {
 
   notes = NOTES;
 
+  selectedNote: Note;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onSelect(note: Note):void {
+    this.selectedNote = note;
   }
 }

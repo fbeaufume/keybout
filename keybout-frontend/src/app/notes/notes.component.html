@@ -1,6 +1,16 @@
 <h2>My notes</h2>
 <ul class="notes">
-  <li *ngFor="let note of notes">
+  <li *ngFor="let note of notes" [class.selected]="note === selectedNote" (click)="onSelect(note)">
     <span class="badge">{{note.id}}</span> {{note.message}}
   </li>
 </ul>
+
+<div *ngIf="selectedNote">
+  <h2>Note details</h2>
+  <div><span>ID: </span>{{selectedNote.id}}</div>
+  <div>
+    <label>name:
+      <input [(ngModel)]="selectedNote.message" placeholder="name"/>
+    </label>
+  </div>
+</div>
