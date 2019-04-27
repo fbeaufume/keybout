@@ -5,12 +5,4 @@
   </li>
 </ul>
 
-<div *ngIf="selectedNote">
-  <h2>Note details</h2>
-  <div><span>ID: </span>{{selectedNote.id}}</div>
-  <div>
-    <label>name:
-      <input [(ngModel)]="selectedNote.message" placeholder="name"/>
-    </label>
-  </div>
-</div>
+<app-note-detail [note]="selectedNote"></app-note-detail>

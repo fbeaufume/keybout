@@ -1,0 +1,9 @@
+<div *ngIf="note">
+  <h2>Note details</h2>
+  <div><span>ID: </span>{{note.id}}</div>
+  <div>
+    <label>name:
+      <input [(ngModel)]="note.message" placeholder="name"/>
+    </label>
+  </div>
+</div>
