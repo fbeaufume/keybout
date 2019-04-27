@@ -1,4 +1,4 @@
-import {Note} from './note';
+import { Note } from './note';
 
 export const NOTES: Note[] = [
   {id: '1', message: 'Note 1'},
