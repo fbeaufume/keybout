@@ -2,8 +2,9 @@
   <h2>Note details</h2>
   <div><span>ID: </span>{{note.id}}</div>
   <div>
-    <label>name:
+    <label>Name:
       <input [(ngModel)]="note.message" placeholder="name"/>
     </label>
   </div>
+  <button (click)="goBack()">Go back</button>
 </div>

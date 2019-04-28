@@ -1,4 +1,4 @@
 export class Note {
-  id: string;
+  id: number;
   message: string;
 }

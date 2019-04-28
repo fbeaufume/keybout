@@ -1,8 +1,8 @@
-<h2>My notes</h2>
+<h2>All notes</h2>
 <ul class="notes">
-  <li *ngFor="let note of notes" [class.selected]="note === selectedNote" (click)="onSelect(note)">
-    <span class="badge">{{note.id}}</span> {{note.message}}
+  <li *ngFor="let note of notes">
+    <a routerLink="/detail/{{note.id}}">
+      <span class="badge">{{note.id}}</span> {{note.message}}
+    </a>
   </li>
 </ul>
-
-<app-note-detail [note]="selectedNote"></app-note-detail>

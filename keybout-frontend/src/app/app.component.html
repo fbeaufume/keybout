@@ -1,4 +1,8 @@
 <h1>{{ title }}</h1>
 <hr/>
-<app-notes></app-notes>
+<nav>
+  <a routerLink="/dashboard">Top notes</a>
+  <a routerLink="/notes">All notes</a>
+</nav>
+<router-outlet></router-outlet>
 <app-messages></app-messages>
