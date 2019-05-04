@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NoteSearchComponent } from './note-search.component';
+import { TopComponent } from './top.component';
 
-describe('NoteSearchComponent', () => {
-  let component: NoteSearchComponent;
-  let fixture: ComponentFixture<NoteSearchComponent>;
+describe('TopComponent', () => {
+  let component: TopComponent;
+  let fixture: ComponentFixture<TopComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NoteSearchComponent ]
+      declarations: [ TopComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NoteSearchComponent);
+    fixture = TestBed.createComponent(TopComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

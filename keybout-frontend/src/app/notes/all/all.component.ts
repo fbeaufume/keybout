@@ -3,11 +3,11 @@ import {Note} from '../note';
 import {NoteService} from '../note.service';
 
 @Component({
-  selector: 'app-notes',
-  templateUrl: './notes.component.html',
-  styleUrls: ['./notes.component.css']
+  selector: 'app-all',
+  templateUrl: './all.component.html',
+  styleUrls: ['./all.component.css']
 })
-export class NotesComponent implements OnInit {
+export class AllComponent implements OnInit {
 
   notes: Note[];
 

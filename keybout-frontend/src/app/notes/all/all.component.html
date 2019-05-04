@@ -9,7 +9,7 @@
 </div>
 <ul class="notes">
   <li *ngFor="let note of notes">
-    <a routerLink="/detail/{{note.id}}">
+    <a routerLink="/notes/detail/{{note.id}}">
       <span class="badge">{{note.id}}</span> {{note.message}}
     </a>
     <button class="delete" title="delete note" (click)="deleteNote(note)">x</button>

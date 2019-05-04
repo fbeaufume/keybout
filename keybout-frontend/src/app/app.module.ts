@@ -5,20 +5,20 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NotesComponent } from './notes/notes.component';
-import { NoteDetailComponent } from './note-detail/note-detail.component';
-import { MessagesComponent } from './messages/messages.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { NoteSearchComponent } from './note-search/note-search.component';
+import { AllComponent } from './notes/all/all.component';
+import { DetailComponent } from './notes/detail/detail.component';
+import { MessagesComponent } from './notes/messages/messages.component';
+import { TopComponent } from './notes/top/top.component';
+import { SearchComponent } from './notes/search/search.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotesComponent,
-    NoteDetailComponent,
+    AllComponent,
+    DetailComponent,
     MessagesComponent,
-    DashboardComponent,
-    NoteSearchComponent
+    TopComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

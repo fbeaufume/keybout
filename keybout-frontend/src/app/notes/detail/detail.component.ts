@@ -5,11 +5,11 @@ import { Location } from '@angular/common';
 import { NoteService } from '../note.service';
 
 @Component({
-  selector: 'app-note-detail',
-  templateUrl: './note-detail.component.html',
-  styleUrls: ['./note-detail.component.css']
+  selector: 'app-detail',
+  templateUrl: './detail.component.html',
+  styleUrls: ['./detail.component.css']
 })
-export class NoteDetailComponent implements OnInit {
+export class DetailComponent implements OnInit {
 
   @Input() note: Note;
 

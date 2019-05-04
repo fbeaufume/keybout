@@ -10,11 +10,11 @@ import { Note } from '../note';
 import { NoteService } from '../note.service';
 
 @Component({
-  selector: 'app-note-search',
-  templateUrl: './note-search.component.html',
-  styleUrls: [ './note-search.component.css' ]
+  selector: 'app-search',
+  templateUrl: './search.component.html',
+  styleUrls: [ './search.component.css' ]
 })
-export class NoteSearchComponent implements OnInit {
+export class SearchComponent implements OnInit {
   notes$: Observable<Note[]>;
   private searchTerms = new Subject<string>();
 
