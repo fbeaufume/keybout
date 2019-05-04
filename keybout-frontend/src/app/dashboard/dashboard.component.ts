@@ -18,6 +18,6 @@ export class DashboardComponent implements OnInit {
 
   getNotes(): void {
     this.noteService.getNotes()
-      .subscribe(notes => this.notes = notes.slice(0, 3));
+      .subscribe(notes => this.notes = notes.slice(0, 4));
   }
 }

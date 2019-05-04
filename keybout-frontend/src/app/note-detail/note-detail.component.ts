@@ -28,6 +28,10 @@ export class NoteDetailComponent implements OnInit {
     this.noteService.getNote(id).subscribe(note => this.note = note);
   }
 
+  save(): void {
+    this.noteService.updateNote(this.note).subscribe(() => this.goBack());
+  }
+
   goBack(): void {
     this.location.back();
   }
