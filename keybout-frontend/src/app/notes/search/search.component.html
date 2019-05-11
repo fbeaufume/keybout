@@ -1,13 +1,12 @@
 <div id="search-component">
-  <h4>Note search</h4>
+  <h4>Search</h4>
 
-  <input #searchBox id="search-box" (input)="search(searchBox.value)" />
+  <input class="form-control mb-2 mr-sm-2" #searchBox (input)="search(searchBox.value)">
+<!--  <input #searchBox id="search-box" (input)="search(searchBox.value)" />-->
 
-  <ul class="search-result">
-    <li *ngFor="let note of notes$ | async" >
-      <a routerLink="/notes/detail/{{note.id}}">
-        {{note.message}}
-      </a>
-    </li>
+  <ul class="list-group">
+    <a routerLink="/notes/detail/{{note.id}}" *ngFor="let note of notes$ | async" class="list-group-item list-group-item-action">
+      {{note.message}}
+    </a>
   </ul>
 </div>

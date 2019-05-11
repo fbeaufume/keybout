@@ -1,11 +1,7 @@
 <div *ngIf="note">
-  <h2>Note details</h2>
-  <div><span>ID: </span>{{note.id}}</div>
-  <div>
-    <label>Name:
-      <input [(ngModel)]="note.message" placeholder="name"/>
-    </label>
-  </div>
-  <button (click)="save()">Save</button>
-  <button (click)="goBack()">Back</button>
+  <h2>Note {{note.id}} details</h2>
+  <input class="form-control mb-2 mr-sm-2" [(ngModel)]="note.message"/>
+  <button class="btn btn-primary" (click)="save()">Save</button>
+  &nbsp;
+  <button class="btn btn-primary" (click)="goBack()">Back</button>
 </div>

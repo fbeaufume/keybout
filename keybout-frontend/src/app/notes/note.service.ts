@@ -23,7 +23,7 @@ export class NoteService {
 
   getNotes(): Observable<Note[]> {
     return this.http.get<Note[]>(this.notesUrl).pipe(
-      tap(_ => this.log('fetched notes')),
+      tap(_ => this.log('Fetched notes')),
       catchError(this.handleError<Note[]>('getNotes', []))
     );
   }
@@ -31,21 +31,21 @@ export class NoteService {
   getNote(id: number): Observable<Note> {
     const url = `${this.notesUrl}/${id}`;
     return this.http.get<Note>(url).pipe(
-      tap(_ => this.log(`fetched note id=${id}`)),
+      tap(_ => this.log(`Fetched note ${id}`)),
       catchError(this.handleError<Note>(`getNote id=${id}`))
     );
   }
 
   updateNote(note: Note): Observable<any> {
     return this.http.put(this.notesUrl, note, httpOptions).pipe(
-      tap(_ => this.log(`updated note id=${note.id}`)),
+      tap(_ => this.log(`Updated note ${note.id}`)),
       catchError(this.handleError<any>('updateNote'))
     );
   }
 
   addNote(note: Note): Observable<Note> {
     return this.http.post<Note>(this.notesUrl, note, httpOptions).pipe(
-      tap((newNote: Note) => this.log(`added note id=${newNote.id}`)),
+      tap((newNote: Note) => this.log(`Added note ${newNote.id}`)),
       catchError(this.handleError<Note>('addNote'))
     );
   }
@@ -55,7 +55,7 @@ export class NoteService {
     const url = `${this.notesUrl}/${id}`;
 
     return this.http.delete<Note>(url, httpOptions).pipe(
-      tap(_ => this.log(`deleted note id=${id}`)),
+      tap(_ => this.log(`Deleted note ${id}`)),
       catchError(this.handleError<Note>('deleteNote'))
     );
   }
@@ -65,7 +65,7 @@ export class NoteService {
       return of([]);
     }
     return this.http.get<Note[]>(`${this.notesUrl}/?message=${term}`).pipe(
-      tap(_ => this.log(`found notes matching "${term}"`)),
+      tap(_ => this.log(`Found notes matching "${term}"`)),
       catchError(this.handleError<Note[]>('searchNotes', []))
     );
   }
@@ -80,7 +80,7 @@ export class NoteService {
     return (error: any): Observable<T> => {
       console.error(error); // log to console instead
 
-      this.log(`${operation} failed: ${error.message}`);
+      this.log(`Operation '${operation}' failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
@@ -88,6 +88,6 @@ export class NoteService {
   }
 
   private log(message: string) {
-    this.messageService.add(`NoteService: ${message}`);
+    this.messageService.add(message);
   }
 }

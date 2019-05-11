@@ -1,17 +1,11 @@
 <h2>All notes</h2>
-<div>
-  <label>Note message:
-    <input #noteMessage/>
-  </label>
-  <button (click)="addNote(noteMessage.value); noteMessage.value=''">
-    add
-  </button>
-</div>
-<ul class="notes">
-  <li *ngFor="let note of notes">
-    <a routerLink="/notes/detail/{{note.id}}">
-      <span class="badge">{{note.id}}</span> {{note.message}}
-    </a>
-    <button class="delete" title="delete note" (click)="deleteNote(note)">x</button>
-  </li>
+
+<input class="form-control mb-2 mr-sm-2" #noteMessage>
+<button class="btn btn-primary mb-2" (click)="addNote(noteMessage.value); noteMessage.value=''">Add</button>
+
+<ul class="list-group">
+  <a routerLink="/notes/detail/{{note.id}}" *ngFor="let note of notes" class="list-group-item list-group-item-action">
+    {{note.message}}
+    <span class="float-right"><button class="btn btn-primary btn-sm" (click)="deleteNote(note)">Delete</button></span>
+  </a>
 </ul>

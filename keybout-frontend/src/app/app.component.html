@@ -1,8 +1,21 @@
-<h1>{{ title }}</h1>
-<hr/>
-<nav>
-  <a routerLink="/notes/top">Top notes</a>
-  <a routerLink="/notes/all">All notes</a>
+<nav class="navbar navbar-expand-lg dark bg-dark">
+  <a class="navbar-brand" href="#">Keybout</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/notes/top">Top notes</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/notes/all">All notes</a>
+      </li>
+    </ul>
+  </div>
 </nav>
+<br>
 <router-outlet></router-outlet>
+<br>
 <app-messages></app-messages>

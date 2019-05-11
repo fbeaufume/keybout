@@ -1,9 +1,16 @@
 <h2>Top notes</h2>
+
 <div class="grid grid-pad">
-  <a *ngFor="let note of notes" class="col-1-4" routerLink="/notes/detail/{{note.id}}">
-    <div class="module note">
-      <h4>{{note.message}}</h4>
-    </div>
-  </a>
+  <div class="card-deck">
+    <a *ngFor="let note of notes" class="col-1-4" routerLink="/notes/detail/{{note.id}}">
+      <div class="card text-white bg-secondary mb-3" style="max-width: 20rem;">
+        <div class="card-header">Note {{note.id}}</div>
+        <div class="card-body">
+          <p class="card-text">{{note.message}}</p>
+        </div>
+      </div>
+    </a>
+  </div>
 </div>
+
 <app-search></app-search>
