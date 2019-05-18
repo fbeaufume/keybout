@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@RequestMapping("/api/notes")
 class NoteController {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
@@ -16,7 +17,7 @@ class NoteController {
             4 to Note(4, "Message 4"),
             5 to Note(5, "Message 5"))
 
-    @GetMapping("/api/notes")
+    @GetMapping
     fun getNotes(@RequestParam(required = false) message: String?): Collection<Note> {
         return if (message == null) {
             map.values
@@ -26,7 +27,7 @@ class NoteController {
         }
     }
 
-    @GetMapping("/api/notes/{id}")
+    @GetMapping("/{id}")
     fun getNote(@PathVariable id: Int): Note? {
         return map[id]
     }
@@ -43,7 +44,7 @@ class NoteController {
         map[note.id] = note
     }
 
-    @DeleteMapping("/api/notes/{id}")
+    @DeleteMapping("/{id}")
     fun deleteNote(@PathVariable id: Int) {
         map.remove(id)
     }
