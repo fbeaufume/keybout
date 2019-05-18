@@ -33,8 +33,10 @@ export class AllComponent implements OnInit {
       });
   }
 
-  deleteNote(note: Note): void {
+  deleteNote(note: Note, event): void {
     this.notes = this.notes.filter(n => n !== note);
     this.noteService.deleteNote(note).subscribe();
+    event.preventDefault()
+    event.stopPropagation();
   }
 }
