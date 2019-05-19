@@ -23,8 +23,8 @@
             <form class="form-inline">
                 <div class="form-group">
                     <label for="connect">WebSocket connection:</label>
-                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
-                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                    <button id="connect" class="btn btn-primary" type="submit">Connect</button>
+                    <button id="disconnect" class="btn btn-primary" type="submit" disabled="disabled">Disconnect
                     </button>
                 </div>
             </form>
@@ -35,7 +35,7 @@
                     <label for="name">What is your name?</label>
                     <input type="text" id="name" class="form-control" placeholder="Your name here...">
                 </div>
-                <button id="send" class="btn btn-default" type="submit">Send</button>
+                <button id="send" class="btn btn-primary" type="submit">Send</button>
             </form>
         </div>
     </div>
@@ -76,8 +76,8 @@
         stompClient.connect({}, function (frame) {
             setConnected(true);
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/chat', function (greeting) {
-                showGreeting(JSON.parse(greeting.body).content);
+            stompClient.subscribe('/topic/chat', function (message) {
+                showGreeting(JSON.parse(message.body).name);
             });
         });
     }
