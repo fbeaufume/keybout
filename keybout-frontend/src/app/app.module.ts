@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { PlayComponent } from './play/play.component';
 import { AllComponent } from './notes/all/all.component';
 import { DetailComponent } from './notes/detail/detail.component';
 import { MessagesComponent } from './notes/messages/messages.component';
@@ -14,6 +15,7 @@ import { SearchComponent } from './notes/search/search.component';
 @NgModule({
   declarations: [
     AppComponent,
+    PlayComponent,
     AllComponent,
     DetailComponent,
     MessagesComponent,
