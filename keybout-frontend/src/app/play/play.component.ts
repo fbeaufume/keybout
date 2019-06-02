@@ -14,6 +14,10 @@ export class PlayComponent implements OnInit {
 
   userName: string;
 
+  static log(message: string) {
+    console.log(`PlayComponent: ${message}`);
+  }
+
   constructor() {
   }
 
@@ -32,15 +36,11 @@ export class PlayComponent implements OnInit {
         this.socket.send(`connect ${this.userName}`);
       };
 
-      this.socket.onmessage= m => {
+      this.socket.onmessage = m => {
         PlayComponent.log(`Received '${m.data}'`);
         PlayComponent.log('Identified');
         this.status = 'IDENTIFIED';
-      }
+      };
     }
-  }
-
-  static log(message: string) {
-    console.log(`PlayComponent: ${message}`);
   }
 }

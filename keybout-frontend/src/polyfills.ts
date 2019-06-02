@@ -63,4 +63,4 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  */
 
 // To fix "ReferenceError: global is not defined" because of "browser-crypto.js" when using SockJS
-(window as any).global = window
+(window as any).global = window;
