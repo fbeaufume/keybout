@@ -50,8 +50,7 @@ class PlayController : TextWebSocketHandler() {
                 session.attributes[NAME] = name
                 updateState(session, ClientState.IDENTIFIED)
                 sendMessage(session, GamesListNotification())
-            }
-            else {
+            } else {
                 sendMessage(session, UsedNameNotification())
             }
         }
