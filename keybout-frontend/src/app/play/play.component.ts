@@ -1,46 +1,29 @@
 import {Component, OnInit} from '@angular/core';
-import * as SockJS from 'sockjs-client';
+import {PlayService} from "./play.service";
 
 @Component({
   selector: 'app-play',
   templateUrl: './play.component.html',
   styleUrls: ['./play.component.css']
 })
-export class PlayComponent implements OnInit {
+export class PlayComponent {
 
-  status = 'NOT_CONNECTED';
-
-  socket: SockJS;
-
-  userName: string;
-
-  static log(message: string) {
-    console.log(`PlayComponent: ${message}`);
+  constructor(public playService: PlayService) {
   }
 
-  constructor() {
+  get userName(): string {
+    return this.playService.userName;
   }
 
-  ngOnInit() {
+  set userName(value: string) {
+    this.playService.userName = value;
+  }
+
+  get state(): string {
+    return this.playService.state;
   }
 
   connect() {
-    if (this.status === 'NOT_CONNECTED') {
-      this.socket = new SockJS('/api/websocket');
-      PlayComponent.log('Connecting');
-
-      this.socket.onopen = () => {
-        this.status = 'CONNECTED';
-        PlayComponent.log('Connected');
-
-        this.socket.send(`connect ${this.userName}`);
-      };
-
-      this.socket.onmessage = m => {
-        PlayComponent.log(`Received '${m.data}'`);
-        PlayComponent.log('Identified');
-        this.status = 'IDENTIFIED';
-      };
-    }
+    this.playService.connect();
   }
 }
