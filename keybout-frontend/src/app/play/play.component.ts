@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {PlayService} from "./play.service";
+import {ClientState, PlayService} from "./play.service";
 
 @Component({
   selector: 'app-play',
@@ -19,8 +19,12 @@ export class PlayComponent {
     this.playService.userName = value;
   }
 
-  get state(): string {
+  get state(): ClientState {
     return this.playService.state;
+  }
+
+  get errorMessage(): string {
+    return this.playService.errorMessage;
   }
 
   connect() {

@@ -1,11 +1,7 @@
 package com.adeliosys.keybout.controller
 
-import com.adeliosys.keybout.model.Action
-import com.adeliosys.keybout.model.ClientState
+import com.adeliosys.keybout.model.*
 import com.adeliosys.keybout.model.Constants.ACTION_CONNECT
-import com.adeliosys.keybout.model.GameDescriptor
-import com.adeliosys.keybout.model.GamesListNotification
-import com.adeliosys.keybout.model.UsedNameNotification
 import com.google.gson.Gson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -37,7 +33,7 @@ class PlayController : TextWebSocketHandler() {
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
         logger.info("Opened connection '{}'", session.id)
-        updateState(session, ClientState.OPENED)
+        updateState(session, ClientState.UNIDENTIFIED)
     }
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
@@ -45,13 +41,18 @@ class PlayController : TextWebSocketHandler() {
 
         val action = Action(message.payload)
         if (action.command == ACTION_CONNECT) {
-            val name = action.arguments[0]
-            if (users.add(name)) {
-                session.attributes[NAME] = name
-                updateState(session, ClientState.IDENTIFIED)
-                sendMessage(session, GamesListNotification())
+            val name = action.arguments.getOrElse(0) { "" }
+
+            if (name.isEmpty()) {
+                sendMessage(session, IncorrectNameNotification())
             } else {
-                sendMessage(session, UsedNameNotification())
+                if (users.add(name)) {
+                    session.attributes[NAME] = name
+                    updateState(session, ClientState.IDENTIFIED)
+                    sendMessage(session, GamesListNotification()) /// TODO FBE send real list
+                } else {
+                    sendMessage(session, UsedNameNotification())
+                }
             }
         }
     }
@@ -64,6 +65,7 @@ class PlayController : TextWebSocketHandler() {
     }
 
     private fun updateState(session: WebSocketSession, state: ClientState) {
+        logger.info("Changed state to '{}' for connection '{}'", state, session.id)
         session.attributes[STATE] = state
     }
 

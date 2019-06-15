@@ -1,8 +1,7 @@
 <h1>Choose a user name</h1>
 <input class="form-control mb-2 mr-sm-2" [(ngModel)]="userName" (keyup.enter)="connect()"/>
+<!-- TODO FBE during connection disable the button and change the label to "Connecting" -->
 <button class="btn btn-primary" (click)="connect()">Connect</button>
 <br>
 <br>
-<div>{{state}}</div>
-<h1>Create or join a game</h1>
-TODO
+{{errorMessage}}

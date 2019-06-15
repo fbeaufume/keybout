@@ -5,9 +5,9 @@ package com.adeliosys.keybout.model
  */
 enum class ClientState {
     /**
-     * The connection was successfully opened.
+     * The connection was successfully opened and the user is not yet identified.
      */
-    OPENED,
+    UNIDENTIFIED,
     /**
      * The user has a name.
      */
