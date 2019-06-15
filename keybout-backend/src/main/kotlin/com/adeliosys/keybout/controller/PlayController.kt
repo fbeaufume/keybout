@@ -1,6 +1,6 @@
 package com.adeliosys.keybout.controller
 
-import com.adeliosys.keybout.message.Action
+import com.adeliosys.keybout.model.Action
 import com.adeliosys.keybout.model.ClientState
 import com.adeliosys.keybout.model.Constants.ACTION_CONNECT
 import com.adeliosys.keybout.model.GameDescriptor
@@ -57,7 +57,10 @@ class PlayController : TextWebSocketHandler() {
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
-        logger.info("Closed connection '{}' with code {} and reason '{}'", session.id, status.code, status.reason)
+        logger.info("Closed connection '{}' with code {} and reason '{}'",
+                session.id,
+                status.code,
+                status.reason.orEmpty())
     }
 
     private fun updateState(session: WebSocketSession, state: ClientState) {
