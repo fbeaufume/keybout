@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {ClientState, PlayService} from "../play.service";
 
 @Component({
-  selector: 'app-play',
+  selector: 'app-connect',
   templateUrl: './connect.component.html',
   styleUrls: ['./connect.component.css']
 })
