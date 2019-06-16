@@ -1,0 +1,8 @@
+<div *ngIf="isVisible()">
+  <h1>Choose a user name</h1>
+  <input class="form-control mb-2 mr-sm-2" [(ngModel)]="userName" (keyup.enter)="connect()"/>
+  <button class="btn btn-primary" [disabled]="isConnectDisabled()" (click)="connect()">Connect</button>
+  <br>
+  <br>
+  {{errorMessage}}
+</div>

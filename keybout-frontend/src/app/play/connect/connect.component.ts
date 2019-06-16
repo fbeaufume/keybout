@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
-import {ClientState, PlayService} from "./play.service";
+import {ClientState, PlayService} from "../play.service";
 
 @Component({
   selector: 'app-play',
-  templateUrl: './play.component.html',
-  styleUrls: ['./play.component.css']
+  templateUrl: './connect.component.html',
+  styleUrls: ['./connect.component.css']
 })
-export class PlayComponent {
+export class ConnectComponent {
 
   constructor(public playService: PlayService) {
   }
@@ -25,6 +25,16 @@ export class PlayComponent {
 
   get errorMessage(): string {
     return this.playService.errorMessage;
+  }
+
+  // Is this component visible
+  isVisible(): boolean {
+    return this.state <= ClientState.IDENTIFYING;
+  }
+
+  // Is the Connect button disabled
+  isConnectDisabled(): boolean {
+    return this.state == ClientState.IDENTIFYING;
   }
 
   connect() {

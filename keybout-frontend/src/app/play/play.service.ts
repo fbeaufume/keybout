@@ -55,11 +55,11 @@ export class PlayService {
           case ClientState.IDENTIFYING:
             switch (data.type) {
               case 'incorrect-name':
-                this.errorMessage = 'This is not a valid user name';
+                this.errorMessage = 'Sorry, this is not a valid user name';
                 this.changeState(ClientState.UNIDENTIFIED);
                 break;
               case 'used-name':
-                this.errorMessage = 'Sorry this user name is already used';
+                this.errorMessage = 'Sorry, this user name is already used';
                 this.changeState(ClientState.UNIDENTIFIED);
                 break;
               case 'games-list':
