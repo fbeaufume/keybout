@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ClientState, PlayService} from "../play.service";
+import {ClientState, PlayService} from '../play.service';
 
 @Component({
   selector: 'app-connect',
@@ -34,7 +34,7 @@ export class ConnectComponent {
 
   // Is the Connect button disabled
   isConnectDisabled(): boolean {
-    return this.state == ClientState.IDENTIFYING;
+    return this.state === ClientState.IDENTIFYING;
   }
 
   connect() {

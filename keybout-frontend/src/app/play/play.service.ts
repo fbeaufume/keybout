@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as SockJS from 'sockjs-client';
+import {Game} from './game';
 
 export enum ClientState {
   UNIDENTIFIED, // Initial state, no used name accepted by the server yet
@@ -24,9 +25,15 @@ export class PlayService {
 
   socket: SockJS; // lazy initialized during the first "Connect"
 
-  userName: string = '';
+  userName = '';
+
+  games: Game[] = [];
 
   errorMessage: string;
+
+  static log(message: string) {
+    console.log(`PlayService: ${message}`);
+  }
 
   constructor() {
     this.changeState(ClientState.UNIDENTIFIED);
@@ -49,7 +56,7 @@ export class PlayService {
       this.socket.onmessage = m => {
         PlayService.log(`Received '${m.data}'`);
 
-        let data = JSON.parse(m.data);
+        const data = JSON.parse(m.data);
 
         switch (this.state) {
           case ClientState.IDENTIFYING:
@@ -73,15 +80,21 @@ export class PlayService {
             break;
         }
       };
+
+      this.socket.onerror = e => {
+        // TODO FBE
+        PlayService.log(`Socket error: ${e}`);
+      };
+
+      this.socket.onclose = () => {
+        // TODO FBE
+        PlayService.log(`Socket closed`);
+      };
     }
   }
 
   changeState(state: ClientState) {
     this.state = state;
     PlayService.log(`Changed state to ${ClientState[state]}`);
-  }
-
-  static log(message: string) {
-    console.log(`PlayService: ${message}`);
   }
 }

@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {PlayComponent} from "./play/play/play.component";
+import {PlayComponent} from './play/play/play.component';
 import {AllComponent} from './notes/all/all.component';
 import {TopComponent} from './notes/top/top.component';
 import {DetailComponent} from './notes/detail/detail.component';
