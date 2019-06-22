@@ -40,18 +40,28 @@ class PlayController : TextWebSocketHandler() {
         logger.info("Received message '{}' for connection '{}'", message.payload, session.id)
 
         val action = Action(message.payload)
-        if (action.command == ACTION_CONNECT) {
-            val name = action.arguments.getOrElse(0) { "" }
 
-            if (name.isEmpty()) {
-                sendMessage(session, IncorrectNameNotification())
-            } else {
-                if (users.add(name)) {
-                    session.attributes[NAME] = name
-                    updateState(session, ClientState.IDENTIFIED)
-                    sendMessage(session, GamesListNotification()) /// TODO FBE send real list
-                } else {
-                    sendMessage(session, UsedNameNotification())
+        when (getState(session)) {
+            ClientState.UNIDENTIFIED -> {
+                when (action.command) {
+                    ACTION_CONNECT -> {
+                        val name = action.arguments.getOrElse(0) { "" }
+
+                        if (name.isEmpty()) {
+                            sendMessage(session, IncorrectNameNotification())
+                        } else {
+                            if (users.add(name)) {
+                                session.attributes[NAME] = name
+                                updateState(session, ClientState.IDENTIFIED)
+                                sendMessage(session, GamesListNotification()) /// TODO FBE send real list
+                            } else {
+                                sendMessage(session, UsedNameNotification())
+                            }
+                        }
+                    }
+                    else -> {
+                        invalidMessage(session, message)
+                    }
                 }
             }
         }
@@ -64,9 +74,17 @@ class PlayController : TextWebSocketHandler() {
                 status.reason.orEmpty())
     }
 
+    private fun getState(session: WebSocketSession): ClientState {
+        return session.attributes[STATE] as ClientState
+    }
+
     private fun updateState(session: WebSocketSession, state: ClientState) {
         logger.info("Changed state to '{}' for connection '{}'", state, session.id)
         session.attributes[STATE] = state
+    }
+
+    private fun invalidMessage(session: WebSocketSession, message: TextMessage) {
+        logger.warn("Invalid message '{}' for state {} and connection '{}'", message.payload, session.id, getState(session))
     }
 
     private fun sendMessage(session: WebSocketSession, obj: Any) {
