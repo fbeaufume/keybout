@@ -2,6 +2,7 @@ package com.adeliosys.keybout.controller
 
 import com.adeliosys.keybout.model.*
 import com.adeliosys.keybout.model.Constants.ACTION_CONNECT
+import com.adeliosys.keybout.model.Constants.ACTION_CREATE_GAME
 import com.google.gson.Gson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -9,6 +10,7 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
+import java.lang.NumberFormatException
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -22,12 +24,17 @@ class PlayController : TextWebSocketHandler() {
     /**
      * Identified user names, used to check if a new user name is available
      */
-    private val users = ConcurrentHashMap.newKeySet<String>()
+    private val userNames = ConcurrentHashMap.newKeySet<String>()
+
+    /**
+     * Identified user sessions, to send them the declared games.
+     */
+    private val userSessions = ConcurrentHashMap<String, WebSocketSession>()
 
     /**
      * Declared games.
      */
-    private val games = ConcurrentHashMap<Int, GameDescriptor>()
+    private val gameDescriptors = ConcurrentHashMap<Long, GameDescriptor>()
 
     private val gson = Gson()
 
@@ -45,18 +52,51 @@ class PlayController : TextWebSocketHandler() {
             ClientState.UNIDENTIFIED -> {
                 when (action.command) {
                     ACTION_CONNECT -> {
-                        val name = action.arguments.getOrElse(0) { "" }
+                        if (action.checkArgumentsCount(1)) {
+                            val name = action.arguments[0]
 
-                        if (name.isEmpty()) {
-                            sendMessage(session, IncorrectNameNotification())
-                        } else {
-                            if (users.add(name)) {
-                                session.attributes[NAME] = name
-                                updateState(session, ClientState.IDENTIFIED)
-                                sendMessage(session, GamesListNotification()) /// TODO FBE send real list
+                            if (name.isEmpty()) {
+                                sendMessage(session, IncorrectNameNotification())
                             } else {
-                                sendMessage(session, UsedNameNotification())
+                                if (userNames.add(name)) {
+                                    session.attributes[NAME] = name
+                                    updateState(session, ClientState.IDENTIFIED)
+                                    userSessions[name] = session
+
+                                    sendMessage(session, GamesListNotification(gameDescriptors.values))
+                                } else {
+                                    sendMessage(session, UsedNameNotification())
+                                }
                             }
+                        }
+                    }
+                    else -> {
+                        invalidMessage(session, message)
+                    }
+                }
+            }
+            ClientState.IDENTIFIED -> {
+                when (action.command) {
+                    ACTION_CREATE_GAME -> {
+                        if (action.checkArgumentsCount(4)) {
+                            val gameDescriptor = GameDescriptor(
+                                    session.attributes[NAME] as String,
+                                    action.arguments[0],
+                                    try {
+                                        action.arguments[1].toInt()
+                                    } catch (e: NumberFormatException) {
+                                        1
+                                    },
+                                    try {
+                                        action.arguments[2].toInt()
+                                    } catch (e: NumberFormatException) {
+                                        10
+                                    },
+                                    action.arguments[3])
+
+                            gameDescriptors[gameDescriptor.id] = gameDescriptor
+
+                            sendMessage(GamesListNotification(gameDescriptors.values))
                         }
                     }
                     else -> {
@@ -87,8 +127,14 @@ class PlayController : TextWebSocketHandler() {
         logger.warn("Invalid message '{}' for state {} and connection '{}'", message.payload, session.id, getState(session))
     }
 
+    // Send a message to one client
     private fun sendMessage(session: WebSocketSession, obj: Any) {
         session.sendMessage(TextMessage(gson.toJson(obj)))
+    }
+
+    // Send a message to all clients
+    private fun sendMessage(obj: Any) {
+        userSessions.forEachValue(1) { s -> s.sendMessage(TextMessage(gson.toJson(obj))) }
     }
 
     companion object {

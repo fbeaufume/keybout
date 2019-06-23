@@ -15,4 +15,7 @@ class IncorrectNameNotification: BaseNotification(Constants.NOTIFICATION_INCORRE
  */
 class UsedNameNotification: BaseNotification(Constants.NOTIFICATION_USED_NAME)
 
-class GamesListNotification: BaseNotification(Constants.NOTIFICATION_GAMES_LIST)
+/**
+ * Sent when the games list changed.
+ */
+class GamesListNotification(val games:Collection<GameDescriptor>): BaseNotification(Constants.NOTIFICATION_GAMES_LIST)

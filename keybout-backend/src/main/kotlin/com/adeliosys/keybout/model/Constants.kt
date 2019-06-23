@@ -8,6 +8,7 @@ object Constants {
     // Action commands
 
     const val ACTION_CONNECT = "connect"
+    const val ACTION_CREATE_GAME = "create-game"
 
     // Notification types
 
