@@ -35,39 +35,30 @@
     <div class="form-group row">
       <label for="inputType" class="col-sm-2 col-form-label">Type</label>
       <div class="col-sm-4">
-        <select class="form-control" id="inputType">
-          <option value="capture-1">Capture (1 round)</option>
-          <option value="capture-2">Capture (2 rounds)</option>
-          <option value="capture-3">Capture (3 rounds)</option>
-          <option value="capture-5">Capture (5 rounds)</option>
-          <option value="capture-5">Capture (10 rounds)</option>
+        <select class="form-control" id="inputType" [(ngModel)]="type" name="inputType">
+          <option *ngFor="let t of types" [value]="t.id" [selected]="type == t.id">{{t.name}}</option>
         </select>
       </div>
     </div>
     <div class="form-group row">
       <label for="inputWords" class="col-sm-2 col-form-label">Words</label>
       <div class="col-sm-4">
-        <select class="form-control" id="inputWords">
-          <option>5</option>
-          <option selected>10</option>
-          <option>20</option>
-          <option>30</option>
-          <option>50</option>
+        <select class="form-control" id="inputWords" [(ngModel)]="wordCount" name="inputWords">
+          <option *ngFor="let w of wordCounts" [selected]="wordCount == w">{{w}}</option>
         </select>
       </div>
     </div>
     <div class="form-group row">
       <label for="inputLanguage" class="col-sm-2 col-form-label">Language</label>
       <div class="col-sm-4">
-        <select class="form-control" id="inputLanguage">
-          <option value="english">English</option>
-          <option value="french">French</option>
+        <select class="form-control" id="inputLanguage" [(ngModel)]="lang" name="inputLanguage">
+          <option *ngFor="let l of langs" [value]="l.id" [selected]="lang == l.name">{{l.name}}</option>
         </select>
       </div>
     </div>
     <div class="form-group row">
       <div class="col-sm-10">
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary" (click)="createGame()">Create</button>
       </div>
     </div>
   </form>

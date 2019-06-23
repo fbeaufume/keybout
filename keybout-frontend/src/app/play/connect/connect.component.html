@@ -1,7 +1,7 @@
 <div *ngIf="isVisible()">
   <h3>Choose a user name</h3>
   <br>
-  <input class="form-control mb-2 mr-sm-2" [(ngModel)]="userName" (keyup.enter)="connect()"/>
+  <input class="form-control mb-2 mr-sm-2" [(ngModel)]="userName" (keyup.enter)="connect()" autofocus/>
   <button class="btn btn-primary" [disabled]="isConnectDisabled()" (click)="connect()">Connect</button>
   <br>
   <br>

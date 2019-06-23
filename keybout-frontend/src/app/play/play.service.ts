@@ -44,13 +44,13 @@ export class PlayService {
     this.errorMessage = null;
 
     if (this.socket != null) {
-      this.socket.send(`connect ${this.userName}`);
+      this.send(`connect ${this.userName}`);
     } else {
       this.socket = new SockJS('/api/websocket');
       PlayService.log('Opening connection to the server');
 
       this.socket.onopen = () => {
-        this.socket.send(`connect ${this.userName}`);
+        this.send(`connect ${this.userName}`);
       };
 
       this.socket.onmessage = m => {
@@ -93,8 +93,18 @@ export class PlayService {
     }
   }
 
+  createGame(type: string, words: number, lang: string) {
+    this.send(`create-game ${type} ${words} ${lang}`);
+  }
+
   changeState(state: ClientState) {
     this.state = state;
     PlayService.log(`Changed state to ${ClientState[state]}`);
+  }
+
+  // Send an action to the server
+  send(message: string) {
+    PlayService.log(`Sending '${message}'`);
+    this.socket.send(message);
   }
 }
