@@ -1,9 +1,24 @@
 <div *ngIf="isVisible()">
-  <h3>Choose a user name</h3>
-  <br>
+  <h4>Choose a user name</h4>
   <input class="form-control mb-2 mr-sm-2" [(ngModel)]="userName" (keyup.enter)="connect()" autofocus/>
   <button class="btn btn-primary" [disabled]="isConnectDisabled()" (click)="connect()">Connect</button>
   <br>
   <br>
+<!--  <form>-->
+<!--    <div class="form-group row">-->
+<!--      <label for="inputName" class="col-sm-2 col-form-label">Name</label>-->
+<!--      <div class="col-sm-4">-->
+<!--        <input class="form-control" id="inputName" [(ngModel)]="userName" name="inputName"/>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="form-group row">-->
+<!--      <div class="col-sm-2"></div>-->
+<!--      <div class="col-sm-4">-->
+<!--        <button type="submit" class="btn btn-primary" [disabled]="isConnectDisabled()" (click)="connect()">Connect</button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </form>-->
+<!--  <br>-->
+<!--  <br>-->
   {{errorMessage}}
 </div>
