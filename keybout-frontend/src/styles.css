@@ -1,6 +1,33 @@
 body {
-  font-size: 16px;
+  font-size: 18px;
 }
+
+.navbar-brand {
+  color: #fff
+}
+
+.navbar-brand:hover {
+  color: #fff
+}
+
+.nav-link {
+  color: #888
+}
+
+.nav-link:hover {
+  color: #fff
+}
+
 h4 {
   margin-bottom: 1em;
+}
+
+.jumbotron {
+  background: url('assets/img/keyboard.jpg') center center no-repeat;
+  background-size: cover;
+  height: 400px;
+}
+
+.black-glow {
+  text-shadow: 0 0 2em black, 0 0 2em black, 0 0 2em black, 0 0 2em black;
 }
