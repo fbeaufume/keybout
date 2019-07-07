@@ -5,4 +5,4 @@ spring:
 logging.level:
   ROOT: INFO
 #  org.springframework: DEBUG
-#  com.adeliosys: DEBUG
+  com.adeliosys: DEBUG

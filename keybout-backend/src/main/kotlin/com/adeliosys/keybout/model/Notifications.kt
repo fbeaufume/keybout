@@ -11,6 +11,11 @@ open class BaseNotification(val type:String)
 class IncorrectNameNotification: BaseNotification(Constants.NOTIFICATION_INCORRECT_NAME)
 
 /**
+ * Sent when the user name is too long.
+ */
+class TooLongNameNotification: BaseNotification(Constants.NOTIFICATION_TOO_LONG_NAME)
+
+/**
  * Sent when the user name is already used.
  */
 class UsedNameNotification: BaseNotification(Constants.NOTIFICATION_USED_NAME)
