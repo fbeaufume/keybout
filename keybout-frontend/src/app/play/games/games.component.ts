@@ -9,15 +9,13 @@ import {Game} from '../game';
 })
 export class GamesComponent {
 
-  // TODO FBE use base class with : PlayService injection, state attribute, etc
-
   // Available game types
   types = [
-    {id: "capture 1", name: "Capture (1 round)"},
-    {id: "capture 2", name: "Capture (2 rounds)"},
-    {id: "capture 3", name: "Capture (3 rounds)"},
-    {id: "capture 5", name: "Capture (5 rounds)"},
-    {id: "capture 10", name: "Capture (10 rounds)"}
+    {id: 'capture 1', name: 'Capture (1 round)'},
+    {id: 'capture 2', name: 'Capture (2 rounds)'},
+    {id: 'capture 3', name: 'Capture (3 rounds)'},
+    {id: 'capture 5', name: 'Capture (5 rounds)'},
+    {id: 'capture 10', name: 'Capture (10 rounds)'}
   ];
 
   // Available word counts
@@ -25,8 +23,8 @@ export class GamesComponent {
 
   // Available game langs
   langs = [
-    {id: "english", name: "English"},
-    {id: "french", name: "French"}
+    {id: 'english', name: 'English'},
+    {id: 'french', name: 'French'}
   ];
 
   // Selected game type
@@ -49,6 +47,10 @@ export class GamesComponent {
     return this.playService.games;
   }
 
+  get gameId(): number {
+    return this.playService.gameId;
+  }
+
   // Is this component visible
   isVisible(): boolean {
     return this.state >= ClientState.IDENTIFIED && this.state <= ClientState.JOINED;
@@ -58,7 +60,48 @@ export class GamesComponent {
     return this.games === undefined || this.games.length === 0;
   }
 
-  createGame() {
+  canCreate() {
+    return this.state === ClientState.IDENTIFIED;
+  }
+
+  // Create a new game
+  create() {
     this.playService.createGame(this.type, this.wordCount, this.lang);
+  }
+
+  canDeleteOrStart(id: number) {
+    return this.state === ClientState.CREATED && id === this.gameId;
+  }
+
+  // Delete the game that the user created
+  delete() {
+    // TODO FBE
+    // this.playService.deleteGame(this.gameId);
+  }
+
+  // Start the game that the user created
+  start() {
+    // TODO FBE
+    // this.playService.startGame(this.gameId);
+  }
+
+  canJoin() {
+    return this.state === ClientState.IDENTIFIED;
+  }
+
+  // Join an existing game
+  join(id: number) {
+    // TODO FBE
+    // this.playService.joinGame(id);
+  }
+
+  canLeave(id: number) {
+    return this.state === ClientState.JOINED && id === this.gameId;
+  }
+
+  // Leave a game the user joined
+  leave() {
+    // TODO FBE
+    // this.playService.leaveGame(this.gameId);
   }
 }

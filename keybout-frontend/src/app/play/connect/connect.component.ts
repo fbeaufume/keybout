@@ -12,11 +12,11 @@ export class ConnectComponent {
   }
 
   get userName(): string {
-    return this.playService.userName;
+    return this.playService.attemptedUserName;
   }
 
   set userName(value: string) {
-    this.playService.userName = value;
+    this.playService.attemptedUserName = value;
   }
 
   get state(): ClientState {
@@ -32,12 +32,14 @@ export class ConnectComponent {
     return this.state <= ClientState.IDENTIFYING;
   }
 
-  // Is the Connect button disabled
-  isConnectDisabled(): boolean {
-    return this.state === ClientState.IDENTIFYING;
+  canConnect(): boolean {
+    return this.state === ClientState.UNIDENTIFIED;
   }
 
   connect() {
-    this.playService.connect();
+    // Prevent 'Enter' key from the HTML input
+    if (this.canConnect()) {
+      this.playService.connect();
+    }
   }
 }

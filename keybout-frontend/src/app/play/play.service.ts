@@ -25,9 +25,16 @@ export class PlayService {
 
   socket: SockJS; // lazy initialized during the first "Connect"
 
+  // User name attempted by the user
+  attemptedUserName = '';
+
+  // User name accepted by the server
   userName = '';
 
   games: Game[] = [];
+
+  // ID of the game created or joined byh the user
+  gameId = 0;
 
   errorMessage: string;
 
@@ -44,19 +51,25 @@ export class PlayService {
     this.errorMessage = null;
 
     if (this.socket != null) {
-      this.send(`connect ${this.userName}`);
+      this.send(`connect ${this.attemptedUserName}`);
     } else {
       this.socket = new SockJS('/api/websocket');
       PlayService.log('Opening connection to the server');
 
       this.socket.onopen = () => {
-        this.send(`connect ${this.userName}`);
+        this.send(`connect ${this.attemptedUserName}`);
       };
 
       this.socket.onmessage = m => {
         PlayService.log(`Received '${m.data}'`);
 
         const data = JSON.parse(m.data);
+
+        // Process the games list notification outside the main switch/case
+        // since several states use the games list
+        if (data.type === 'games-list') {
+          this.updateGamesList(data.games);
+        }
 
         switch (this.state) {
           case ClientState.IDENTIFYING:
@@ -65,12 +78,15 @@ export class PlayService {
                 this.errorMessage = 'Sorry, this is not a valid user name';
                 this.changeState(ClientState.UNIDENTIFIED);
                 break;
+              case 'too-long-name':
+                this.errorMessage = 'Sorry, this name is too long';
+                this.changeState(ClientState.UNIDENTIFIED);
+                break;
               case 'used-name':
                 this.errorMessage = 'Sorry, this user name is already used';
                 this.changeState(ClientState.UNIDENTIFIED);
                 break;
               case 'games-list':
-                // TODO FBE use the games list
                 this.changeState(ClientState.IDENTIFIED);
                 break;
             }
@@ -87,14 +103,42 @@ export class PlayService {
       };
 
       this.socket.onclose = () => {
-        // TODO FBE
+        this.errorMessage = 'Cannot connect to the server';
+        this.socket = null;
+        this.changeState(ClientState.UNIDENTIFIED);
         PlayService.log(`Socket closed`);
       };
     }
   }
 
   createGame(type: string, words: number, lang: string) {
+    this.changeState(ClientState.CREATING);
     this.send(`create-game ${type} ${words} ${lang}`);
+  }
+
+  // Update the received games list, for proper display
+  updateGamesList(games) {
+    this.userName = this.attemptedUserName;
+    this.changeState(ClientState.IDENTIFIED);
+
+    for (const game of games) {
+      game.type = `Capture (${game.rounds} round${game.rounds > 1 ? 's' : ''})`;
+      game.language = game.language === 'english' ? 'English' : 'French';
+
+      // Verify if the game was created by the user
+      if (game.creator === this.userName) {
+        this.gameId = game.id;
+        this.changeState(ClientState.CREATED);
+      }
+
+      // Verify if the game was joined by the user
+      if (game.players.includes(this.userName)) {
+        this.gameId = game.id;
+        this.changeState(ClientState.JOINED);
+      }
+    }
+
+    this.games = games;
   }
 
   changeState(state: ClientState) {

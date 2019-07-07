@@ -1,4 +1,4 @@
-<div *ngIf="isVisible()">
+<div class="container" *ngIf="isVisible()">
   <h4>Join a game</h4>
   <table class="table table-striped table-bordered">
     <thead>
@@ -19,7 +19,10 @@
       <td>{{game.language}}</td>
       <td>{{game.players}}</td>
       <td>
-        <button class="btn btn-primary">Join</button>
+        <button *ngIf="canDeleteOrStart(game.id)" class="btn btn-warning mr-2" (click)="delete()">Delete</button>
+        <button *ngIf="canDeleteOrStart(game.id)" class="btn btn-primary" (click)="start()">Start</button>
+        <button *ngIf="canJoin()" class="btn btn-primary" (click)="join(game.id)">Join</button>
+        <button *ngIf="canLeave(game.id)" class="btn btn-warning" (click)="leave()">Leave</button>
       </td>
     </tr>
     <tr *ngIf="noAvailableGame()">
@@ -57,7 +60,7 @@
     <div class="form-group row">
       <div class="col-sm-2"></div>
       <div class="col-sm-4">
-        <button type="submit" class="btn btn-primary" (click)="createGame()">Create</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!canCreate()" (click)="create()">Create</button>
       </div>
     </div>
   </form>

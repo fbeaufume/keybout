@@ -1,24 +1,11 @@
-<div *ngIf="isVisible()">
+<div class="container" *ngIf="isVisible()">
   <h4>Choose a user name</h4>
-  <input class="form-control mb-2 mr-sm-2" [(ngModel)]="userName" (keyup.enter)="connect()" autofocus/>
-  <button class="btn btn-primary" [disabled]="isConnectDisabled()" (click)="connect()">Connect</button>
+  <form class="form-inline">
+    <label for="inputName">Name</label>
+    <input class="form-control mx-2" id="inputName" [(ngModel)]="userName" (keyup.enter)="connect()" name="inputName" autofocus>
+    <button type="submit" class="btn btn-primary" [disabled]="!canConnect()" (click)="connect()">Connect</button>
+  </form>
   <br>
   <br>
-<!--  <form>-->
-<!--    <div class="form-group row">-->
-<!--      <label for="inputName" class="col-sm-2 col-form-label">Name</label>-->
-<!--      <div class="col-sm-4">-->
-<!--        <input class="form-control" id="inputName" [(ngModel)]="userName" name="inputName"/>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="form-group row">-->
-<!--      <div class="col-sm-2"></div>-->
-<!--      <div class="col-sm-4">-->
-<!--        <button type="submit" class="btn btn-primary" [disabled]="isConnectDisabled()" (click)="connect()">Connect</button>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </form>-->
-<!--  <br>-->
-<!--  <br>-->
-  {{errorMessage}}
+  <p class="text-danger">{{errorMessage}}</p>
 </div>

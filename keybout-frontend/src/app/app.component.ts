@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {PlayService} from './play/play.service';
 
 @Component({
   selector: 'app-root',
@@ -6,4 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
+  constructor(public playService: PlayService) {
+  }
+
+  get userName(): string {
+    return this.playService.userName;
+  }
 }

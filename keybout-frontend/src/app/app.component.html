@@ -1,24 +1,24 @@
 <nav class="navbar navbar-expand-lg dark bg-dark border-0">
-  <a class="navbar-brand" href="#">Keybout</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">Keybout</a>
 
-  <div class="collapse navbar-collapse" id="navbarColor02">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/play">Play</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/about">About</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/notes/top">Top notes</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/notes/all">All notes</a>
-      </li>
-    </ul>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+            aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/play">Play</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/about">About</a>
+        </li>
+      </ul>
+      <span class="navbar-text">{{userName}}</span>
+    </div>
   </div>
 </nav>
 <br>
