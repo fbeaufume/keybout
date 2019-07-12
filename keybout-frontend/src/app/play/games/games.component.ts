@@ -75,14 +75,12 @@ export class GamesComponent {
 
   // Delete the game that the user created
   delete() {
-    // TODO FBE
-    // this.playService.deleteGame(this.gameId);
+    this.playService.deleteGame();
   }
 
   // Start the game that the user created
   start() {
-    // TODO FBE
-    // this.playService.startGame(this.gameId);
+    this.playService.startGame();
   }
 
   canJoin() {
@@ -91,8 +89,7 @@ export class GamesComponent {
 
   // Join an existing game
   join(id: number) {
-    // TODO FBE
-    // this.playService.joinGame(id);
+    this.playService.joinGame(id);
   }
 
   canLeave(id: number) {
@@ -101,7 +98,6 @@ export class GamesComponent {
 
   // Leave a game the user joined
   leave() {
-    // TODO FBE
-    // this.playService.leaveGame(this.gameId);
+    this.playService.leaveGame();
   }
 }

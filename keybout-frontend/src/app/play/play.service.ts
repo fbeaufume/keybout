@@ -6,9 +6,10 @@ export enum ClientState {
   UNIDENTIFIED, // Initial state, no used name accepted by the server yet
   IDENTIFYING, // Sending user name, used to disable the corresponding button
   IDENTIFIED, // User name accepted by server
-  CREATING, // Creating a game, used to disable the corresponding button
+  CREATING, // Creating a game, used to disable the corresponding buttons
   CREATED, // Has created a game
-  JOINING, // Joined a game, used to disable the corresponding button
+  DELETING, // Deleting a game, used to disable the corresponding buttons
+  JOINING, // Joined a game, used to disable the corresponding buttons
   JOINED, // Has joined a game
   STARTING, // A game is starting
   PLAYING, // A game is running
@@ -98,8 +99,8 @@ export class PlayService {
       };
 
       this.socket.onerror = e => {
-        // TODO FBE
         PlayService.log(`Socket error: ${e}`);
+        this.socket.close();
       };
 
       this.socket.onclose = () => {
@@ -114,6 +115,25 @@ export class PlayService {
   createGame(type: string, words: number, lang: string) {
     this.changeState(ClientState.CREATING);
     this.send(`create-game ${type} ${words} ${lang}`);
+  }
+
+  deleteGame() {
+    this.changeState(ClientState.DELETING);
+    this.send(`delete-game`);
+  }
+
+  joinGame(id: number) {
+    this.changeState(ClientState.JOINING);
+    this.send(`join-game ${id}`);
+  }
+
+  leaveGame() {
+    this.changeState(ClientState.CREATING);
+    this.send(`leave-game`);
+  }
+
+  startGame() {
+    // TODO FBE
   }
 
   // Update the received games list, for proper display

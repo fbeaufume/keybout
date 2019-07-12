@@ -9,6 +9,9 @@ object Constants {
 
     const val ACTION_CONNECT = "connect"
     const val ACTION_CREATE_GAME = "create-game"
+    const val ACTION_DELETE_GAME = "delete-game"
+    const val ACTION_JOIN_GAME = "join-game"
+    const val ACTION_LEAVE_GAME = "leave-game"
 
     // Notification types
 
