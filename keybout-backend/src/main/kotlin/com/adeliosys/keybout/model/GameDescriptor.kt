@@ -3,7 +3,7 @@ package com.adeliosys.keybout.model
 import java.util.concurrent.atomic.AtomicLong
 
 /**
- * Declaration of a game.
+ * A declared game.
  */
 class GameDescriptor(val creator:String, val type:String, val rounds:Int, val words:Int, val language:String) {
 

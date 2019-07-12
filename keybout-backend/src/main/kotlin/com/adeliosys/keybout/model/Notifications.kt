@@ -24,3 +24,8 @@ class UsedNameNotification: BaseNotification(Constants.NOTIFICATION_USED_NAME)
  * Sent when the games list changed.
  */
 class GamesListNotification(val games:Collection<GameDescriptor>): BaseNotification(Constants.NOTIFICATION_GAMES_LIST)
+
+/**
+ * Sent when a game creator starts a game or round.
+ */
+class GameStartNotification: BaseNotification(Constants.NOTIFICATION_GAME_START)
