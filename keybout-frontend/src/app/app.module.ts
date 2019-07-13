@@ -12,6 +12,7 @@ import {PlayComponent} from './play/play/play.component';
 import {ConnectComponent} from './play/connect/connect.component';
 import {GamesComponent} from './play/games/games.component';
 import {StartComponent} from './play/start/start.component';
+import {GameComponent} from './play/game/game.component';
 import {AboutComponent} from './about/about.component';
 
 // Tour of Heroes components
@@ -29,6 +30,7 @@ import {SearchComponent} from './notes/search/search.component';
     ConnectComponent,
     GamesComponent,
     StartComponent,
+    GameComponent,
     AboutComponent,
     AllComponent,
     DetailComponent,

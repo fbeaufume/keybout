@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as SockJS from 'sockjs-client';
 import {Game} from './game';
+import {Subject} from 'rxjs/internal/Subject';
 
 export enum ClientState {
   UNIDENTIFIED, // Initial state, no used name accepted by the server yet
@@ -40,6 +41,12 @@ export class PlayService {
   gameId = 0;
 
   errorMessage: string;
+
+  // Subject used for countdown notification
+  private countdownSubject = new Subject<any>();
+
+  // Observable used for countdown notification
+  countdownObservable$ = this.countdownSubject.asObservable();
 
   static log(message: string) {
     console.log(`PlayService: ${message}`);
@@ -109,6 +116,7 @@ export class PlayService {
             break;
           case ClientState.STARTING:
             if (data.type === 'game-start') {
+              this.countdownSubject.next();
               this.changeState(ClientState.STARTED);
             }
             break;
