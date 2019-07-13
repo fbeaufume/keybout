@@ -5,34 +5,20 @@ import org.springframework.web.socket.WebSocketSession
 /**
  * A running game.
  */
-class Game {
+class Game(descriptor: GameDescriptor, val players: List<WebSocketSession>) {
 
-    val id:Long
+    val id: Long = descriptor.id
 
     /**
      * Name of the player that starts the next round.
      */
-    val manager:String
+    val manager: String = descriptor.creator
 
-    val remainingRounds:Int
+    val remainingRounds: Int = descriptor.rounds
 
-    val wordsCount:Int
+    val wordsCount: Int = descriptor.words
 
-    val language:String
+    val language: String = descriptor.language
 
     val words = listOf<String>()
-
-    /**
-     * All game players, including the creator.
-     */
-    val players: List<WebSocketSession>
-
-    constructor(descriptor: GameDescriptor, players: List<WebSocketSession>) {
-        this.id = descriptor.id
-        this.manager = descriptor.creator
-        this.remainingRounds = descriptor.rounds
-        this.wordsCount = descriptor.words
-        this.language = descriptor.language
-        this.players = players
-    }
 }

@@ -18,6 +18,8 @@ import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 /**
  * Receive WebSocket messages and trigger their business processing
@@ -67,6 +69,12 @@ class PlayController : TextWebSocketHandler() {
     private val runningGames = mutableMapOf<Long, Game>()
 
     private val gson = Gson()
+
+    /**
+     * Executor used to start games with a delay, to display a countdown
+     * in the UI.
+     */
+    private val executor = Executors.newSingleThreadScheduledExecutor()
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
         logger.debug("Opened connection '{}'", session.id)
@@ -175,10 +183,10 @@ class PlayController : TextWebSocketHandler() {
             }
             ClientState.CREATED -> deleteGame(session)
             ClientState.JOINED -> leaveGame(session)
-            ClientState.STARTING -> {
+            ClientState.IN_GAME -> {
                 // TODO FBE
             }
-            else -> throw IllegalStateException("Not implemented yet") // TODO FBE
+            // TODO FBE other cases
         }
 
         userNames.remove(session.getUserName())
@@ -255,13 +263,15 @@ class PlayController : TextWebSocketHandler() {
                 runningGames[game.id] = game
 
                 // Update the state of all players
-                game.players.forEach { s -> s.setState(ClientState.STARTING, game.id, logger) }
+                game.players.forEach { s -> s.setState(ClientState.IN_GAME, game.id, logger) }
 
                 // Notify playing users
                 sendMessage(game.players, GameStartNotification())
 
                 // Notify other users
                 sendMessage(gamesSessions.values, GamesListNotification(declaredGames.values))
+
+                executor.schedule({ sendMessage(game.players, GameRunNotification()) }, 5L, TimeUnit.SECONDS)
             }
         }
     }

@@ -17,6 +17,6 @@ export class GameComponent {
 
   // Is this component visible
   isVisible(): boolean {
-    return this.state >= ClientState.PLAYING;
+    return this.state >= ClientState.RUNNING;
   }
 }

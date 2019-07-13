@@ -26,6 +26,11 @@ class UsedNameNotification: BaseNotification(Constants.NOTIFICATION_USED_NAME)
 class GamesListNotification(val games:Collection<GameDescriptor>): BaseNotification(Constants.NOTIFICATION_GAMES_LIST)
 
 /**
- * Sent when a game creator starts a game or round.
+ * Sent when a game is starting, to display a countdown in the UI.
  */
 class GameStartNotification: BaseNotification(Constants.NOTIFICATION_GAME_START)
+
+/**
+ * Sent when a game is running.
+ */
+class GameRunNotification: BaseNotification(Constants.NOTIFICATION_GAME_RUN)

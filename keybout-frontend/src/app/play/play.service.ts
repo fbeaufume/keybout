@@ -15,7 +15,7 @@ export enum ClientState {
   LEAVING, // User is leaving a game
   STARTING, // User is starting a game
   STARTED, // Display the countdown page
-  PLAYING, // A game is running
+  RUNNING, // A game is running
   END_ROUND, // A game round has ended
   END_GAME // A game has ended
 }
@@ -118,6 +118,11 @@ export class PlayService {
             if (data.type === 'game-start') {
               this.countdownSubject.next();
               this.changeState(ClientState.STARTED);
+            }
+            break;
+          case ClientState.STARTED:
+            if (data.type === 'game-run') {
+              this.changeState(ClientState.RUNNING);
             }
             break;
           // TODO FBE other cases

@@ -21,19 +21,7 @@ enum class ClientState {
      */
     JOINED,
     /**
-     * A game round is about to start.
+     * A game is in progress (starting or running or displaying result).
      */
-    STARTING,
-    /**
-     * A game round is in progress.
-     */
-    PLAYING,
-    /**
-     * A game round has ended.
-     */
-    END_ROUND,
-    /**
-     * A game has ended.
-     */
-    END_GAME
+    IN_GAME
 }
