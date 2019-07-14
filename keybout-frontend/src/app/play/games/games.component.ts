@@ -22,9 +22,9 @@ export class GamesComponent {
   wordCounts = [5, 10, 20, 30, 50];
 
   // Available game langs
-  langs = [
-    {id: 'english', name: 'English'},
-    {id: 'french', name: 'French'}
+  languages = [
+    {id: 'en', name: 'English'},
+    {id: 'fr', name: 'French'}
   ];
 
   // Selected game type
@@ -34,7 +34,7 @@ export class GamesComponent {
   wordCount = this.wordCounts[1];
 
   // Selected lang
-  lang = this.langs[0].id;
+  language = this.languages[0].id;
 
   constructor(public playService: PlayService) {
   }
@@ -66,7 +66,7 @@ export class GamesComponent {
 
   // Create a new game
   create() {
-    this.playService.createGame(this.type, this.wordCount, this.lang);
+    this.playService.createGame(this.type, this.wordCount, this.language);
   }
 
   canDeleteOrStart(id: number) {

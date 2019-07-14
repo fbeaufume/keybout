@@ -52,8 +52,8 @@
     <div class="form-group row">
       <label for="inputLanguage" class="col-sm-2 col-form-label">Language</label>
       <div class="col-sm-4">
-        <select class="form-control" id="inputLanguage" [(ngModel)]="lang" name="inputLanguage">
-          <option *ngFor="let l of langs" [value]="l.id" [selected]="lang == l.name">{{l.name}}</option>
+        <select class="form-control" id="inputLanguage" [(ngModel)]="language" name="inputLanguage">
+          <option *ngFor="let l of languages" [value]="l.id" [selected]="language == l.name">{{l.name}}</option>
         </select>
       </div>
     </div>

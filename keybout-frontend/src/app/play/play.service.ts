@@ -143,9 +143,9 @@ export class PlayService {
     }
   }
 
-  createGame(type: string, words: number, lang: string) {
+  createGame(type: string, words: number, language: string) {
     this.changeState(ClientState.CREATING);
-    this.send(`create-game ${type} ${words} ${lang}`);
+    this.send(`create-game ${type} ${words} ${language}`);
   }
 
   deleteGame() {
@@ -175,7 +175,7 @@ export class PlayService {
 
     for (const game of games) {
       game.type = `Capture (${game.rounds} round${game.rounds > 1 ? 's' : ''})`;
-      game.language = game.language === 'english' ? 'English' : 'French';
+      game.language = game.language === 'en' ? 'English' : 'French';
 
       // Verify if the game was created by the user
       if (game.creator === this.userName) {

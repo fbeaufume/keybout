@@ -10,9 +10,12 @@ import com.adeliosys.keybout.model.Constants.ACTION_DELETE_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_JOIN_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_LEAVE_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_START_GAME
+import com.adeliosys.keybout.service.GameBuilder
 import com.google.gson.Gson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
@@ -30,6 +33,7 @@ import java.util.concurrent.TimeUnit
  * - The user name
  * - The game ID (0 if the user is not related to any game, or the actual game ID)
  */
+@Service
 class PlayController : TextWebSocketHandler() {
 
     companion object {
@@ -69,6 +73,9 @@ class PlayController : TextWebSocketHandler() {
     private val runningGames = mutableMapOf<Long, Game>()
 
     private val gson = Gson()
+
+    @Autowired
+    private lateinit var gameBuilder: GameBuilder
 
     /**
      * Executor used to start games with a delay, to display a countdown
@@ -259,7 +266,7 @@ class PlayController : TextWebSocketHandler() {
                 players.addAll(gameDescriptor.players.mapNotNull { n -> gamesSessions.remove(n) })
 
                 // Record the running game
-                val game = Game(gameDescriptor, players)
+                val game = gameBuilder.build(gameDescriptor, players)
                 runningGames[game.id] = game
 
                 // Update the state of all players
