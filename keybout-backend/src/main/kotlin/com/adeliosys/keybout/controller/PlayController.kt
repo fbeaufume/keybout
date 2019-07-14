@@ -4,6 +4,7 @@ import com.adeliosys.keybout.controller.PlayController.Companion.GAME_ID
 import com.adeliosys.keybout.controller.PlayController.Companion.NAME
 import com.adeliosys.keybout.controller.PlayController.Companion.STATE
 import com.adeliosys.keybout.model.*
+import com.adeliosys.keybout.model.Constants.ACTION_CLAIM_WORD
 import com.adeliosys.keybout.model.Constants.ACTION_CONNECT
 import com.adeliosys.keybout.model.Constants.ACTION_CREATE_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_DELETE_GAME
@@ -175,7 +176,16 @@ class PlayController : TextWebSocketHandler() {
                         else -> invalidMessage(session, message)
                     }
                 }
-                else -> logger.warn("Invalid state {} for connection '{}'", session.getState(), session.id)
+                ClientState.IN_GAME -> {
+                    when (action.command) {
+                        ACTION_CLAIM_WORD -> {
+                            if (action.checkArgumentsCount(1)) {
+                                claimWord(session, action.arguments[0])
+                            }
+                        }
+                        else -> invalidMessage(session, message)
+                    }
+                }
             }
         } catch (e: Exception) {
             logger.error("Caught an exception during message processing", e)
@@ -278,7 +288,17 @@ class PlayController : TextWebSocketHandler() {
                 // Notify other users
                 sendMessage(gamesSessions.values, GamesListNotification(declaredGames.values))
 
-                executor.schedule({ sendMessage(game.players, GameRunNotification()) }, 5L, TimeUnit.SECONDS)
+                executor.schedule({ sendMessage(game.players, WordsListNotification(game.getFlatWordsMap())) }, 5L, TimeUnit.SECONDS)
+            }
+        }
+    }
+
+    private fun claimWord(session: WebSocketSession, label: String) {
+        val game = runningGames[session.getGameId()]
+        if (game != null) {
+            val map = game.claimWord(session.getUserName(), label)
+            if (map.isNotEmpty()) {
+                sendMessage(game.players, WordsListNotification(map))
             }
         }
     }

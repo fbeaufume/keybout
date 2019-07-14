@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as SockJS from 'sockjs-client';
-import {Game} from './game';
 import {Subject} from 'rxjs/internal/Subject';
+import {Game} from './game';
 
 export enum ClientState {
   UNIDENTIFIED, // Initial state, no used name accepted by the server yet
@@ -37,7 +37,7 @@ export class PlayService {
 
   games: Game[] = [];
 
-  // ID of the game created or joined byh the user
+  // ID of the game created or joined by the user
   gameId = 0;
 
   errorMessage: string;
@@ -47,6 +47,8 @@ export class PlayService {
 
   // Observable used for countdown notification
   countdownObservable$ = this.countdownSubject.asObservable();
+
+  words: Map<string, string> = new Map();
 
   static log(message: string) {
     console.log(`PlayService: ${message}`);
@@ -121,11 +123,18 @@ export class PlayService {
             }
             break;
           case ClientState.STARTED:
-            if (data.type === 'game-run') {
-              this.changeState(ClientState.RUNNING);
+          case ClientState.RUNNING:
+            if (data.type === 'words-list') {
+              this.words.clear();
+              for (let k of Object.keys(data.words)) {
+                this.words.set(k, data.words[k]);
+              }
+              if (this.state != ClientState.RUNNING) {
+                this.changeState(ClientState.RUNNING);
+              }
             }
             break;
-          // TODO FBE other cases
+          // TODO FBE other casesco
         }
       };
 
@@ -200,6 +209,11 @@ export class PlayService {
   changeState(state: ClientState) {
     this.state = state;
     PlayService.log(`Changed state to ${ClientState[state]}`);
+  }
+
+  // The user fully typed an available word, send it to the server
+  claimWord(label: string) {
+    this.send(`claim-word ${label}`);
   }
 
   // Send an action to the server

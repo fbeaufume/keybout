@@ -2,6 +2,7 @@ package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.Game
 import com.adeliosys.keybout.model.GameDescriptor
+import com.adeliosys.keybout.model.Word
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -35,7 +36,7 @@ class GameBuilder {
      * Load the words for one language.
      */
     private fun loadWords(resource: Resource, lang: String) {
-        logger.info("Loading words for '{}' language", lang)
+        logger.info("Loading '{}' words", lang)
 
         val words = mutableListOf<String>()
 
@@ -50,21 +51,21 @@ class GameBuilder {
 
     fun build(descriptor: GameDescriptor, players: List<WebSocketSession>): Game {
         val possibleWords = wordsByLang[descriptor.language]!!
-        val selectedWords = mutableListOf<String>()
+        val selectedWords = mutableMapOf<String, Word>()
 
         while (selectedWords.size < descriptor.words) {
             val selectedWord = possibleWords[(0..possibleWords.size).random()]
 
             // Check if no other word begins with the same letters
             var found = false
-            for (word in selectedWords) {
-                if (word.startsWith(selectedWord)) {
+            for (word in selectedWords.values) {
+                if (word.label.startsWith(selectedWord)) {
                     found = true
                     break
                 }
             }
             if (!found) {
-                selectedWords.add(selectedWord)
+                selectedWords[selectedWord] = Word(selectedWord)
             }
         }
 

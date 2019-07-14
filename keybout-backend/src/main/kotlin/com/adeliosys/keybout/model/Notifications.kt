@@ -31,6 +31,6 @@ class GamesListNotification(val games:Collection<GameDescriptor>): BaseNotificat
 class GameStartNotification: BaseNotification(Constants.NOTIFICATION_GAME_START)
 
 /**
- * Sent when a game is running.
+ * Sent when a game is begins running or the state of a word changes.
  */
-class GameRunNotification: BaseNotification(Constants.NOTIFICATION_GAME_RUN)
+class WordsListNotification(val words:Map<String, String>): BaseNotification(Constants.NOTIFICATION_WORDS_LIST)

@@ -13,6 +13,7 @@ object Constants {
     const val ACTION_JOIN_GAME = "join-game"
     const val ACTION_LEAVE_GAME = "leave-game"
     const val ACTION_START_GAME = "start-game"
+    const val ACTION_CLAIM_WORD = "claim-word"
 
     // Notification types
 
@@ -21,5 +22,5 @@ object Constants {
     const val NOTIFICATION_USED_NAME = "used-name"
     const val NOTIFICATION_GAMES_LIST = "games-list"
     const val NOTIFICATION_GAME_START = "game-start"
-    const val NOTIFICATION_GAME_RUN = "game-run"
+    const val NOTIFICATION_WORDS_LIST = "words-list"
 }
