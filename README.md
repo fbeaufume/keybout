@@ -1,13 +1,20 @@
 # Keybout
 
-Keybout started as a sample WebSocket application, then evolved to a simple
-web based multiplayer game where opponents have to quickly catch words by typing them.
+KeyBout is a simple web-based multiplayer keyboard racing game, where the players
+have to type random words before the other players.
 
-The first version started in 2014 and used JavaScript, WebSocket, Java EE 7, Java and Maven.
+The first version started in 2014 as a sample WebSocket application and used JavaScript,
+WebSocket, Java EE 7 and Java.
 
-This second version is a full rewrite and uses Angular, TypeScript, WebSocket, Spring Boot, Kotlin and Maven.
+This second version is a full rewrite and uses Angular, SockJS, Spring Boot and Kotlin.
 
 The application is under development and **not working yet**.
+
+![Home page](doc/keybout-1.png)
+
+![Game creation](doc/keybout-2.png)
+
+![Gameplay](doc/keybout-3.png)
 
 ## Usage
 
