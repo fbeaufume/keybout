@@ -7,7 +7,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 
 import {HomeComponent} from './home/home.component';
-import {PlayComponent} from './play/play/play.component';
+import {PlayComponent} from './play/play.component';
 import {ConnectComponent} from './play/connect/connect.component';
 import {GamesComponent} from './play/games/games.component';
 import {StartComponent} from './play/start/start.component';
