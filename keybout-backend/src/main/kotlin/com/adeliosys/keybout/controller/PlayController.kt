@@ -288,7 +288,7 @@ class PlayController : TextWebSocketHandler() {
                 // Notify other users
                 sendMessage(gamesSessions.values, GamesListNotification(declaredGames.values))
 
-                executor.schedule({ sendMessage(game.players, WordsListNotification(game.getFlatWordsMap())) }, 5L, TimeUnit.SECONDS)
+                executor.schedule({ sendMessage(game.players, WordsListNotification(game.getWordsDto())) }, 5L, TimeUnit.SECONDS)
             }
         }
     }
@@ -298,7 +298,12 @@ class PlayController : TextWebSocketHandler() {
         if (game != null) {
             val map = game.claimWord(session.getUserName(), label)
             if (map.isNotEmpty()) {
-                sendMessage(game.players, WordsListNotification(map))
+                if (game.isRoundOver()) {
+                    sendMessage(game.players, ScoresNotification(map, game.getRoundScoresDto()))
+                }
+                else {
+                    sendMessage(game.players, WordsListNotification(map))
+                }
             }
         }
     }

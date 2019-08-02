@@ -26,12 +26,11 @@ class Game(
     var gameScores: List<Score> = emptyList()
 
     /**
-     * Return a client friendly map of words, i.e. the key is the word label
+     * Return UI friendly words, i.e. the key is the word label
      * and the value is the assigned user name (or empty).
      */
-    fun getFlatWordsMap(): Map<String, String> {
-        return words.map { entry -> entry.key to entry.value.userName }.toMap()
-    }
+    fun getWordsDto(): Map<String, String> =
+            words.map { entry -> entry.key to entry.value.userName }.toMap()
 
     /**
      * Assign a word to a user, if currently available.
@@ -51,7 +50,7 @@ class Game(
                     updateScores()
                 }
 
-                return getFlatWordsMap()
+                return getWordsDto()
             }
         }
         return mapOf()
@@ -79,4 +78,9 @@ class Game(
 
         // TODO FBE update game scores
     }
+
+    /**
+     * Return UI friendly scores.
+     */
+    fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points) }
 }

@@ -10,3 +10,5 @@ class Score(val userName: String) {
         points++
     }
 }
+
+class ScoreDto(val userName: String, val points: Int)
