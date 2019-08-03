@@ -13,11 +13,11 @@ export enum ClientState {
   JOINING, // User is joining a game
   JOINED, // User has joined a game
   LEAVING, // User is leaving a game
-  STARTING, // User is starting a game
+  STARTING, // User is starting a game, i.e. has clicked on Start button
   STARTED, // Display the countdown page
   RUNNING, // A game is running
-  END_ROUND, // A game round has ended
-  END_GAME // A game has ended
+  END_ROUND, // A game round has ended, display the View scores button
+  SCORES // Displaying the scores
 }
 
 @Injectable({
@@ -123,18 +123,21 @@ export class PlayService {
             }
             break;
           case ClientState.STARTED:
-          case ClientState.RUNNING:
             if (data.type === 'words-list') {
-              this.words.clear();
-              for (let k of Object.keys(data.words)) {
-                this.words.set(k, data.words[k]);
-              }
-              if (this.state != ClientState.RUNNING) {
-                this.changeState(ClientState.RUNNING);
-              }
+              this.updateWords(data.words);
+              this.changeState(ClientState.RUNNING);
             }
             break;
-          // TODO FBE other casesco
+          case ClientState.RUNNING:
+            if (data.type === 'words-list') {
+              this.updateWords(data.words)
+            }
+            if (data.type === 'scores') {
+              this.updateWords(data.words);
+              this.changeState(ClientState.END_ROUND)
+            }
+            break;
+          // TODO FBE other cases
         }
       };
 
@@ -177,7 +180,7 @@ export class PlayService {
     this.send(`start-game`);
   }
 
-  // Update the received games list, for proper display
+  // Update the displayed games list
   updateGamesList(games) {
     this.userName = this.attemptedUserName;
     let state = ClientState.IDENTIFIED;
@@ -203,6 +206,14 @@ export class PlayService {
 
     if (state !== this.state) {
       this.changeState(state);
+    }
+  }
+
+  // Update the displayed words
+  updateWords(words) {
+    this.words.clear();
+    for (let k of Object.keys(words)) {
+      this.words.set(k, words[k]);
     }
   }
 

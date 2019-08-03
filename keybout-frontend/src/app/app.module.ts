@@ -12,6 +12,7 @@ import {ConnectComponent} from './play/connect/connect.component';
 import {GamesComponent} from './play/games/games.component';
 import {StartComponent} from './play/start/start.component';
 import {GameComponent} from './play/game/game.component';
+import {ScoresComponent} from './play/scores/scores.component';
 import {AboutComponent} from './about/about.component';
 
 @NgModule({
@@ -23,6 +24,7 @@ import {AboutComponent} from './about/about.component';
     GamesComponent,
     StartComponent,
     GameComponent,
+    ScoresComponent,
     AboutComponent
   ],
   imports: [

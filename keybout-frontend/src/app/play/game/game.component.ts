@@ -23,7 +23,7 @@ export class GameComponent {
 
   // Is this component visible
   isVisible(): boolean {
-    return this.state >= ClientState.RUNNING;
+    return this.state >= ClientState.RUNNING && this.state <= ClientState.END_ROUND;
   }
 
   // TODO FBE focus the input
@@ -52,5 +52,13 @@ export class GameComponent {
         this.inputWord = '';
       }
     }
+  }
+
+  canViewScores() {
+    return this.state === ClientState.END_ROUND;
+  }
+
+  viewScores() {
+    this.playService.changeState(ClientState.SCORES);
   }
 }
