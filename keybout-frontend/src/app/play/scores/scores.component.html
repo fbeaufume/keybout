@@ -1,4 +1,19 @@
 <div class="container" *ngIf="isVisible()">
-  <h4>Scores</h4>
-  TODO
+  <h4>Round scores</h4>
+  <table class="table table-striped table-bordered">
+    <thead>
+    <tr>
+      <th scope="col">Rank</th>
+      <th scope="col">Name</th>
+      <th scope="col">Score</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let score of scores; index as i">
+      <td>{{i+1}}</td>
+      <td>{{score.userName}}</td>
+      <td>{{score.points}}</td>
+    </tr>
+    </tbody>
+  </table>
 </div>

@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import * as SockJS from 'sockjs-client';
 import {Subject} from 'rxjs/internal/Subject';
 import {Game} from './game';
+import {Score} from './score';
 
 export enum ClientState {
   UNIDENTIFIED, // Initial state, no used name accepted by the server yet
@@ -39,6 +40,8 @@ export class PlayService {
 
   // ID of the game created or joined by the user
   gameId = 0;
+
+  scores: Score[] = [];
 
   errorMessage: string;
 
@@ -81,7 +84,7 @@ export class PlayService {
           case ClientState.IDENTIFYING:
             switch (data.type) {
               case 'incorrect-name':
-                this.errorMessage = 'Sorry, this is not a valid user name';
+                this.errorMessage = 'Sorry, this is not a valid user name, space is not allowed for instance';
                 this.changeState(ClientState.UNIDENTIFIED);
                 break;
               case 'too-long-name':
@@ -134,6 +137,7 @@ export class PlayService {
             }
             if (data.type === 'scores') {
               this.updateWords(data.words);
+              this.scores = data.scores;
               this.changeState(ClientState.END_ROUND)
             }
             break;

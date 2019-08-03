@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import {ClientState,PlayService} from "../play.service";
+import {Component} from '@angular/core';
+import {ClientState, PlayService} from "../play.service";
+import {Score} from "../score";
 
 @Component({
   selector: 'app-scores',
@@ -13,6 +14,10 @@ export class ScoresComponent {
 
   get state(): ClientState {
     return this.playService.state;
+  }
+
+  get scores(): Score[] {
+    return this.playService.scores;
   }
 
   // Is this component visible
