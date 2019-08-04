@@ -40,13 +40,16 @@ class GameBuilder {
 
         val words = mutableListOf<String>()
 
-        // Uses UTF-8 encoding to read the file
-        resource.file.forEachLine {
+        // Do not use resource.file, it does not work with a Spring Boot fat jar
+        resource.inputStream.bufferedReader(Charsets.UTF_8).readLines().forEach {
             if (it.length >= MINIMUM_WORD_LENGTH) {
                 words.add(it)
             }
         }
+
         wordsByLang[lang] = words
+
+        logger.info("Loaded {} '{}' words", words.size, lang)
     }
 
     fun build(descriptor: GameDescriptor, players: List<WebSocketSession>): Game {
