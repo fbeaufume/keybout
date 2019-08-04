@@ -47,8 +47,10 @@ export class GameComponent {
     } else {
       // Try to match an available word
       const userName = this.playService.words.get(this.inputWord);
-      if (userName != null && userName === '') {
-        this.playService.claimWord(this.inputWord);
+      if (userName != null) {
+        if (userName === '') {
+          this.playService.claimWord(this.inputWord);
+        }
         this.inputWord = '';
       }
     }
