@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {ClientState, PlayService} from '../play.service';
 
+const COUNTDOWN = 5; // Total duration of the countdown
+
 @Component({
   selector: 'app-start',
   templateUrl: './start.component.html',
@@ -10,7 +12,7 @@ export class StartComponent {
 
   intervalId = 0;
 
-  countdown = 1;
+  countdown = COUNTDOWN; // Current value of the countdown
 
   constructor(public playService: PlayService) {
     this.playService.countdownObservable$.subscribe(() => this.startCountdown());
@@ -32,7 +34,7 @@ export class StartComponent {
       clearInterval(this.intervalId);
     }
 
-    this.countdown = 5;
+    this.countdown = COUNTDOWN;
 
     this.intervalId = window.setInterval(() => {
       this.countdown -= 1;

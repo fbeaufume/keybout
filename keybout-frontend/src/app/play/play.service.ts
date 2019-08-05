@@ -115,14 +115,13 @@ export class PlayService {
                 this.updateGamesList(data.games);
                 break;
               case 'game-start':
-                this.changeState(ClientState.STARTED);
+                this.gameStarted();
                 break;
             }
             break;
           case ClientState.STARTING:
             if (data.type === 'game-start') {
-              this.countdownSubject.next();
-              this.changeState(ClientState.STARTED);
+              this.gameStarted();
             }
             break;
           case ClientState.STARTED:
@@ -133,12 +132,12 @@ export class PlayService {
             break;
           case ClientState.RUNNING:
             if (data.type === 'words-list') {
-              this.updateWords(data.words)
+              this.updateWords(data.words);
             }
             if (data.type === 'scores') {
               this.updateWords(data.words);
               this.scores = data.scores;
-              this.changeState(ClientState.END_ROUND)
+              this.changeState(ClientState.END_ROUND);
             }
             break;
           // TODO FBE other cases
@@ -184,6 +183,11 @@ export class PlayService {
     this.send(`start-game`);
   }
 
+  gameStarted() {
+    this.countdownSubject.next();
+    this.changeState(ClientState.STARTED);
+  }
+
   // Update the displayed games list
   updateGamesList(games) {
     this.userName = this.attemptedUserName;
@@ -216,7 +220,7 @@ export class PlayService {
   // Update the displayed words
   updateWords(words) {
     this.words.clear();
-    for (let k of Object.keys(words)) {
+    for (const k of Object.keys(words)) {
       this.words.set(k, words[k]);
     }
   }
