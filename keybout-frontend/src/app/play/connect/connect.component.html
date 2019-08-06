@@ -2,7 +2,7 @@
   <h4>Choose a user name</h4>
   <form class="form-inline">
     <label for="inputName">Name</label>
-    <input class="form-control col-3 mx-2" id="inputName" [(ngModel)]="userName" (keyup.enter)="connect()" name="inputName" autofocus>
+    <input class="form-control col-3 mx-2" id="inputName" maxlength="32" [(ngModel)]="userName" (keyup.enter)="connect()" name="inputName" autofocus>
     <button type="submit" class="btn btn-primary" [disabled]="!canConnect()" (click)="connect()">Connect</button>
   </form>
   <br>

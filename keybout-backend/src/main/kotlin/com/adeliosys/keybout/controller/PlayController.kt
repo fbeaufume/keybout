@@ -99,12 +99,12 @@ class PlayController : TextWebSocketHandler() {
                 ClientState.UNIDENTIFIED -> {
                     when (action.command) {
                         ACTION_CONNECT -> {
-                            if (action.checkArgumentsCount(1)) {
-                                val name = action.arguments[0]
+                            if (action.checkMinimumArgumentsCount(1)) {
+                                val name = action.rawArguments
 
                                 when {
                                     // Check the name length
-                                    name.length >= 32 -> {
+                                    name.length > 32 -> {
                                         sendMessage(session, TooLongNameNotification())
                                     }
                                     // Check the name availability
