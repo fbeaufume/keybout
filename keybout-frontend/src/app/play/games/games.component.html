@@ -35,7 +35,7 @@
   <form>
     <div class="form-group row">
       <label for="inputType" class="col-sm-2 col-form-label">Type</label>
-      <div class="col-sm-4">
+      <div class="col-sm-3">
         <select class="form-control" id="inputType" [(ngModel)]="type" name="inputType">
           <option *ngFor="let t of types" [value]="t.id" [selected]="type == t.id">{{t.name}}</option>
         </select>
@@ -43,7 +43,7 @@
     </div>
     <div class="form-group row">
       <label for="inputWords" class="col-sm-2 col-form-label">Words</label>
-      <div class="col-sm-4">
+      <div class="col-sm-3">
         <select class="form-control" id="inputWords" [(ngModel)]="wordCount" name="inputWords">
           <option *ngFor="let w of wordCounts" [selected]="wordCount == w">{{w}}</option>
         </select>
@@ -51,7 +51,7 @@
     </div>
     <div class="form-group row">
       <label for="inputLanguage" class="col-sm-2 col-form-label">Language</label>
-      <div class="col-sm-4">
+      <div class="col-sm-3">
         <select class="form-control" id="inputLanguage" [(ngModel)]="language" name="inputLanguage">
           <option *ngFor="let l of languages" [value]="l.id" [selected]="language == l.name">{{l.name}}</option>
         </select>
@@ -59,7 +59,7 @@
     </div>
     <div class="form-group row">
       <div class="col-sm-2"></div>
-      <div class="col-sm-4">
+      <div class="col-sm-3">
         <button type="submit" class="btn btn-primary" [disabled]="!canCreate()" (click)="create()">Create</button>
       </div>
     </div>
