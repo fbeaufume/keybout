@@ -42,4 +42,5 @@ class ScoresNotification(
         val words: Map<String, String>,
         val roundScores: List<ScoreDto>,
         val gameScores: List<ScoreDto>,
-        val manager: String) : BaseNotification(Constants.NOTIFICATION_SCORES)
+        val manager: String,
+        val gameOver: Boolean) : BaseNotification(Constants.NOTIFICATION_SCORES)

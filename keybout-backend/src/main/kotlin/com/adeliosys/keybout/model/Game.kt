@@ -2,33 +2,32 @@ package com.adeliosys.keybout.model
 
 import com.adeliosys.keybout.controller.getUserName
 import org.springframework.web.socket.WebSocketSession
-import kotlin.math.round
 
 /**
  * A running game.
  */
 class Game(
         val id: Long,
-        var remainingRounds: Int,
+        private var roundsCount: Int,
         val wordCount: Int,
         val language: String,
         var manager: String, // Name of the player that starts the next round
         val players: List<WebSocketSession>) {
 
     // Words by label
-    var words: Map<String, Word> = mapOf()
+    private var words: Map<String, Word> = mapOf()
 
     // Number of available words, when it reaches 0 the round ends
-    var availableWords = 0
+    private var availableWords = 0
 
     // Round scores by user name, updated as the words are assigned
-    val userScores: MutableMap<String, Score> = mutableMapOf()
+    private val userScores: MutableMap<String, Score> = mutableMapOf()
 
     // Ordered round scores, updated at the end of the round
-    var roundScores: List<Score> = emptyList()
+    private var roundScores: List<Score> = emptyList()
 
     // Ordered game scores, updated at the end of the game
-    var gameScores: List<Score> = emptyList()
+    private var gameScores: List<Score> = emptyList()
 
     init {
         players.forEach { userScores[it.getUserName()] = Score(it.getUserName()) }
@@ -77,6 +76,8 @@ class Game(
 
     fun isRoundOver() = availableWords <= 0
 
+    fun isGameOver() = gameScores[0].victories >= roundsCount
+
     /**
      * Update round and game scores.
      */
@@ -84,9 +85,9 @@ class Game(
         roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { it.timestamp }))
 
         // Give 1 victory to the best user
-        roundScores[0]?.incrementVictories()
+        roundScores[0].incrementVictories()
 
-        gameScores = userScores.values.sortedWith(compareBy({-it.victories}))
+        gameScores = userScores.values.sortedWith(compareBy { -it.victories })
     }
 
     /**

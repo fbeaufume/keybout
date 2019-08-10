@@ -1030,7 +1030,6 @@ sept
 partout
 immobilier
 lancement
-rating
 réussi
 patrimoine
 feu
@@ -4430,7 +4429,6 @@ bouquet
 ceinture
 coalition
 comptables
-corporate
 différemment
 dits
 journées

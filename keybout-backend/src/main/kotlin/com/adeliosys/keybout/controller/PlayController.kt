@@ -10,9 +10,10 @@ import com.adeliosys.keybout.model.Constants.ACTION_CREATE_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_DELETE_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_JOIN_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_LEAVE_GAME
+import com.adeliosys.keybout.model.Constants.ACTION_QUIT_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_START_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_START_ROUND
-import com.adeliosys.keybout.service.GameBuilder
+import com.adeliosys.keybout.service.WordGenerator
 import com.google.gson.Gson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -77,7 +78,7 @@ class PlayController : TextWebSocketHandler() {
     private val gson = Gson()
 
     @Autowired
-    private lateinit var gameBuilder: GameBuilder
+    private lateinit var wordGenerator: WordGenerator
 
     /**
      * Executor used to start games with a delay, to display a countdown
@@ -111,14 +112,8 @@ class PlayController : TextWebSocketHandler() {
                                     // Check the name availability
                                     userNames.add(name) -> {
                                         logger.debug("Using name '{}' for connection '{}', user count is {}", name, session.id, userNames.count())
-
                                         session.setUserName(name)
-                                        session.setState(ClientState.IDENTIFIED, 0, logger)
-
-                                        synchronized(this) {
-                                            gamesSessions[name] = session
-                                            sendMessage(session, GamesListNotification(declaredGames.values))
-                                        }
+                                        goToGamesList(session)
                                     }
                                     else ->
                                         sendMessage(session, UsedNameNotification())
@@ -185,6 +180,7 @@ class PlayController : TextWebSocketHandler() {
                             }
                         }
                         ACTION_START_ROUND -> startRound(session)
+                        ACTION_QUIT_GAME -> goToGamesList(session)
                         else -> invalidMessage(session, message)
                     }
                 }
@@ -219,6 +215,18 @@ class PlayController : TextWebSocketHandler() {
 
     private fun invalidMessage(session: WebSocketSession, message: TextMessage) {
         logger.warn("Invalid message '{}' for state {} and connection '{}'", message.payload, session.id, session.getState())
+    }
+
+    /**
+     * Called after a user connection, or after a user quit a game, to go to the games list.
+     */
+    private fun goToGamesList(session: WebSocketSession) {
+        session.setState(ClientState.IDENTIFIED, 0, logger)
+
+        synchronized(this) {
+            gamesSessions[session.getUserName()] = session
+            sendMessage(session, GamesListNotification(declaredGames.values))
+        }
     }
 
     private fun createGame(session: WebSocketSession, gameDescriptor: GameDescriptor) {
@@ -285,8 +293,17 @@ class PlayController : TextWebSocketHandler() {
                         descriptor.language,
                         descriptor.creator,
                         players)
-                game.initializeRound(gameBuilder.generateWords(game.language, game.wordCount))
+                game.initializeRound(wordGenerator.generateWords(game.language, game.wordCount))
                 runningGames[game.id] = game
+
+                logger.info("Created a {} player 'capture' game {} with {} round{} and {} '{}' words, game count is {}",
+                        players.size,
+                        descriptor.id,
+                        descriptor.rounds,
+                        if (descriptor.rounds > 1) "s" else "",
+                        descriptor.words,
+                        descriptor.language,
+                        runningGames.size)
 
                 // Update the state of all players
                 game.players.forEach { s -> s.setState(ClientState.IN_GAME, game.id, logger) }
@@ -313,7 +330,12 @@ class PlayController : TextWebSocketHandler() {
             val map = game.claimWord(session.getUserName(), label)
             if (map.isNotEmpty()) {
                 if (game.isRoundOver()) {
-                    sendMessage(game.players, ScoresNotification(map, game.getRoundScoresDto(), game.getGameScoresDto(), game.manager))
+                    sendMessage(game.players, ScoresNotification(map, game.getRoundScoresDto(), game.getGameScoresDto(), game.manager, game.isGameOver()))
+
+                    if (game.isGameOver()) {
+                        runningGames.remove(session.getGameId())
+                        logger.info("Deleted game {}, games count is {}", game.id, runningGames.size)
+                    }
                 } else {
                     sendMessage(game.players, WordsListNotification(map))
                 }
@@ -324,7 +346,7 @@ class PlayController : TextWebSocketHandler() {
     private fun startRound(session: WebSocketSession) {
         val game = runningGames[session.getGameId()]
         if (game != null) {
-            game.initializeRound(gameBuilder.generateWords(game.language, game.wordCount))
+            game.initializeRound(wordGenerator.generateWords(game.language, game.wordCount))
 
             notifyRoundStart(game)
         }

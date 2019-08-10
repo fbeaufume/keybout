@@ -19,7 +19,8 @@ export enum ClientState {
   RUNNING, // A game is running
   END_ROUND, // A game round has ended, display the View scores button
   SCORES, // Displaying the scores
-  STARTING_ROUND // User is starting the next round, i.e. has clicked on Start next round
+  STARTING_ROUND, // User is starting the next round, i.e. has clicked on Start next round
+  QUITTING// User is quitting a game that ended
 }
 
 @Injectable({
@@ -42,14 +43,16 @@ export class PlayService {
   // ID of the game created or joined by the user
   gameId = 0;
 
-  // Manager of the game, i.e. the user that can start the next round
-  gameManager = '';
-
   // Scores of the round that ended
   roundScores: Score[] = [];
 
   // Current game scores, when a round ended
   gameScores: Score[] = [];
+
+  // Manager of the game, i.e. the user that can start the next round
+  gameManager = '';
+
+  gameOver = false;
 
   errorMessage: string;
 
@@ -144,9 +147,10 @@ export class PlayService {
             }
             if (data.type === 'scores') {
               this.updateWords(data.words);
-              this.gameManager = data.manager;
               this.roundScores = data.roundScores;
               this.gameScores = data.gameScores;
+              this.gameManager = data.manager;
+              this.gameOver = data.gameOver;
               this.changeState(ClientState.END_ROUND);
             }
             break;
@@ -165,7 +169,11 @@ export class PlayService {
               this.gameStarted();
             }
             break;
-          // TODO FBE other cases
+          case ClientState.QUITTING:
+            if (data.type === 'games-list') {
+              this.updateGamesList(data.games);
+            }
+            break;
         }
       };
 
@@ -178,7 +186,7 @@ export class PlayService {
         this.errorMessage = 'Cannot connect to the server';
         this.socket = null;
         this.changeState(ClientState.UNIDENTIFIED);
-        PlayService.log(`Socket closed`);
+        PlayService.log('Socket closed');
       };
     }
   }
@@ -190,7 +198,7 @@ export class PlayService {
 
   deleteGame() {
     this.changeState(ClientState.DELETING);
-    this.send(`delete-game`);
+    this.send('delete-game');
   }
 
   joinGame(id: number) {
@@ -200,7 +208,7 @@ export class PlayService {
 
   leaveGame() {
     this.changeState(ClientState.LEAVING);
-    this.send(`leave-game`);
+    this.send('leave-game');
   }
 
   // Start the first round of the game
@@ -264,7 +272,13 @@ export class PlayService {
   // Start the next round of the game
   startRound() {
     this.changeState(ClientState.STARTING_ROUND);
-    this.send(`start-round`);
+    this.send('start-round');
+  }
+
+  // The user wants to quit a game that ended
+  quitGame() {
+    this.changeState(ClientState.QUITTING);
+    this.send('quit-game');
   }
 
   // Send an action to the server

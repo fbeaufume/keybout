@@ -16,6 +16,10 @@ export class ScoresComponent {
     return this.playService.state;
   }
 
+  get userName(): string {
+    return this.playService.userName;
+  }
+
   get roundScores(): Score[] {
     return this.playService.roundScores;
   }
@@ -32,10 +36,6 @@ export class ScoresComponent {
     return this.gameScores[0].userName;
   }
 
-  get firstRoundUser(): string {
-    return this.roundScores[0].userName;
-  }
-
   // Is this component visible
   isVisible(): boolean {
     return this.state >= ClientState.SCORES && this.state <= ClientState.STARTING_ROUND;
@@ -45,11 +45,23 @@ export class ScoresComponent {
     return this.playService.userName === this.playService.gameManager;
   }
 
+  isGameOver(): boolean {
+    return this.playService.gameOver;
+  }
+
   canStart() {
     return this.state === ClientState.SCORES;
   }
 
   startNextRound() {
     this.playService.startRound();
+  }
+
+  canQuit() {
+    return this.state === ClientState.SCORES;
+  }
+
+  quitGame() {
+    this.playService.quitGame();
   }
 }

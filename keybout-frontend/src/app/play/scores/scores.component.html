@@ -1,7 +1,10 @@
 <div class="container" *ngIf="isVisible()">
-  <h4>Round over</h4>
-  <p>Round winner is <span class="text-primary font-weight-bold">{{topRoundUser}}</span>.</p>
-  <p>Current game leader is <span class="text-primary font-weight-bold">{{topGameUser}}</span>.</p>
+  <h4>{{isGameOver() ? 'Game' : 'Round'}} over</h4>
+  <p>Round winner is <span [ngClass]="(userName === topRoundUser)?'text-success':'text-danger'"
+                           class="font-weight-bold">{{topRoundUser}}</span>.
+  </p>
+  <p>Current game leader is <span [ngClass]="(userName === topRoundUser)?'text-success':'text-danger'"
+                                  class="font-weight-bold">{{topGameUser}}</span>.</p>
   <br>
   <div class="row">
     <div class="col">
@@ -16,9 +19,9 @@
         </thead>
         <tbody>
         <tr *ngFor="let score of roundScores; index as i">
-          <td>{{i + 1}}</td>
-          <td>{{score.userName}}</td>
-          <td>{{score.points}}</td>
+          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{i + 1}}</td>
+          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.userName}}</td>
+          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.points}}</td>
         </tr>
         </tbody>
       </table>
@@ -35,19 +38,22 @@
         </thead>
         <tbody>
         <tr *ngFor="let score of gameScores; index as i">
-          <td>{{i + 1}}</td>
-          <td>{{score.userName}}</td>
-          <td>{{score.points}}</td>
+          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{i + 1}}</td>
+          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.userName}}</td>
+          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.points}}</td>
         </tr>
         </tbody>
       </table>
     </div>
   </div>
   <br>
-  <div *ngIf="isGameManager(); else notGameManager" class="text-center">
+  <div *ngIf="!isGameOver() && isGameManager()" class="text-center">
     <button class="btn btn-primary" [disabled]="!canStart()" (click)="startNextRound()">Start next round</button>
   </div>
-  <ng-template #notGameManager>
+  <div *ngIf="!isGameOver() && !isGameManager()" class="text-center">
     Waiting for the game manager to start the next round...
-  </ng-template>
+  </div>
+  <div *ngIf="isGameOver()" class="text-center">
+    <button class="btn btn-primary" [disabled]="!canQuit()" (click)="quitGame()">Done</button>
+  </div>
 </div>

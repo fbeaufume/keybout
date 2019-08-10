@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
 
 @Service
-class GameBuilder {
+class WordGenerator {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
