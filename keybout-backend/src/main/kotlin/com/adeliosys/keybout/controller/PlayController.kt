@@ -11,6 +11,7 @@ import com.adeliosys.keybout.model.Constants.ACTION_DELETE_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_JOIN_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_LEAVE_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_START_GAME
+import com.adeliosys.keybout.model.Constants.ACTION_START_ROUND
 import com.adeliosys.keybout.service.GameBuilder
 import com.google.gson.Gson
 import org.slf4j.Logger
@@ -183,6 +184,7 @@ class PlayController : TextWebSocketHandler() {
                                 claimWord(session, action.arguments[0])
                             }
                         }
+                        ACTION_START_ROUND -> startRound(session)
                         else -> invalidMessage(session, message)
                     }
                 }
@@ -264,8 +266,8 @@ class PlayController : TextWebSocketHandler() {
 
     private fun startGame(session: WebSocketSession) {
         synchronized(this) {
-            val gameDescriptor = declaredGames[session.getGameId()]
-            if (gameDescriptor != null) {
+            val descriptor = declaredGames[session.getGameId()]
+            if (descriptor != null) {
                 declaredGames.remove(session.getGameId())
 
                 // Move creator user to the running game
@@ -273,24 +275,36 @@ class PlayController : TextWebSocketHandler() {
                 val players = mutableListOf(session)
 
                 // Move joined users to the running game
-                players.addAll(gameDescriptor.players.mapNotNull { n -> gamesSessions.remove(n) })
+                players.addAll(descriptor.players.mapNotNull { n -> gamesSessions.remove(n) })
 
                 // Record the running game
-                val game = gameBuilder.build(gameDescriptor, players)
+                val game = Game(
+                        descriptor.id,
+                        descriptor.rounds,
+                        descriptor.words,
+                        descriptor.language,
+                        descriptor.creator,
+                        players)
+                game.initializeRound(gameBuilder.generateWords(game.language, game.wordCount))
                 runningGames[game.id] = game
 
                 // Update the state of all players
                 game.players.forEach { s -> s.setState(ClientState.IN_GAME, game.id, logger) }
 
-                // Notify playing users
-                sendMessage(game.players, GameStartNotification())
-
-                // Notify other users
+                // Notify non playing users
                 sendMessage(gamesSessions.values, GamesListNotification(declaredGames.values))
 
-                executor.schedule({ sendMessage(game.players, WordsListNotification(game.getWordsDto())) }, 5L, TimeUnit.SECONDS)
+                notifyRoundStart(game)
             }
         }
+    }
+
+    private fun notifyRoundStart(game: Game) {
+        // Notify playing users to display the countdown
+        sendMessage(game.players, GameStartNotification())
+
+        // Notify playing users when the round begins
+        executor.schedule({ sendMessage(game.players, WordsListNotification(game.getWordsDto())) }, 5L, TimeUnit.SECONDS)
     }
 
     private fun claimWord(session: WebSocketSession, label: String) {
@@ -299,12 +313,20 @@ class PlayController : TextWebSocketHandler() {
             val map = game.claimWord(session.getUserName(), label)
             if (map.isNotEmpty()) {
                 if (game.isRoundOver()) {
-                    sendMessage(game.players, ScoresNotification(map, game.getRoundScoresDto()))
-                }
-                else {
+                    sendMessage(game.players, ScoresNotification(map, game.getRoundScoresDto(), game.manager))
+                } else {
                     sendMessage(game.players, WordsListNotification(map))
                 }
             }
+        }
+    }
+
+    private fun startRound(session: WebSocketSession) {
+        val game = runningGames[session.getGameId()]
+        if (game != null) {
+            game.initializeRound(gameBuilder.generateWords(game.language, game.wordCount))
+
+            notifyRoundStart(game)
         }
     }
 

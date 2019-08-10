@@ -38,4 +38,7 @@ class WordsListNotification(val words: Map<String, String>) : BaseNotification(C
 /**
  * Sent when a round ended. Contains the last words update and the scores.
  */
-class ScoresNotification(val words: Map<String, String>, val scores: List<ScoreDto>) : BaseNotification(Constants.NOTIFICATION_SCORES)
+class ScoresNotification(
+        val words: Map<String, String>,
+        val scores: List<ScoreDto>,
+        val manager: String) : BaseNotification(Constants.NOTIFICATION_SCORES)

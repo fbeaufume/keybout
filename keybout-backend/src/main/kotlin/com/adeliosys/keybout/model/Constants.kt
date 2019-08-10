@@ -14,6 +14,7 @@ object Constants {
     const val ACTION_LEAVE_GAME = "leave-game"
     const val ACTION_START_GAME = "start-game"
     const val ACTION_CLAIM_WORD = "claim-word"
+    const val ACTION_START_ROUND = "start-round"
 
     // Notification types
 

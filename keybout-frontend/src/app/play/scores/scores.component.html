@@ -16,4 +16,11 @@
     </tr>
     </tbody>
   </table>
+  <br>
+  <div *ngIf="isGameManager(); else notGameManager" class="text-center">
+    <button  class="btn btn-primary" [disabled]="!canStart()" (click)="startNextRound()">Start next round</button>
+  </div>
+  <ng-template #notGameManager>
+    Waiting for the game manager to start the next round...
+  </ng-template>
 </div>

@@ -1,5 +1,6 @@
 package com.adeliosys.keybout.model
 
+import com.adeliosys.keybout.controller.getUserName
 import org.springframework.web.socket.WebSocketSession
 import kotlin.math.round
 
@@ -9,14 +10,18 @@ import kotlin.math.round
 class Game(
         val id: Long,
         var remainingRounds: Int,
-        val words: Map<String, Word>, // Words by label
+        val wordCount: Int,
+        val language: String,
         var manager: String, // Name of the player that starts the next round
         val players: List<WebSocketSession>) {
 
-    // Number of available words, when it reaches 0 the round ends
-    var availableWords = words.size
+    // Words by label
+    var words: Map<String, Word> = mapOf()
 
-    // Scores by user name, updated as the words are assigned
+    // Number of available words, when it reaches 0 the round ends
+    var availableWords = 0
+
+    // Round scores by user name, updated as the words are assigned
     val userScores: MutableMap<String, Score> = mutableMapOf()
 
     // Ordered round scores, updated at the end of the round
@@ -24,6 +29,16 @@ class Game(
 
     // Ordered game scores, updated at the end of the game
     var gameScores: List<Score> = emptyList()
+
+    @Synchronized
+    fun initializeRound(words: Map<String, Word>) {
+        this.words = words
+        availableWords = words.size
+
+        // Reset the user scores
+        userScores.clear()
+        players.forEach { userScores[it.getUserName()] = Score(it.getUserName()) }
+    }
 
     /**
      * Return UI friendly words, i.e. the key is the word label
@@ -43,7 +58,8 @@ class Game(
             if (word != null && word.userName.isEmpty()) {
                 word.userName = userName
 
-                updateUserScore(userName)
+                // Add 1 point to the user score
+                userScores[userName]?.increment()
 
                 availableWords--
                 if (isRoundOver()) {
@@ -57,18 +73,6 @@ class Game(
     }
 
     fun isRoundOver() = availableWords <= 0
-
-    /**
-     * Add 1 point to the user score.
-     */
-    private fun updateUserScore(userName: String) {
-        val score = userScores[userName]
-        if (score == null) {
-            userScores[userName] = Score(userName)
-        } else {
-            score.increment()
-        }
-    }
 
     /**
      * Update round and game scores.

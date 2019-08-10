@@ -22,6 +22,18 @@ export class ScoresComponent {
 
   // Is this component visible
   isVisible(): boolean {
-    return this.state == ClientState.SCORES;
+    return this.state >= ClientState.SCORES && this.state <= ClientState.STARTING_ROUND;
+  }
+
+  isGameManager(): boolean {
+    return this.playService.userName === this.playService.gameManager;
+  }
+
+  canStart() {
+    return this.state === ClientState.SCORES;
+  }
+
+  startNextRound() {
+    this.playService.startRound();
   }
 }

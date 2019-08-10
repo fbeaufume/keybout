@@ -14,11 +14,12 @@ export enum ClientState {
   JOINING, // User is joining a game
   JOINED, // User has joined a game
   LEAVING, // User is leaving a game
-  STARTING, // User is starting a game, i.e. has clicked on Start button
+  STARTING_GAME, // User is starting a game, i.e. has clicked on Start button
   STARTED, // Display the countdown page
   RUNNING, // A game is running
   END_ROUND, // A game round has ended, display the View scores button
-  SCORES // Displaying the scores
+  SCORES, // Displaying the scores
+  STARTING_ROUND // User is starting the next round, i.e. has clicked on Start next round
 }
 
 @Injectable({
@@ -40,6 +41,9 @@ export class PlayService {
 
   // ID of the game created or joined by the user
   gameId = 0;
+
+  // Manager of the game, i.e. the user that can start the next round
+  gameManager = '';
 
   scores: Score[] = [];
 
@@ -119,7 +123,7 @@ export class PlayService {
                 break;
             }
             break;
-          case ClientState.STARTING:
+          case ClientState.STARTING_GAME:
             if (data.type === 'game-start') {
               this.gameStarted();
             }
@@ -136,8 +140,24 @@ export class PlayService {
             }
             if (data.type === 'scores') {
               this.updateWords(data.words);
+              this.gameManager = data.manager;
               this.scores = data.scores;
               this.changeState(ClientState.END_ROUND);
+            }
+            break;
+          case ClientState.END_ROUND:
+            if (data.type === 'game-start') {
+              this.gameStarted();
+            }
+            break;
+          case ClientState.SCORES:
+            if (data.type === 'game-start') {
+              this.gameStarted();
+            }
+            break;
+          case ClientState.STARTING_ROUND:
+            if (data.type === 'game-start') {
+              this.gameStarted();
             }
             break;
           // TODO FBE other cases
@@ -178,8 +198,9 @@ export class PlayService {
     this.send(`leave-game`);
   }
 
+  // Start the first round of the game
   startGame() {
-    this.changeState(ClientState.STARTING);
+    this.changeState(ClientState.STARTING_GAME);
     this.send(`start-game`);
   }
 
@@ -235,6 +256,11 @@ export class PlayService {
     this.send(`claim-word ${label}`);
   }
 
+  // Start the next round of the game
+  startRound() {
+    this.changeState(ClientState.STARTING_ROUND);
+    this.send(`start-round`);
+  }
   // Send an action to the server
   send(message: string) {
     PlayService.log(`Sending '${message}'`);

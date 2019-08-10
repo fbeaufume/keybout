@@ -1,14 +1,11 @@
 package com.adeliosys.keybout.service
 
-import com.adeliosys.keybout.model.Game
-import com.adeliosys.keybout.model.GameDescriptor
 import com.adeliosys.keybout.model.Word
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
-import org.springframework.web.socket.WebSocketSession
 import javax.annotation.PostConstruct
 
 @Service
@@ -52,11 +49,14 @@ class GameBuilder {
         logger.info("Loaded {} '{}' words", words.size, lang)
     }
 
-    fun build(descriptor: GameDescriptor, players: List<WebSocketSession>): Game {
-        val possibleWords = wordsByLang[descriptor.language]!!
+    /**
+     * Generate random words.
+     */
+    fun generateWords(language: String, count: Int): Map<String, Word> {
+        val possibleWords = wordsByLang[language]!!
         val selectedWords = mutableMapOf<String, Word>()
 
-        while (selectedWords.size < descriptor.words) {
+        while (selectedWords.size < count) {
             val selectedWord = possibleWords[(0..possibleWords.size).random()]
 
             // Check if no other word begins with the same letters
@@ -72,6 +72,6 @@ class GameBuilder {
             }
         }
 
-        return Game(descriptor.id, descriptor.rounds, selectedWords, descriptor.creator, players)
+        return selectedWords
     }
 }

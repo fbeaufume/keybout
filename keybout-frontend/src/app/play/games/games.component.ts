@@ -53,7 +53,7 @@ export class GamesComponent {
 
   // Is this component visible
   isVisible(): boolean {
-    return this.state >= ClientState.IDENTIFIED && this.state <= ClientState.STARTING;
+    return this.state >= ClientState.IDENTIFIED && this.state <= ClientState.STARTING_GAME;
   }
 
   noAvailableGame(): boolean {
