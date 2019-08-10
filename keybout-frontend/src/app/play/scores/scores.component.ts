@@ -16,8 +16,24 @@ export class ScoresComponent {
     return this.playService.state;
   }
 
-  get scores(): Score[] {
-    return this.playService.scores;
+  get roundScores(): Score[] {
+    return this.playService.roundScores;
+  }
+
+  get topRoundUser(): string {
+    return this.roundScores[0].userName;
+  }
+
+  get gameScores(): Score[] {
+    return this.playService.gameScores;
+  }
+
+  get topGameUser(): string {
+    return this.gameScores[0].userName;
+  }
+
+  get firstRoundUser(): string {
+    return this.roundScores[0].userName;
   }
 
   // Is this component visible

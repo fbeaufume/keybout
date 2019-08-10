@@ -1,24 +1,51 @@
 <div class="container" *ngIf="isVisible()">
-  <h4>Round scores</h4>
-  <table class="table table-striped table-bordered">
-    <thead>
-    <tr>
-      <th scope="col">Rank</th>
-      <th scope="col">Name</th>
-      <th scope="col">Score</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let score of scores; index as i">
-      <td>{{i+1}}</td>
-      <td>{{score.userName}}</td>
-      <td>{{score.points}}</td>
-    </tr>
-    </tbody>
-  </table>
+  <h4>Round over</h4>
+  <p>Round winner is <span class="text-primary font-weight-bold">{{topRoundUser}}</span>.</p>
+  <p>Current game leader is <span class="text-primary font-weight-bold">{{topGameUser}}</span>.</p>
+  <br>
+  <div class="row">
+    <div class="col">
+      <h5>Round scores</h5>
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col">Rank</th>
+          <th scope="col">Name</th>
+          <th scope="col">Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let score of roundScores; index as i">
+          <td>{{i + 1}}</td>
+          <td>{{score.userName}}</td>
+          <td>{{score.points}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col">
+      <h5>Game scores</h5>
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col">Rank</th>
+          <th scope="col">Name</th>
+          <th scope="col">Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let score of gameScores; index as i">
+          <td>{{i + 1}}</td>
+          <td>{{score.userName}}</td>
+          <td>{{score.points}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
   <br>
   <div *ngIf="isGameManager(); else notGameManager" class="text-center">
-    <button  class="btn btn-primary" [disabled]="!canStart()" (click)="startNextRound()">Start next round</button>
+    <button class="btn btn-primary" [disabled]="!canStart()" (click)="startNextRound()">Start next round</button>
   </div>
   <ng-template #notGameManager>
     Waiting for the game manager to start the next round...

@@ -313,7 +313,7 @@ class PlayController : TextWebSocketHandler() {
             val map = game.claimWord(session.getUserName(), label)
             if (map.isNotEmpty()) {
                 if (game.isRoundOver()) {
-                    sendMessage(game.players, ScoresNotification(map, game.getRoundScoresDto(), game.manager))
+                    sendMessage(game.players, ScoresNotification(map, game.getRoundScoresDto(), game.getGameScoresDto(), game.manager))
                 } else {
                     sendMessage(game.players, WordsListNotification(map))
                 }

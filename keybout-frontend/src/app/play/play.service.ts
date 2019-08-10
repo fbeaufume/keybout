@@ -45,7 +45,11 @@ export class PlayService {
   // Manager of the game, i.e. the user that can start the next round
   gameManager = '';
 
-  scores: Score[] = [];
+  // Scores of the round that ended
+  roundScores: Score[] = [];
+
+  // Current game scores, when a round ended
+  gameScores: Score[] = [];
 
   errorMessage: string;
 
@@ -141,7 +145,8 @@ export class PlayService {
             if (data.type === 'scores') {
               this.updateWords(data.words);
               this.gameManager = data.manager;
-              this.scores = data.scores;
+              this.roundScores = data.roundScores;
+              this.gameScores = data.gameScores;
               this.changeState(ClientState.END_ROUND);
             }
             break;
@@ -261,6 +266,7 @@ export class PlayService {
     this.changeState(ClientState.STARTING_ROUND);
     this.send(`start-round`);
   }
+
   // Send an action to the server
   send(message: string) {
     PlayService.log(`Sending '${message}'`);

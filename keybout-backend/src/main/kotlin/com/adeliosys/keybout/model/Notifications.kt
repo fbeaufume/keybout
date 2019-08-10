@@ -40,5 +40,6 @@ class WordsListNotification(val words: Map<String, String>) : BaseNotification(C
  */
 class ScoresNotification(
         val words: Map<String, String>,
-        val scores: List<ScoreDto>,
+        val roundScores: List<ScoreDto>,
+        val gameScores: List<ScoreDto>,
         val manager: String) : BaseNotification(Constants.NOTIFICATION_SCORES)

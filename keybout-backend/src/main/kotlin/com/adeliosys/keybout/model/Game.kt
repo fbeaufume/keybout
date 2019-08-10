@@ -30,14 +30,17 @@ class Game(
     // Ordered game scores, updated at the end of the game
     var gameScores: List<Score> = emptyList()
 
+    init {
+        players.forEach { userScores[it.getUserName()] = Score(it.getUserName()) }
+    }
+
     @Synchronized
     fun initializeRound(words: Map<String, Word>) {
         this.words = words
         availableWords = words.size
 
         // Reset the user scores
-        userScores.clear()
-        players.forEach { userScores[it.getUserName()] = Score(it.getUserName()) }
+        userScores.forEach { (_, s) -> s.resetPoints() }
     }
 
     /**
@@ -59,7 +62,7 @@ class Game(
                 word.userName = userName
 
                 // Add 1 point to the user score
-                userScores[userName]?.increment()
+                userScores[userName]?.incrementPoints()
 
                 availableWords--
                 if (isRoundOver()) {
@@ -80,11 +83,19 @@ class Game(
     private fun updateScores() {
         roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { it.timestamp }))
 
-        // TODO FBE update game scores
+        // Give 1 victory to the best user
+        roundScores[0]?.incrementVictories()
+
+        gameScores = userScores.values.sortedWith(compareBy({-it.victories}))
     }
 
     /**
-     * Return UI friendly scores.
+     * Return UI friendly round scores.
      */
     fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points) }
+
+    /**
+     * Return UI friendly game scores.
+     */
+    fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories) }
 }
