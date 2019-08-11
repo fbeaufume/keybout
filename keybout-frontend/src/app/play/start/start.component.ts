@@ -15,7 +15,9 @@ export class StartComponent {
   countdown = COUNTDOWN; // Current value of the countdown
 
   constructor(public playService: PlayService) {
-    this.playService.countdownObservable$.subscribe(() => this.startCountdown());
+    this.playService.stateObservable$.subscribe(state => {
+      if (state === ClientState.STARTED) this.startCountdown()
+    });
   }
 
   get state(): ClientState {

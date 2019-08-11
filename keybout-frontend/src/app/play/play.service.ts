@@ -56,11 +56,11 @@ export class PlayService {
 
   errorMessage: string;
 
-  // Subject used for countdown notification
-  private countdownSubject = new Subject<any>();
+  // Subject used for state change notification
+  private stateSubject = new Subject<ClientState>();
 
-  // Observable used for countdown notification
-  countdownObservable$ = this.countdownSubject.asObservable();
+  // Observable used for state change notification
+  stateObservable$ = this.stateSubject.asObservable();
 
   words: Map<string, string> = new Map();
 
@@ -218,7 +218,6 @@ export class PlayService {
   }
 
   gameStarted() {
-    this.countdownSubject.next();
     this.changeState(ClientState.STARTED);
   }
 
@@ -261,6 +260,7 @@ export class PlayService {
 
   changeState(state: ClientState) {
     this.state = state;
+    this.stateSubject.next(state);
     PlayService.log(`Changed state to ${ClientState[state]}`);
   }
 
