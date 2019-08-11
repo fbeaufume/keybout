@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {ClientState, PlayService} from '../play.service';
 
 @Component({
@@ -8,9 +8,20 @@ import {ClientState, PlayService} from '../play.service';
 })
 export class GameComponent {
 
+  // To give the focus to the word input
+  @ViewChild('wordInput', {read: ElementRef}) wordInput: ElementRef;
+
   inputWord = '';
 
   constructor(public playService: PlayService) {
+    this.playService.stateObservable$.subscribe(state => {
+      if (state === ClientState.RUNNING) {
+        // See https://github.com/angular/components/issues/3922
+        // and https://stackoverflow.com/questions/39908967/how-to-get-reference-of-the-component-associated-with-elementref-in-angular-2/39909203#39909203
+        // and https://blog.angular-university.io/angular-viewchild/
+        //this.wordInput.nativeElement.focus(); // Does not work here (or in ngAfterViewInit) : ERROR TypeError: "_this.wordInput is undefined"
+      }
+    });
   }
 
   get state(): ClientState {

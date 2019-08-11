@@ -1,10 +1,18 @@
 <div class="container" *ngIf="isVisible()">
-  <h4>{{isGameOver() ? 'Game' : 'Round'}} over</h4>
-  <p>Round winner is <span [ngClass]="(userName === topRoundUser)?'text-success':'text-danger'"
-                           class="font-weight-bold">{{topRoundUser}}</span>.
-  </p>
-  <p>Current game leader is <span [ngClass]="(userName === topRoundUser)?'text-success':'text-danger'"
-                                  class="font-weight-bold">{{topGameUser}}</span>.</p>
+  <div *ngIf="!isGameOver(); else gameOver">
+    <h4>Round over</h4>
+    <p>Round winner is <span [ngClass]="(userName === topRoundUser)?'text-success':'text-danger'"
+                             class="font-weight-bold">{{topRoundUser}}</span>.
+    </p>
+    <p>Current game leader is <span [ngClass]="(userName === topGameUser)?'text-success':'text-danger'"
+                                    class="font-weight-bold">{{topGameUser}}</span>.</p>
+  </div>
+  <ng-template #gameOver>
+    <h4>Game over</h4>
+    <p>Game winner is <span [ngClass]="(userName === topGameUser)?'text-success':'text-danger'"
+                            class="font-weight-bold">{{topGameUser}}</span>.
+    </p>
+  </ng-template>
   <br>
   <div class="row">
     <div class="col">

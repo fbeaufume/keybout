@@ -33,7 +33,7 @@ class WordGenerator {
      * Load the words for one language.
      */
     private fun loadWords(resource: Resource, lang: String) {
-        logger.info("Loading '{}' words", lang)
+        logger.debug("Loading '{}' words", lang)
 
         val words = mutableListOf<String>()
 
