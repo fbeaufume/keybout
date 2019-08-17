@@ -8,18 +8,18 @@ import {ClientState, PlayService} from '../play.service';
 })
 export class GameComponent {
 
-  // To give the focus to the word input
-  @ViewChild('wordInput', {read: ElementRef}) wordInput: ElementRef;
+  @ViewChild('outerDiv') outerDiv: ElementRef;
 
   inputWord = '';
 
   constructor(public playService: PlayService) {
     this.playService.stateObservable$.subscribe(state => {
       if (state === ClientState.RUNNING) {
-        // See https://github.com/angular/components/issues/3922
-        // and https://stackoverflow.com/questions/39908967/how-to-get-reference-of-the-component-associated-with-elementref-in-angular-2/39909203#39909203
-        // and https://blog.angular-university.io/angular-viewchild/
-        //this.wordInput.nativeElement.focus(); // Does not work here (or in ngAfterViewInit) : ERROR TypeError: "_this.wordInput is undefined"
+        // Give the focus to the input element,
+        // inspired by https://stackoverflow.com/a/45590831/623185
+        setTimeout(() => {
+          this.outerDiv.nativeElement.getElementsByTagName('input').item(0).focus();
+        }, 10);
       }
     });
   }
@@ -36,8 +36,6 @@ export class GameComponent {
   isVisible(): boolean {
     return this.state >= ClientState.RUNNING && this.state <= ClientState.END_ROUND;
   }
-
-  // TODO FBE focus the input
 
   // Return the class attribute for a given word
   getClass(label: string) {

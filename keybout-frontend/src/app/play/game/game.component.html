@@ -1,11 +1,15 @@
-<div class="container" *ngIf="isVisible()">
-  <h4>Go!</h4>
-  <button *ngFor="let word of words | keyvalue" type="button" [class]="getClass(word.key)">{{word.key | uppercase}}</button>
-  <br>
-  <input #wordInput class="form-control mt-4" type="text" autocomplete="false" [(ngModel)]="inputWord" (keyup)="onKey()"/>
-  <p class="text-right">Hints: case does not matter, Space clears the input</p>
-  <br>
-  <div *ngIf="canViewScores()" class="text-center">
-    <button  class="btn btn-primary" (click)="viewScores()">View scores</button>
+<div #outerDiv>
+  <div class="container" *ngIf="isVisible()">
+    <h4>Go!</h4>
+    <button *ngFor="let word of words | keyvalue" type="button"
+            [class]="getClass(word.key)">{{word.key | uppercase}}</button>
+    <br>
+    <input class="form-control mt-4" type="text" autocomplete="false" [(ngModel)]="inputWord"
+           (keyup)="onKey()"/>
+    <p class="text-right">Hints: case does not matter, Space clears the input</p>
+    <br>
+    <div *ngIf="canViewScores()" class="text-center">
+      <button class="btn btn-primary" (click)="viewScores()">View scores</button>
+    </div>
   </div>
 </div>
