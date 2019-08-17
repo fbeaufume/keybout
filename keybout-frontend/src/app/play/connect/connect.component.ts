@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {ClientState, PlayService} from '../play.service';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-connect',
@@ -8,7 +9,18 @@ import {ClientState, PlayService} from '../play.service';
 })
 export class ConnectComponent {
 
-  constructor(public playService: PlayService) {
+  @ViewChild('outerDiv') outerDiv: ElementRef;
+
+  constructor(private router: Router, public playService: PlayService) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd && event.url === '/play' && this.isVisible()) {
+        setTimeout(() => {
+          // Give the focus to the input element,
+          // inspired by https://stackoverflow.com/a/45590831/623185
+          this.outerDiv.nativeElement.getElementsByTagName('input').item(0).focus();
+        }, 50);
+      }
+    });
   }
 
   get userName(): string {
