@@ -26,4 +26,5 @@ object Constants {
     const val NOTIFICATION_GAME_START = "game-start"
     const val NOTIFICATION_WORDS_LIST = "words-list"
     const val NOTIFICATION_SCORES = "scores"
+    const val NOTIFICATION_MANAGER = "manager"
 }

@@ -40,7 +40,14 @@ class WordsListNotification(val words: Map<String, String>) : BaseNotification(C
  */
 class ScoresNotification(
         val words: Map<String, String>,
-        val roundScores: List<ScoreDto>,
-        val gameScores: List<ScoreDto>,
-        val manager: String,
-        val gameOver: Boolean) : BaseNotification(Constants.NOTIFICATION_SCORES)
+        game: Game) : BaseNotification(Constants.NOTIFICATION_SCORES) {
+    val roundScores: List<ScoreDto> = game.getRoundScoresDto()
+    val gameScores: List<ScoreDto> = game.getGameScoresDto()
+    val manager: String = game.manager
+    val gameOver: Boolean = game.isGameOver()
+}
+
+/**
+ * Sent at the end of a round, when the manager changed.
+ */
+class ManagerNotification(val manager: String): BaseNotification(Constants.NOTIFICATION_MANAGER)

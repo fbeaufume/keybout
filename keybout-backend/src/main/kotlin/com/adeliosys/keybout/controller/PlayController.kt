@@ -71,7 +71,7 @@ class PlayController : TextWebSocketHandler() {
     private val declaredGames = mutableMapOf<Long, GameDescriptor>()
 
     /**
-     * WebSocket sessions for a running game.
+     * Running games.
      * The key is the game ID.
      * Concurrency is handled by synchronizing on this object.
      */
@@ -166,7 +166,7 @@ class PlayController : TextWebSocketHandler() {
                                 try {
                                     joinGame(session, action.arguments[0].toLong())
                                 } catch (e: NumberFormatException) {
-                                    logger.warn("Invalid game ID is message '{}' for connection '{}'", message, session.id)
+                                    logger.warn("Invalid game in message '{}' for connection '{}'", message, session.id)
                                 }
                             }
                         }
@@ -212,10 +212,7 @@ class PlayController : TextWebSocketHandler() {
             }
             ClientState.CREATED -> deleteGame(session)
             ClientState.JOINED -> leaveGame(session)
-            ClientState.IN_GAME -> {
-                // TODO FBE
-            }
-            // TODO FBE other cases
+            ClientState.IN_GAME -> disconnectFromGame(session)
         }
 
         userNames.remove(session.getUserName())
@@ -232,12 +229,11 @@ class PlayController : TextWebSocketHandler() {
     }
 
     /**
-     * Called after a user connection, or after a user quit a game, to go to the games list.
+     * Called after a user identification or after a user quit a game, to go to the games list.
      */
     private fun goToGamesList(session: WebSocketSession) {
-        session.setState(ClientState.IDENTIFIED, 0, logger)
-
         synchronized(this) {
+            session.setState(ClientState.IDENTIFIED, 0, logger)
             gamesSessions[session.getUserName()] = session
             sendMessage(session, GamesListNotification(declaredGames.values))
         }
@@ -310,9 +306,10 @@ class PlayController : TextWebSocketHandler() {
                 game.initializeRound(wordGenerator.generateWords(game.language, game.wordCount))
                 runningGames[game.id] = game
 
-                logger.info("Created a {} player 'capture' game {} with {} round{} and {} '{}' words, game count is {}",
-                        players.size,
+                logger.info("Created game {} ({} player{}, 'capture' type, {} round{}, {} '{}' words), game count is {}",
                         descriptor.id,
+                        players.size,
+                        if (players.size > 1) "s" else "",
                         descriptor.rounds,
                         if (descriptor.rounds > 1) "s" else "",
                         descriptor.words,
@@ -344,11 +341,10 @@ class PlayController : TextWebSocketHandler() {
             val map = game.claimWord(session.getUserName(), label)
             if (map.isNotEmpty()) {
                 if (game.isRoundOver()) {
-                    sendMessage(game.players, ScoresNotification(map, game.getRoundScoresDto(), game.getGameScoresDto(), game.manager, game.isGameOver()))
+                    sendMessage(game.players, ScoresNotification(map, game))
 
                     if (game.isGameOver()) {
-                        runningGames.remove(session.getGameId())
-                        logger.info("Deleted game {}, games count is {}", game.id, runningGames.size)
+                        deleteRunningGame(game.id)
                     }
                 } else {
                     sendMessage(game.players, WordsListNotification(map))
@@ -357,12 +353,35 @@ class PlayController : TextWebSocketHandler() {
         }
     }
 
+    private fun deleteRunningGame(gameId: Long) {
+        runningGames.remove(gameId)
+        logger.info("Deleted game {}, games count is {}", gameId, runningGames.size)
+    }
+
     private fun startRound(session: WebSocketSession) {
         val game = runningGames[session.getGameId()]
         if (game != null) {
             game.initializeRound(wordGenerator.generateWords(game.language, game.wordCount))
 
             notifyRoundStart(game)
+        }
+    }
+
+    private fun disconnectFromGame(session: WebSocketSession) {
+        synchronized(this) {
+            val game = runningGames[session.getGameId()]
+            if (game != null) {
+                val (changed, manager, empty) = game.removeUser(session)
+
+                if (empty) {
+                    // No user left, remove the game
+                    deleteRunningGame(game.id)
+                }
+                else if (changed) {
+                    // Notify the users about the new manager
+                    sendMessage(game.players, ManagerNotification(manager))
+                }
+            }
         }
     }
 
@@ -403,7 +422,7 @@ fun WebSocketSession.getState(): ClientState = attributes[STATE] as ClientState
 fun WebSocketSession.setState(state: ClientState, gameId: Long, logger: Logger) {
     attributes[STATE] = state
     attributes[GAME_ID] = gameId
-    logger.debug("Changed state to '{}' and game {} for connection '{}'", state, gameId, id)
+    logger.debug("Changed to state '{}' and game {} for connection '{}'", state, gameId, id)
 }
 
 fun WebSocketSession.getGameId(): Long = attributes[GAME_ID] as Long

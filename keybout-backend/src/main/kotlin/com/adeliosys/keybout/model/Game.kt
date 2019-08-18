@@ -12,7 +12,7 @@ class Game(
         val wordCount: Int,
         val language: String,
         var manager: String, // Name of the player that starts the next round
-        val players: List<WebSocketSession>) {
+        val players: MutableList<WebSocketSession>) {
 
     // Words by label
     private var words: Map<String, Word> = mapOf()
@@ -20,7 +20,7 @@ class Game(
     // Number of available words, when it reaches 0 the round ends
     private var availableWords = 0
 
-    // Round scores by user name, updated as the words are assigned
+    // Round and game scores by user name, updated as the words are assigned
     private val userScores: MutableMap<String, Score> = mutableMapOf()
 
     // Ordered round scores, updated at the end of the round
@@ -99,4 +99,22 @@ class Game(
      * Return UI friendly game scores.
      */
     fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories) }
+
+    /**
+     * A user disconnected, remove him from the game.
+     * Return true if the manager changed (when it was the disconnected user),
+     * the new manager name, the number of remaining users.
+     */
+    @Synchronized
+    fun removeUser(session: WebSocketSession): Triple<Boolean, String, Boolean> {
+        var changed = false
+        if (players.remove(session)) {
+            if (players.size > 0 && session.getUserName() == manager) {
+                // Choose a new manager
+                manager = players[0].getUserName()
+                changed = true
+            }
+        }
+        return Triple(changed, manager, players.size <= 0)
+    }
 }

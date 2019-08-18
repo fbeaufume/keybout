@@ -153,15 +153,24 @@ export class PlayService {
               this.gameOver = data.gameOver;
               this.changeState(ClientState.END_ROUND);
             }
+            if (data.type === 'manager') {
+              this.gameManager = data.manager;
+            }
             break;
           case ClientState.END_ROUND:
             if (data.type === 'game-start') {
               this.gameStarted();
             }
+            if (data.type === 'manager') {
+              this.gameManager = data.manager;
+            }
             break;
           case ClientState.SCORES:
             if (data.type === 'game-start') {
               this.gameStarted();
+            }
+            if (data.type === 'manager') {
+              this.gameManager = data.manager;
             }
             break;
           case ClientState.STARTING_ROUND:
