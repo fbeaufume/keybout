@@ -18,6 +18,7 @@ import com.google.gson.Gson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
@@ -26,6 +27,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import javax.annotation.PostConstruct
 
 /**
  * Receive WebSocket messages and trigger their business processing
@@ -77,6 +79,9 @@ class PlayController : TextWebSocketHandler() {
 
     private val gson = Gson()
 
+    @Value("\${application.latency:0}")
+    private var latency = 0L
+
     @Autowired
     private lateinit var wordGenerator: WordGenerator
 
@@ -86,6 +91,11 @@ class PlayController : TextWebSocketHandler() {
      */
     private val executor = Executors.newSingleThreadScheduledExecutor()
 
+    @PostConstruct
+    private fun init() {
+        logger.info("Using latency of {} ms", latency)
+    }
+
     override fun afterConnectionEstablished(session: WebSocketSession) {
         logger.debug("Opened connection '{}'", session.id)
         session.setState(ClientState.UNIDENTIFIED, 0, logger)
@@ -93,6 +103,10 @@ class PlayController : TextWebSocketHandler() {
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
         try {
+            if (latency > 0) {
+                Thread.sleep(latency)
+            }
+
             logger.debug("Received message '{}' for connection '{}'", message.payload, session.id)
 
             val action = Action(message.payload)

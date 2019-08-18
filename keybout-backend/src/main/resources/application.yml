@@ -4,5 +4,11 @@ spring:
 
 logging.level:
   ROOT: INFO
-#  org.springframework: DEBUG
-#  com.adeliosys: DEBUG
+
+---
+
+spring:
+  profiles: dev
+
+logging.level:
+  com.adeliosys: DEBUG
