@@ -100,7 +100,7 @@
     <profiles>
         <!-- Embed the frontend contents in the backend if this profile is active -->
         <profile>
-            <id>with-frontend</id>
+            <id>full</id>
             <build>
                 <plugins>
                     <plugin>
