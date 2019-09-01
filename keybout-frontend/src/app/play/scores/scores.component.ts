@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {ClientState, PlayService} from "../play.service";
-import {Score} from "../score";
+import {ClientState, PlayService} from '../play.service';
+import {Score} from '../score';
 
 @Component({
   selector: 'app-scores',
@@ -43,6 +43,18 @@ export class ScoresComponent {
 
   isGameManager(): boolean {
     return this.playService.userName === this.playService.gameManager;
+  }
+
+  get roundDuration(): number {
+    return this.playService.roundDuration;
+  }
+
+  getWordsPerMin(points: number, duration: number): number {
+    return this.playService.getWordsPerMin(points, duration);
+  }
+
+  getBestWordsPerMin(userName: string): number {
+    return this.playService.bestWordsPerMin.get(userName);
   }
 
   isGameOver(): boolean {

@@ -44,10 +44,11 @@ class ScoresNotification(
     val roundScores: List<ScoreDto> = game.getRoundScoresDto()
     val gameScores: List<ScoreDto> = game.getGameScoresDto()
     val manager: String = game.manager
+    val roundDuration: Long = game.roundDuration
     val gameOver: Boolean = game.isGameOver()
 }
 
 /**
  * Sent at the end of a round, when the manager changed.
  */
-class ManagerNotification(val manager: String): BaseNotification(Constants.NOTIFICATION_MANAGER)
+class ManagerNotification(val manager: String) : BaseNotification(Constants.NOTIFICATION_MANAGER)

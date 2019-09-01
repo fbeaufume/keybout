@@ -14,6 +14,12 @@ class Game(
         var manager: String, // Name of the player that starts the next round
         val players: MutableList<WebSocketSession>) {
 
+    // Timestamp of the beginning of the current round
+    private var roundStart: Long = 0
+
+    // Duration of the current round
+    var roundDuration: Long = 0
+
     // Words by label
     private var words: Map<String, Word> = mapOf()
 
@@ -35,6 +41,8 @@ class Game(
 
     @Synchronized
     fun initializeRound(words: Map<String, Word>) {
+        roundStart = System.currentTimeMillis()
+        roundDuration = 0
         this.words = words
         availableWords = words.size
 
@@ -65,6 +73,8 @@ class Game(
 
                 availableWords--
                 if (isRoundOver()) {
+                    roundDuration = System.currentTimeMillis() - roundStart
+
                     updateScores()
                 }
 

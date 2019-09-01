@@ -23,6 +23,7 @@
           <th scope="col">Rank</th>
           <th scope="col">Name</th>
           <th scope="col">Words</th>
+          <th scope="col">Words/min</th>
         </tr>
         </thead>
         <tbody>
@@ -30,6 +31,7 @@
           <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{i + 1}}</td>
           <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.userName}}</td>
           <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.points}}</td>
+          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{getWordsPerMin(score.points, roundDuration) | number:'1.0-0'}}</td>
         </tr>
         </tbody>
       </table>
@@ -42,6 +44,7 @@
           <th scope="col">Rank</th>
           <th scope="col">Name</th>
           <th scope="col">Rounds won</th>
+          <th scope="col">Best w/m</th>
         </tr>
         </thead>
         <tbody>
@@ -49,6 +52,7 @@
           <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{i + 1}}</td>
           <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.userName}}</td>
           <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.points}}</td>
+          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{getBestWordsPerMin(score.userName) | number:'1.0-0'}}</td>
         </tr>
         </tbody>
       </table>

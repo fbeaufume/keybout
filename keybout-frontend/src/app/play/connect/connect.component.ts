@@ -18,7 +18,7 @@ export class ConnectComponent {
           // Give the focus to the input element,
           // inspired by https://stackoverflow.com/a/45590831/623185
           this.outerDiv.nativeElement.getElementsByTagName('input').item(0).focus();
-        }, 50);
+        }, 0);
       }
     });
   }

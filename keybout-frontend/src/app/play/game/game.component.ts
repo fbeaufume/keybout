@@ -19,7 +19,7 @@ export class GameComponent {
         // inspired by https://stackoverflow.com/a/45590831/623185
         setTimeout(() => {
           this.outerDiv.nativeElement.getElementsByTagName('input').item(0).focus();
-        }, 50);
+        }, 0);
       }
     });
   }
