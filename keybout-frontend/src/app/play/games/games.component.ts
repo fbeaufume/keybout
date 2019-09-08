@@ -14,12 +14,11 @@ export class GamesComponent {
     {id: 'capture 1', name: 'Capture (1 round)'},
     {id: 'capture 2', name: 'Capture (2 rounds)'},
     {id: 'capture 3', name: 'Capture (3 rounds)'},
-    {id: 'capture 5', name: 'Capture (5 rounds)'},
-    {id: 'capture 10', name: 'Capture (10 rounds)'}
+    {id: 'capture 5', name: 'Capture (5 rounds)'}
   ];
 
   // Available word counts
-  wordCounts = [5, 10, 20, 30, 50];
+  wordCounts = [5, 10, 20, 30, 50, 100];
 
   // Available game langs
   languages = [
