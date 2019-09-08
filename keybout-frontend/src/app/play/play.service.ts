@@ -308,6 +308,7 @@ export class PlayService {
 
   // The user wants to quit a game that ended
   quitGame() {
+    this.bestWordsPerMin.clear();
     this.changeState(ClientState.QUITTING);
     this.send('quit-game');
   }

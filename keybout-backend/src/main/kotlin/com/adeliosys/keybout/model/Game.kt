@@ -92,12 +92,12 @@ class Game(
      * Update round and game scores.
      */
     private fun updateScores() {
-        roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { it.timestamp }))
+        roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { it.latestWordTimestamp }))
 
         // Give 1 victory to the best user
         roundScores[0].incrementVictories()
 
-        gameScores = userScores.values.sortedWith(compareBy { -it.victories })
+        gameScores = userScores.values.sortedWith(compareBy({ -it.victories }, { it.latestVictoryTimestamp }))
     }
 
     /**
