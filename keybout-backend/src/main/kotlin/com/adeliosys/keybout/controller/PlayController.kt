@@ -99,6 +99,7 @@ class PlayController : TextWebSocketHandler() {
     override fun afterConnectionEstablished(session: WebSocketSession) {
         logger.debug("Opened connection '{}'", session.id)
         session.setState(ClientState.UNIDENTIFIED, 0, logger)
+        session.setUserName("")
     }
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
