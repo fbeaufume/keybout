@@ -16,7 +16,9 @@ export class StartComponent {
 
   constructor(public playService: PlayService) {
     this.playService.stateObservable$.subscribe(state => {
-      if (state === ClientState.STARTED) this.startCountdown()
+      if (state === ClientState.STARTED) {
+        this.startCountdown();
+      }
     });
   }
 
