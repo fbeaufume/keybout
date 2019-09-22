@@ -3,6 +3,7 @@ import * as SockJS from 'sockjs-client';
 import {Subject} from 'rxjs/internal/Subject';
 import {Game} from './game';
 import {Score} from './score';
+import {environment} from '../../environments/environment';
 
 export enum ClientState {
   UNIDENTIFIED, // Initial state, no used name accepted by the server yet
@@ -71,7 +72,9 @@ export class PlayService {
   words: Map<string, string> = new Map();
 
   static log(message: string) {
-    console.log(`PlayService: ${message}`);
+    if (!environment.production) {
+      console.log(`PlayService: ${message}`);
+    }
   }
 
   constructor() {
