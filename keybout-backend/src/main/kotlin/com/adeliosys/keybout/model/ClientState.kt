@@ -7,7 +7,7 @@ enum class ClientState {
     /**
      * The connection was successfully opened and the user is not yet identified.
      */
-    UNIDENTIFIED,
+    OPENED,
     /**
      * The user has a name.
      */
@@ -23,5 +23,5 @@ enum class ClientState {
     /**
      * A game is in progress (starting or running or displaying result).
      */
-    IN_GAME
+    PLAYING
 }
