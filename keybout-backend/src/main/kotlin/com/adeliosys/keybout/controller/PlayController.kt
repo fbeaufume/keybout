@@ -99,7 +99,7 @@ class PlayController : TextWebSocketHandler() {
                 Thread.sleep(latency)
             }
 
-            logger.debug("Received message '{}' for {}", message.payload, session.description)
+            logger.trace("Received message '{}' for {}", message.payload, session.description)
 
             val action = Action(message.payload)
 

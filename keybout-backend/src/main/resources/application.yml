@@ -11,4 +11,4 @@ spring:
   profiles: dev
 
 logging.level:
-  com.adeliosys: DEBUG
+  com.adeliosys: TRACE
