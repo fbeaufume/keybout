@@ -1,8 +1,5 @@
 package com.adeliosys.keybout.controller
 
-import com.adeliosys.keybout.controller.PlayController.Companion.GAME_ID
-import com.adeliosys.keybout.controller.PlayController.Companion.NAME
-import com.adeliosys.keybout.controller.PlayController.Companion.STATE
 import com.adeliosys.keybout.model.*
 import com.adeliosys.keybout.model.Constants.ACTION_CLAIM_WORD
 import com.adeliosys.keybout.model.Constants.ACTION_CONNECT
@@ -14,6 +11,7 @@ import com.adeliosys.keybout.model.Constants.ACTION_QUIT_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_START_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_START_ROUND
 import com.adeliosys.keybout.service.WordGenerator
+import com.adeliosys.keybout.util.*
 import com.google.gson.Gson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -40,12 +38,6 @@ import javax.annotation.PostConstruct
  */
 @Service
 class PlayController : TextWebSocketHandler() {
-
-    companion object {
-        const val STATE = "state"
-        const val NAME = "name"
-        const val GAME_ID = "GAME_ID"
-    }
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -97,7 +89,7 @@ class PlayController : TextWebSocketHandler() {
     }
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
-        session.setUserName("")
+        session.userName = ""
         session.setState(logger, ClientState.OPENED, 0)
     }
 
@@ -107,11 +99,11 @@ class PlayController : TextWebSocketHandler() {
                 Thread.sleep(latency)
             }
 
-            logger.trace("Received message '{}' for {}", message.payload, session.getDescription())
+            logger.debug("Received message '{}' for {}", message.payload, session.description)
 
             val action = Action(message.payload)
 
-            when (session.getState()) {
+            when (session.state) {
                 ClientState.OPENED -> {
                     when (action.command) {
                         ACTION_CONNECT -> {
@@ -125,7 +117,7 @@ class PlayController : TextWebSocketHandler() {
                                     }
                                     // Check the name availability
                                     userNames.add(name) -> {
-                                        session.setUserName(name)
+                                        session.userName = name
                                         goToGamesList(session)
                                     }
                                     else ->
@@ -143,7 +135,7 @@ class PlayController : TextWebSocketHandler() {
                         ACTION_CREATE_GAME -> {
                             if (action.checkArgumentsCount(4)) {
                                 val gameDescriptor = GameDescriptor(
-                                        session.getUserName(),
+                                        session.userName,
                                         action.arguments[0],
                                         try {
                                             action.arguments[1].toInt()
@@ -165,7 +157,7 @@ class PlayController : TextWebSocketHandler() {
                                 try {
                                     joinGame(session, action.arguments[0].toLong())
                                 } catch (e: NumberFormatException) {
-                                    logger.warn("Invalid game in message '{}' for {}", message, session.getDescription())
+                                    logger.warn("Invalid game in message '{}' for {}", message, session.description)
                                 }
                             }
                         }
@@ -204,7 +196,7 @@ class PlayController : TextWebSocketHandler() {
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
-        when (session.getState()) {
+        when (session.state) {
             ClientState.OPENED -> {
             }
             ClientState.IDENTIFIED -> {
@@ -214,17 +206,17 @@ class PlayController : TextWebSocketHandler() {
             ClientState.PLAYING -> disconnectFromGame(session)
         }
 
-        userNames.remove(session.getUserName())
+        userNames.remove(session.userName)
 
         logger.debug("Closed {} with code {} and reason '{}', user count is {}",
-                session.getDescription(),
+                session.description,
                 status.code,
                 status.reason.orEmpty(),
                 userNames.count())
     }
 
     private fun invalidMessage(session: WebSocketSession, message: TextMessage) {
-        logger.warn("Invalid message '{}' for state {} of {}", message.payload, session.getState(), session.getDescription())
+        logger.warn("Invalid message '{}' for state {} of {}", message.payload, session.state, session.description)
     }
 
     /**
@@ -233,7 +225,7 @@ class PlayController : TextWebSocketHandler() {
     private fun goToGamesList(session: WebSocketSession) {
         synchronized(this) {
             session.setState(logger, ClientState.IDENTIFIED, 0, userNames.count())
-            gamesSessions[session.getUserName()] = session
+            gamesSessions[session.userName] = session
             sendMessage(session, GamesListNotification(declaredGames.values))
         }
     }
@@ -248,9 +240,9 @@ class PlayController : TextWebSocketHandler() {
 
     private fun deleteGame(session: WebSocketSession) {
         synchronized(this) {
-            val gameDescriptor = declaredGames[session.getGameId()]
+            val gameDescriptor = declaredGames[session.gameId]
             if (gameDescriptor != null) {
-                declaredGames.remove(session.getGameId())
+                declaredGames.remove(session.gameId)
 
                 // Process the game creator
                 session.setState(logger, ClientState.IDENTIFIED, 0)
@@ -265,7 +257,7 @@ class PlayController : TextWebSocketHandler() {
 
     private fun joinGame(session: WebSocketSession, gameId: Long) {
         synchronized(this) {
-            if (declaredGames[gameId]?.players?.add(session.getUserName()) == true) {
+            if (declaredGames[gameId]?.players?.add(session.userName) == true) {
                 session.setState(logger, ClientState.JOINED, gameId)
                 sendMessage(gamesSessions.values, GamesListNotification(declaredGames.values))
             }
@@ -274,7 +266,7 @@ class PlayController : TextWebSocketHandler() {
 
     private fun leaveGame(session: WebSocketSession) {
         synchronized(this) {
-            if (declaredGames[session.getGameId()]?.players?.remove(session.getUserName()) == true) {
+            if (declaredGames[session.gameId]?.players?.remove(session.userName) == true) {
                 session.setState(logger, ClientState.IDENTIFIED, 0)
                 sendMessage(gamesSessions.values, GamesListNotification(declaredGames.values))
             }
@@ -283,12 +275,12 @@ class PlayController : TextWebSocketHandler() {
 
     private fun startGame(session: WebSocketSession) {
         synchronized(this) {
-            val descriptor = declaredGames[session.getGameId()]
+            val descriptor = declaredGames[session.gameId]
             if (descriptor != null) {
-                declaredGames.remove(session.getGameId())
+                declaredGames.remove(session.gameId)
 
                 // Move creator user to the running game
-                gamesSessions.remove(session.getUserName())
+                gamesSessions.remove(session.userName)
                 val players = mutableListOf(session)
 
                 // Move joined users to the running game
@@ -335,9 +327,9 @@ class PlayController : TextWebSocketHandler() {
     }
 
     private fun claimWord(session: WebSocketSession, label: String) {
-        val game = runningGames[session.getGameId()]
+        val game = runningGames[session.gameId]
         if (game != null) {
-            val map = game.claimWord(session.getUserName(), label)
+            val map = game.claimWord(session.userName, label)
             if (map.isNotEmpty()) {
                 if (game.isRoundOver()) {
                     sendMessage(game.players, ScoresNotification(map, game))
@@ -358,7 +350,7 @@ class PlayController : TextWebSocketHandler() {
     }
 
     private fun startRound(session: WebSocketSession) {
-        val game = runningGames[session.getGameId()]
+        val game = runningGames[session.gameId]
         if (game != null) {
             game.initializeRound(wordGenerator.generateWords(game.language, game.wordCount))
 
@@ -368,7 +360,7 @@ class PlayController : TextWebSocketHandler() {
 
     private fun disconnectFromGame(session: WebSocketSession) {
         synchronized(this) {
-            val game = runningGames[session.getGameId()]
+            val game = runningGames[session.gameId]
             if (game != null) {
                 val (changed, manager, empty) = game.removeUser(session)
 
@@ -402,33 +394,7 @@ class PlayController : TextWebSocketHandler() {
         try {
             session.sendMessage(TextMessage(msg))
         } catch (e: Exception) {
-            logger.error("Failed to send message to {}: {}", session.getDescription(), e.toString())
+            logger.error("Failed to send message to {}: {}", session.description, e.toString())
         }
     }
 }
-
-// Several extensions to WebSocketSession
-
-fun WebSocketSession.getDescription(): String {
-    return "'${getUserName()}' ('$id')"
-}
-
-fun WebSocketSession.getUserName(): String = attributes[NAME] as String
-
-fun WebSocketSession.setUserName(name: String) {
-    attributes[NAME] = name
-}
-
-fun WebSocketSession.getState(): ClientState = attributes[STATE] as ClientState
-
-fun WebSocketSession.setState(logger: Logger, state: ClientState, gameId: Long, userCount: Int = 0) {
-    attributes[STATE] = state
-    attributes[GAME_ID] = gameId
-    logger.debug("Changed state to '{}' and game #{} for {}{}",
-            state,
-            gameId,
-            getDescription(),
-            if (userCount > 0) ", user count is $userCount" else "")
-}
-
-fun WebSocketSession.getGameId(): Long = attributes[GAME_ID] as Long

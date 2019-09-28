@@ -1,6 +1,6 @@
 package com.adeliosys.keybout.model
 
-import com.adeliosys.keybout.controller.getUserName
+import com.adeliosys.keybout.util.userName
 import org.springframework.web.socket.WebSocketSession
 
 /**
@@ -36,7 +36,7 @@ class Game(
     private var gameScores: List<Score> = emptyList()
 
     init {
-        players.forEach { userScores[it.getUserName()] = Score(it.getUserName()) }
+        players.forEach { userScores[it.userName] = Score(it.userName) }
     }
 
     @Synchronized
@@ -119,9 +119,9 @@ class Game(
     fun removeUser(session: WebSocketSession): Triple<Boolean, String, Boolean> {
         var changed = false
         if (players.remove(session)) {
-            if (players.size > 0 && session.getUserName() == manager) {
+            if (players.size > 0 && session.userName == manager) {
                 // Choose a new manager
-                manager = players[0].getUserName()
+                manager = players[0].userName
                 changed = true
             }
         }
