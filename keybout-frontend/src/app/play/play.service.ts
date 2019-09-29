@@ -88,7 +88,7 @@ export class PlayService {
     if (this.socket != null) {
       this.send(`connect ${this.attemptedUserName}`);
     } else {
-      this.socket = new SockJS('/api/websocket');
+      this.socket = new SockJS('/api/websocket', null, {timeout: 3000});
       PlayService.log('Opening connection to the server');
 
       this.socket.onopen = () => {
@@ -203,7 +203,7 @@ export class PlayService {
       };
 
       this.socket.onclose = () => {
-        this.errorMessage = 'Cannot connect to the server';
+        this.errorMessage = (this.state >= ClientState.IDENTIFIED) ? 'Disconnected from the server' : 'Cannot connect to the server';
         this.socket = null;
         this.changeState(ClientState.UNIDENTIFIED);
         PlayService.log('Socket closed');
