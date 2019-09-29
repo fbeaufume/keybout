@@ -3,6 +3,7 @@
     "target": "http://localhost:8080",
     "secure": false,
     "cookieDomainRewrite": "*",
-    "changeOrigin": true
+    "changeOrigin": true,
+    "ws": true
   }
 }
