@@ -9,6 +9,9 @@
     </form>
     <br>
     <br>
+    <p class="connecting" *ngIf="!canConnect()">
+      Connecting to the server<span>.</span><span>.</span><span>.</span>
+    </p>
     <p class="text-danger">{{errorMessage}}</p>
   </div>
 </div>
