@@ -9,7 +9,7 @@ import {NavigationEnd, Router} from '@angular/router';
 })
 export class ConnectComponent {
 
-  @ViewChild('outerDiv') outerDiv: ElementRef;
+  @ViewChild('outerDiv', { static: true }) outerDiv: ElementRef;
 
   constructor(private router: Router, public playService: PlayService) {
     this.router.events.subscribe((event) => {

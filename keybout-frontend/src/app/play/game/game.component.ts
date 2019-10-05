@@ -8,7 +8,7 @@ import {ClientState, PlayService} from '../play.service';
 })
 export class GameComponent {
 
-  @ViewChild('outerDiv') outerDiv: ElementRef;
+  @ViewChild('outerDiv', { static: true }) outerDiv: ElementRef;
 
   inputWord = '';
 
