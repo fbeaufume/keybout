@@ -124,6 +124,7 @@ export class PlayService {
           case ClientState.CREATING:
           case ClientState.DELETING:
           case ClientState.JOINING:
+          case ClientState.LEAVING:
             if (data.type === 'games-list') {
               this.updateGamesList(data.games);
             }
