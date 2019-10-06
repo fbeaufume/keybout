@@ -28,10 +28,10 @@
         </thead>
         <tbody>
         <tr *ngFor="let score of roundScores; index as i">
-          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{i + 1}}</td>
-          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.userName}}</td>
-          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.points}}</td>
-          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{getWordsPerMin(score.points, roundDuration) | number:'1.0-0'}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{i + 1}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.userName}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.points}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{getWordsPerMin(score.points, roundDuration) | number:'1.0-0'}}</td>
         </tr>
         </tbody>
       </table>
@@ -49,10 +49,10 @@
         </thead>
         <tbody>
         <tr *ngFor="let score of gameScores; index as i">
-          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{i + 1}}</td>
-          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.userName}}</td>
-          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{score.points}}</td>
-          <td [ngClass]="{'text-success font-weight-bold': userName === score.userName}">{{getBestWordsPerMin(score.userName) | number:'1.0-0'}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{i + 1}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.userName}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.points}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{getBestWordsPerMin(score.userName) | number:'1.0-0'}}</td>
         </tr>
         </tbody>
       </table>
