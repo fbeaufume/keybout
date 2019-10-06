@@ -15,6 +15,6 @@ class WebSocketConfig : WebSocketConfigurer {
     private lateinit var playController: PlayController
 
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(playController, "/api/websocket").withSockJS()
+        registry.addHandler(playController, "/api/websocket").setAllowedOrigins("*").withSockJS()
     }
 }
