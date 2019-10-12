@@ -18,6 +18,7 @@ export class GameComponent {
         // Give the focus to the input element,
         // inspired by https://stackoverflow.com/a/45590831/623185
         setTimeout(() => {
+          this.inputWord = '';
           this.outerDiv.nativeElement.getElementsByTagName('input').item(0).focus();
         }, 0);
       }
