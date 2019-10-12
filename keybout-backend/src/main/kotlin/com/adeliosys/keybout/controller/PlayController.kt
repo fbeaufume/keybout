@@ -199,7 +199,8 @@ class PlayController : TextWebSocketHandler() {
         when (session.state) {
             ClientState.OPENED -> {
             }
-            ClientState.IDENTIFIED -> {
+            ClientState.IDENTIFIED -> synchronized(this) {
+                gamesSessions.remove(session.userName)
             }
             ClientState.CREATED -> deleteGame(session)
             ClientState.JOINED -> leaveGame(session)
