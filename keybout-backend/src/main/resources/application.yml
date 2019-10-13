@@ -7,8 +7,13 @@ logging.level:
 
 ---
 
-spring:
-  profiles: dev
+spring.profiles: color
+
+spring.output.ansi.enabled: ALWAYS
+
+---
+
+spring.profiles: dev
 
 logging.level:
   com.adeliosys: TRACE
