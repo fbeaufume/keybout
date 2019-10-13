@@ -56,10 +56,11 @@ export class GameComponent {
       this.inputWord = '';
     } else {
       // Try to match an available word
-      const userName = this.playService.words.get(this.inputWord);
+      const word = this.inputWord.toLowerCase();
+      const userName = this.playService.words.get(word);
       if (userName != null) {
         if (userName === '') {
-          this.playService.claimWord(this.inputWord);
+          this.playService.claimWord(word);
         }
         this.inputWord = '';
       }
