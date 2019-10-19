@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-sm dark bg-dark border-0">
   <div class="container">
-    <a class="navbar-brand" routerLink="/">Keybout</a>
+    <a routerLinkActive="white" class="navbar-brand serif larger" routerLink="/home">Keybout</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
             aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,14 +10,18 @@
     <div class="collapse navbar-collapse" id="navbarColor02">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/play">Play</a>
+          <a routerLinkActive="white" class="nav-link" routerLink="/play">Play</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" routerLink="/about">About</a>
+          <a class="nav-link" routerLink="/about" routerLinkActive="white">About</a>
         </li>
       </ul>
-      <span class="navbar-text">{{userName}}</span>
+
+      <ng-container *ngIf="isIdentified()">
+        <span class="navbar-text text-primary">{{userName}}</span>
+        <span class="navbar-text nav-link" (click)="quit()">Quit</span>
+      </ng-container>
     </div>
   </div>
 </nav>

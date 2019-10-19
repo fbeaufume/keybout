@@ -2,8 +2,16 @@ body {
   font-size: 18px;
 }
 
+.serif {
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.larger {
+  font-size: 130%;
+}
+
 .navbar-brand {
-  color: #fff
+  color: #888
 }
 
 .navbar-brand:hover {
@@ -15,6 +23,11 @@ body {
 }
 
 .nav-link:hover {
+  color: #fff;
+  cursor: pointer;
+}
+
+.white {
   color: #fff
 }
 

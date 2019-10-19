@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {PlayService} from './play/play.service';
+import {Component} from '@angular/core';
+import {ClientState, PlayService} from './play/play.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,15 @@ export class AppComponent {
   constructor(public playService: PlayService) {
   }
 
+  isIdentified(): boolean {
+    return this.playService.state >= ClientState.IDENTIFIED;
+  }
+
   get userName(): string {
     return this.playService.userName;
+  }
+
+  quit() {
+    this.playService.quit();
   }
 }

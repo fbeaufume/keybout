@@ -39,6 +39,10 @@ export class PlayService {
   // User name accepted by the server
   userName = '';
 
+  // True when the user wants to disconnect from the server,
+  // used to prevent the error message displayed when the user is disconnected from the server
+  quitting = false;
+
   games: Game[] = [];
 
   // ID of the game created or joined by the user
@@ -208,12 +212,24 @@ export class PlayService {
       };
 
       this.socket.onclose = () => {
-        this.errorMessage = (this.state >= ClientState.IDENTIFIED) ? 'Disconnected from the server' : 'Cannot connect to the server';
+        if (this.quitting === false) {
+          this.errorMessage = (this.state >= ClientState.IDENTIFIED) ? 'Disconnected from the server' : 'Cannot connect to the server';
+        } else {
+          this.quitting = false;
+        }
         this.socket = null;
         this.changeState(ClientState.UNIDENTIFIED);
         PlayService.log('Socket closed');
       };
     }
+  }
+
+  // Disconnect the user from the server
+  quit() {
+    this.attemptedUserName = '';
+    this.userName = '';
+    this.quitting = true;
+    this.socket.close();
   }
 
   createGame(type: string, words: number, language: string) {
