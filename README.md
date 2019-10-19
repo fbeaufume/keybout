@@ -16,12 +16,14 @@ This second version is a full rewrite and uses Angular, SockJS, Spring Boot and 
 
 ## Usage
 
-Prerequisites: Node.js 10+, Angular CLI 7 (install with `npm install -g @angular/cli`), Java 8+, Maven 3.5+.
+Prerequisites: Java 8+, Maven 3.5+, Node.js 10+ with NPM
 
-To start the frontend, run `ng serve` in `keybout-frontend` or use your IDE.
+To start the frontend locally, run `npm install` then `ng serve` in `keybout-frontend`
+or use your IDE.
 
-To start the backend, run `mvn spring-boot:run` in `keybout-backend` or use your IDE.
+To start the backend locally, run `mvn spring-boot:run` in `keybout-backend`
+or use your IDE.
 
-To build a single fat jar containing the whole application, run `mvn package -Pfull` from the home folder
-then use `keybout-backend/target/keybout-backend.jar`. Omit `-Pfull` if you prefer to separate the
-fontend and backend packages.
+To build a single deployable fat jar containing the whole application,
+run `mvn package -Pfull` from the home folder then use `keybout-backend/target/keybout-backend.jar`.
+Omit `-Pfull` if you prefer to separate the fontend and backend packages.
