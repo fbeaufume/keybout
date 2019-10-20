@@ -196,11 +196,14 @@ class PlayController : TextWebSocketHandler() {
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
+        synchronized(this) {
+            gamesSessions.remove(session.userName)
+        }
+
         when (session.state) {
             ClientState.OPENED -> {
             }
-            ClientState.IDENTIFIED -> synchronized(this) {
-                gamesSessions.remove(session.userName)
+            ClientState.IDENTIFIED ->  {
             }
             ClientState.CREATED -> deleteGame(session)
             ClientState.JOINED -> leaveGame(session)
@@ -395,7 +398,8 @@ class PlayController : TextWebSocketHandler() {
         try {
             session.sendMessage(TextMessage(msg))
         } catch (e: Exception) {
-            logger.error("Failed to send message to {}: {}", session.description, e.toString())
+            val shortenedMsg = if (msg.length > 40) msg.substring(0, 40) + "..." else msg
+            logger.error("Failed to send message '{}' to {}: {}", shortenedMsg, session.description, e.toString())
         }
     }
 }
