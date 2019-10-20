@@ -9,10 +9,12 @@ import org.springframework.web.socket.WebSocketSession
 class Game(
         val id: Long,
         private var roundsCount: Int,
-        val wordCount: Int,
+        word: Int,
         val language: String,
         var manager: String, // Name of the player that starts the next round
         val players: MutableList<WebSocketSession>) {
+
+    val wordCount = word * players.size
 
     // Timestamp of the beginning of the current round
     private var roundStart: Long = 0

@@ -18,7 +18,7 @@ export class GamesComponent {
   ];
 
   // Available word counts
-  wordCounts = [5, 10, 20, 30, 50, 100];
+  wordCounts = [5, 7, 10, 15, 20];
 
   // Available game langs
   languages = [
@@ -30,7 +30,7 @@ export class GamesComponent {
   type = this.types[0].id;
 
   // Selected word count
-  wordCount = this.wordCounts[1];
+  wordCount = this.wordCounts[2];
 
   // Selected lang
   language = this.languages[0].id;
