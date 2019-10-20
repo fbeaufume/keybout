@@ -73,6 +73,8 @@ export class PlayService {
   // Observable used for state change notification
   stateObservable$ = this.stateSubject.asObservable();
 
+  // Map used to track who captured each word
+  // The key is the word label, the value is the user name or empty is not captured yet
   words: Map<string, string> = new Map();
 
   static log(message: string) {

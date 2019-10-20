@@ -20,9 +20,9 @@
       <td>{{game.players.join(', ')}}</td>
       <td>
         <button *ngIf="canDeleteOrStart(game.id)" class="btn btn-primary mr-2" (click)="start()">Start</button>
-        <button *ngIf="canDeleteOrStart(game.id)" class="btn btn-warning" (click)="delete()">Delete</button>
+        <button *ngIf="canDeleteOrStart(game.id)" class="btn btn-danger" (click)="delete()">Delete</button>
         <button *ngIf="canJoin()" class="btn btn-primary" (click)="join(game.id)">Join</button>
-        <button *ngIf="canLeave(game.id)" class="btn btn-warning" (click)="leave()">Leave</button>
+        <button *ngIf="canLeave(game.id)" class="btn btn-danger" (click)="leave()">Leave</button>
       </td>
     </tr>
     <tr *ngIf="noAvailableGame()">
