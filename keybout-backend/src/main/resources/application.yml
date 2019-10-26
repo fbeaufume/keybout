@@ -2,6 +2,11 @@ spring:
   main:
     banner-mode: "off"
 
+keybout:
+  latency: 0
+  min-word-length: 5
+  max-word-length: 12
+
 logging.level:
   ROOT: INFO
 

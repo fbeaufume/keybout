@@ -43,7 +43,7 @@ class PlayController : TextWebSocketHandler() {
      */
     private val userNames = ConcurrentHashMap.newKeySet<String>()
 
-    @Value("\${application.latency:0}")
+    @Value("\${keybout.latency:0}")
     private var latency = 0L
 
     @Autowired

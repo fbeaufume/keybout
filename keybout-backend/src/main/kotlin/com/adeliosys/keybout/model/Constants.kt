@@ -32,9 +32,28 @@ object Constants {
 
     // Misc
 
+    /**
+     * Maximum length of a player name.
+     */
     const val MAX_NAME_LENGTH = 32
+
+    /**
+     * Minimum length of words during games.
+     */
     const val MIN_WORD_LENGTH = 5
 
-    // Not technically a constant
+    /**
+     * Maximum lenght of words during games.
+     */
+    const val MAX_WORD_LENGTH = 12
+
+    /**
+     * Minimum amount of loaded words allowed, to prevent incorrect values of minimum and maximum word length.
+     */
+    const val MIN_WORD_COUNT = 200
+
+    /**
+     * Not technically a constant, single GSON instance used by several classes.
+     */
     val GSON = Gson()
 }
