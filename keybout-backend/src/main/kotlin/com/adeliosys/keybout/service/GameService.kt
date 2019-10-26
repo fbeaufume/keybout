@@ -1,6 +1,9 @@
-package com.adeliosys.keybout.model
+package com.adeliosys.keybout.service
 
-import com.adeliosys.keybout.service.WordGenerator
+import com.adeliosys.keybout.model.GameDescriptor
+import com.adeliosys.keybout.model.Score
+import com.adeliosys.keybout.model.ScoreDto
+import com.adeliosys.keybout.model.Word
 import com.adeliosys.keybout.util.userName
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -13,7 +16,7 @@ import org.springframework.web.socket.WebSocketSession
  */
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class Game() {
+class GameService {
 
     var id: Long = 0
 
@@ -87,7 +90,6 @@ class Game() {
     /**
      * Initialization at the beginning of each round.
      */
-    @Synchronized
     fun initializeRound() {
         roundStart = System.currentTimeMillis()
         roundDuration = 0

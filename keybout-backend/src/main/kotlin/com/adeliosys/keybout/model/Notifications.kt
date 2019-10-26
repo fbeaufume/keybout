@@ -1,5 +1,7 @@
 package com.adeliosys.keybout.model
 
+import com.adeliosys.keybout.service.GameService
+
 /**
  * Base class for the notifications.
  */
@@ -40,7 +42,7 @@ class WordsListNotification(val words: Map<String, String>) : BaseNotification(C
  */
 class ScoresNotification(
         val words: Map<String, String>,
-        game: Game) : BaseNotification(Constants.NOTIFICATION_SCORES) {
+        game: GameService) : BaseNotification(Constants.NOTIFICATION_SCORES) {
     val roundScores: List<ScoreDto> = game.getRoundScoresDto()
     val gameScores: List<ScoreDto> = game.getGameScoresDto()
     val manager: String = game.manager

@@ -1,5 +1,7 @@
 package com.adeliosys.keybout.model
 
+import com.google.gson.Gson
+
 /**
  * Application constants.
  */
@@ -27,4 +29,12 @@ object Constants {
     const val NOTIFICATION_WORDS_LIST = "words-list"
     const val NOTIFICATION_SCORES = "scores"
     const val NOTIFICATION_MANAGER = "manager"
+
+    // Misc
+
+    const val MAX_NAME_LENGTH = 32
+    const val MIN_WORD_LENGTH = 5
+
+    // Not technically a constant
+    val GSON = Gson()
 }

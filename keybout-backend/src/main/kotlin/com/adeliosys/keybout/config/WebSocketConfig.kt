@@ -1,6 +1,6 @@
 package com.adeliosys.keybout.config
 
-import com.adeliosys.keybout.controller.PlayController
+import com.adeliosys.keybout.service.PlayController
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.socket.config.annotation.EnableWebSocket

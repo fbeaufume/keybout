@@ -1,5 +1,6 @@
 package com.adeliosys.keybout.service
 
+import com.adeliosys.keybout.model.Constants.MIN_WORD_LENGTH
 import com.adeliosys.keybout.model.Word
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -8,12 +9,13 @@ import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
 
+/**
+ * Generate random for a game round.
+ */
 @Service
 class WordGenerator {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
-
-    private val MINIMUM_WORD_LENGTH = 5
 
     @Value("classpath:words-en.txt")
     private lateinit var wordsEn: Resource
@@ -39,7 +41,7 @@ class WordGenerator {
 
         // Do not use resource.file, it does not work with a Spring Boot fat jar
         resource.inputStream.bufferedReader(Charsets.UTF_8).readLines().forEach {
-            if (it.length >= MINIMUM_WORD_LENGTH) {
+            if (it.length >= MIN_WORD_LENGTH) {
                 words.add(it)
             }
         }

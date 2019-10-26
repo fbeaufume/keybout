@@ -9,9 +9,9 @@ enum class ClientState {
      */
     OPENED,
     /**
-     * The user has a name.
+     * The user is identified and is in the lobby getting the list of games.
      */
-    IDENTIFIED,
+    LOBBY,
     /**
      * The user created a game.
      */
