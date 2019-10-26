@@ -1,51 +1,98 @@
 package com.adeliosys.keybout.model
 
+import com.adeliosys.keybout.service.WordGenerator
 import com.adeliosys.keybout.util.userName
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Service
 import org.springframework.web.socket.WebSocketSession
 
 /**
  * A running game.
  */
-class Game(
-        val id: Long,
-        private var roundsCount: Int,
-        word: Int,
-        val language: String,
-        var manager: String, // Name of the player that starts the next round
-        val players: MutableList<WebSocketSession>) {
+@Service
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+class Game() {
 
-    val wordCount = word * players.size
+    var id: Long = 0
 
-    // Timestamp of the beginning of the current round
+    private var roundsCount: Int = 0
+
+    var wordCount: Int = 0
+
+    var language: String = ""
+
+    /**
+     * Name of the player that starts the next round.
+     */
+
+    var manager: String = ""
+
+    val players: MutableList<WebSocketSession> = mutableListOf()
+
+    /**
+     * Timestamp of the beginning of the current round.
+     */
+
     private var roundStart: Long = 0
 
-    // Duration of the current round
+    /**
+     * Duration of the current round.
+     */
     var roundDuration: Long = 0
 
-    // Words by label
+    /**
+     * Words by label.
+     */
     private var words: Map<String, Word> = mapOf()
 
-    // Number of available words, when it reaches 0 the round ends
+    /**
+     * Number of available words, when it reaches 0 the round ends.
+     */
     private var availableWords = 0
 
-    // Round and game scores by user name, updated as the words are assigned
+    /**
+     * Round and game scores by user name, updated as the words are assigned.
+     */
     private val userScores: MutableMap<String, Score> = mutableMapOf()
 
-    // Ordered round scores, updated at the end of the round
+    /**
+     * Ordered round scores, updated at the end of the round.
+     */
     private var roundScores: List<Score> = emptyList()
 
-    // Ordered game scores, updated at the end of the game
+    /**
+     * Ordered game scores, updated at the end of the game.
+     */
     private var gameScores: List<Score> = emptyList()
 
-    init {
+    @Autowired
+    private lateinit var wordGenerator: WordGenerator
+
+    /**
+     * One-time initialization. Should be in a constructor or Kotlin init block,
+     * but would not be Spring friendly since this class is a Spring service.
+     */
+    fun initialize(gameDescriptor: GameDescriptor, players: MutableList<WebSocketSession>) {
+        id = gameDescriptor.id
+        roundsCount = gameDescriptor.rounds
+        wordCount = gameDescriptor.words * players.size
+        language = gameDescriptor.language
+        this.players.addAll(players)
+
         players.forEach { userScores[it.userName] = Score(it.userName) }
     }
 
+    /**
+     * Initialization at the beginning of each round.
+     */
     @Synchronized
-    fun initializeRound(words: Map<String, Word>) {
+    fun initializeRound() {
         roundStart = System.currentTimeMillis()
         roundDuration = 0
-        this.words = words
+
+        words = wordGenerator.generateWords(language, wordCount)
         availableWords = words.size
 
         // Reset the user scores

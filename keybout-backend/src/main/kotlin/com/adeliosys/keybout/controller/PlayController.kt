@@ -17,6 +17,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
@@ -75,7 +76,7 @@ class PlayController : TextWebSocketHandler() {
     private var latency = 0L
 
     @Autowired
-    private lateinit var wordGenerator: WordGenerator
+    private lateinit var applicationContext: ApplicationContext
 
     /**
      * Executor used to start games with a delay, to display a countdown
@@ -203,7 +204,7 @@ class PlayController : TextWebSocketHandler() {
         when (session.state) {
             ClientState.OPENED -> {
             }
-            ClientState.IDENTIFIED ->  {
+            ClientState.IDENTIFIED -> {
             }
             ClientState.CREATED -> deleteGame(session)
             ClientState.JOINED -> leaveGame(session)
@@ -291,14 +292,9 @@ class PlayController : TextWebSocketHandler() {
                 players.addAll(descriptor.players.mapNotNull { n -> gamesSessions.remove(n) })
 
                 // Record the running game
-                val game = Game(
-                        descriptor.id,
-                        descriptor.rounds,
-                        descriptor.words,
-                        descriptor.language,
-                        descriptor.creator,
-                        players)
-                game.initializeRound(wordGenerator.generateWords(game.language, game.wordCount))
+                val game = applicationContext.getBean(Game::class.java)
+                game.initialize(descriptor, players)
+                game.initializeRound()
                 runningGames[game.id] = game
 
                 logger.info("Created game #{} ({} player{}, 'capture' type, {} round{}, {} '{}' words), running game count is {}",
@@ -356,8 +352,7 @@ class PlayController : TextWebSocketHandler() {
     private fun startRound(session: WebSocketSession) {
         val game = runningGames[session.gameId]
         if (game != null) {
-            game.initializeRound(wordGenerator.generateWords(game.language, game.wordCount))
-
+            game.initializeRound()
             notifyRoundStart(game)
         }
     }
