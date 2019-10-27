@@ -82,6 +82,7 @@ class GameService {
         roundsCount = gameDescriptor.rounds
         wordCount = gameDescriptor.words * players.size
         language = gameDescriptor.language
+        manager = gameDescriptor.creator
         this.players.addAll(players)
 
         players.forEach { userScores[it.userName] = Score(it.userName) }
