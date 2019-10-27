@@ -4,9 +4,7 @@
     <button *ngFor="let word of words | keyvalue" type="button"
             [class]="getClass(word.key)">{{word.key | uppercase}}</button>
     <br>
-    <input class="form-control mt-4" type="text" autocomplete="false" [(ngModel)]="inputWord"
-           (keyup)="onKey()"/>
-    <p class="text-right">Hints: case does not matter, Space clears the input</p>
+    <input class="form-control mt-4" type="text" autocomplete="false" [(ngModel)]="inputWord" (keyup)="onKey()"/>
     <br>
     <div *ngIf="canViewScores()" class="text-center">
       <button class="btn btn-primary" (click)="viewScores()">View scores</button>
