@@ -55,6 +55,11 @@ object Constants {
     const val MAX_WORD_LENGTH = 14
 
     /**
+     * Words/min bonus granted to prevent a tie.
+     */
+    const val WORDS_PER_MIN_BONUS = 0.2f
+
+    /**
      * Not technically a constant, single GSON instance used by several classes.
      */
     val GSON = Gson()

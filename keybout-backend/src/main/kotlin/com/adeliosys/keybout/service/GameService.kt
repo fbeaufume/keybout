@@ -83,7 +83,7 @@ class GameService {
         roundsCount = gameDescriptor.rounds
         language = gameDescriptor.language
         wordCount = gameDescriptor.wordCount * players.size
-        var pair = when (gameDescriptor.wordLength) {
+        val pair = when (gameDescriptor.wordLength) {
             Constants.LENGTH_SHORTEST -> Pair(3, 6)
             Constants.LENGTH_SHORTER -> Pair(4, 8)
             Constants.LENGTH_LONGER -> Pair(6, 12)
@@ -154,23 +154,34 @@ class GameService {
      * Update round and game scores.
      */
     private fun updateScores() {
+        // Update the words/min and best words/min
+        userScores.values.forEach { it.updateWordsPerMin(roundDuration) }
+
+        // Get the sorted round scores
         roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { it.latestWordTimestamp }))
 
-        // Give 1 victory to the best user
+        // If the round winner has won the same number of words than the second player,
+        // give him a small words/min bonus to prevent a frustrating tie in the UI
+        if (roundScores.size > 1 && roundScores[0].points == roundScores[1].points) {
+            roundScores[0].giveWordsPerMinBonus()
+        }
+
+        // Give 1 victory to the round winner
         roundScores[0].incrementVictories()
 
-        gameScores = userScores.values.sortedWith(compareBy({ -it.victories }, { it.latestVictoryTimestamp }))
+        // Get the sorted game scores
+        gameScores = userScores.values.sortedWith(compareBy({ -it.victories }, { -it.bestWordsPerMin }, { it.latestVictoryTimestamp }))
     }
 
     /**
      * Return UI friendly round scores.
      */
-    fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points) }
+    fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points, it.wordsPerMin) }
 
     /**
      * Return UI friendly game scores.
      */
-    fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories) }
+    fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories, it.bestWordsPerMin) }
 
     /**
      * A user disconnected, remove him from the game.

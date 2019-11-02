@@ -49,14 +49,6 @@ export class ScoresComponent {
     return this.playService.roundDuration;
   }
 
-  getWordsPerMin(points: number, duration: number): number {
-    return this.playService.getWordsPerMin(points, duration);
-  }
-
-  getBestWordsPerMin(userName: string): number {
-    return this.playService.bestWordsPerMin.get(userName);
-  }
-
   isGameOver(): boolean {
     return this.playService.gameOver;
   }

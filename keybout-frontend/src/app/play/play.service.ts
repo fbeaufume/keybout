@@ -54,9 +54,6 @@ export class PlayService {
   // Current game scores, when a round ended
   gameScores: Score[] = [];
 
-  // Best words per min so far for the current game
-  bestWordsPerMin: Map<string, number> = new Map();
-
   // Manager of the game, i.e. the user that can start the next round
   gameManager = '';
 
@@ -172,7 +169,6 @@ export class PlayService {
               this.gameManager = data.manager;
               this.roundDuration = data.roundDuration;
               this.gameOver = data.gameOver;
-              this.updateBestWordsPerMin();
               this.changeState(ClientState.END_ROUND);
             }
             if (data.type === 'manager') {
@@ -301,20 +297,6 @@ export class PlayService {
     }
   }
 
-  updateBestWordsPerMin() {
-    for (const s of this.roundScores) {
-      const currentBestWpm = this.bestWordsPerMin.get(s.userName);
-      const roundWpm = this.getWordsPerMin(s.points, this.roundDuration);
-      if (currentBestWpm === undefined || currentBestWpm < roundWpm) {
-        this.bestWordsPerMin.set(s.userName, roundWpm);
-      }
-    }
-  }
-
-  getWordsPerMin(points: number, duration: number): number {
-    return points * 60000 / duration;
-  }
-
   changeState(state: ClientState) {
     this.state = state;
     this.stateSubject.next(state);
@@ -334,7 +316,6 @@ export class PlayService {
 
   // The user wants to quit a game that ended
   quitGame() {
-    this.bestWordsPerMin.clear();
     this.changeState(ClientState.QUITTING);
     this.send('quit-game');
   }

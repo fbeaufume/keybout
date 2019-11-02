@@ -31,7 +31,7 @@
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{i + 1}}</td>
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.userName}}</td>
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.points}}</td>
-          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{getWordsPerMin(score.points, roundDuration) | number:'1.0-0'}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.wpm | number:'1.1-1'}}</td>
         </tr>
         </tbody>
       </table>
@@ -52,7 +52,7 @@
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{i + 1}}</td>
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.userName}}</td>
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.points}}</td>
-          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{getBestWordsPerMin(score.userName) | number:'1.0-0'}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.wpm | number:'1.1-1'}}</td>
         </tr>
         </tbody>
       </table>
