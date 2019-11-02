@@ -21,11 +21,11 @@ class PlayService {
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     /**
-     * WebSocket sessions of users getting/creating/joining/etc games.
+     * WebSocket sessions of users in the lobby.
      * The key is the user name.
      * Concurrency is handled by synchronizing on the class instance.
      */
-    private val gamesSessions = mutableMapOf<String, WebSocketSession>()
+    private val lobbySessions = mutableMapOf<String, WebSocketSession>()
 
     /**
      * Declared games, i.e. games that were created but not started yet.
@@ -58,7 +58,7 @@ class PlayService {
     fun goToLobby(session: WebSocketSession) {
         synchronized(this) {
             session.setState(ClientState.LOBBY, 0, logger)
-            gamesSessions[session.userName] = session
+            lobbySessions[session.userName] = session
             session.sendObjectMessage(GamesListNotification(declaredGames.values), logger)
         }
     }
@@ -67,7 +67,7 @@ class PlayService {
         synchronized(this) {
             session.setState(ClientState.CREATED, gameDescriptor.id, logger)
             declaredGames[gameDescriptor.id] = gameDescriptor
-            sendMessage(gamesSessions.values, GamesListNotification(declaredGames.values))
+            sendMessage(lobbySessions.values, GamesListNotification(declaredGames.values))
         }
     }
 
@@ -81,9 +81,9 @@ class PlayService {
                 session.setState(ClientState.LOBBY, 0, logger)
 
                 // Process the joined players
-                gameDescriptor.players.forEach { n -> gamesSessions[n]?.setState(ClientState.LOBBY, 0, logger) }
+                gameDescriptor.players.forEach { n -> lobbySessions[n]?.setState(ClientState.LOBBY, 0, logger) }
 
-                sendMessage(gamesSessions.values, GamesListNotification(declaredGames.values))
+                sendMessage(lobbySessions.values, GamesListNotification(declaredGames.values))
             }
         }
     }
@@ -92,7 +92,7 @@ class PlayService {
         synchronized(this) {
             if (declaredGames[gameId]?.players?.add(session.userName) == true) {
                 session.setState(ClientState.JOINED, gameId, logger)
-                sendMessage(gamesSessions.values, GamesListNotification(declaredGames.values))
+                sendMessage(lobbySessions.values, GamesListNotification(declaredGames.values))
             }
         }
     }
@@ -101,7 +101,7 @@ class PlayService {
         synchronized(this) {
             if (declaredGames[session.gameId]?.players?.remove(session.userName) == true) {
                 session.setState(ClientState.LOBBY, 0, logger)
-                sendMessage(gamesSessions.values, GamesListNotification(declaredGames.values))
+                sendMessage(lobbySessions.values, GamesListNotification(declaredGames.values))
             }
         }
     }
@@ -113,11 +113,11 @@ class PlayService {
                 declaredGames.remove(session.gameId)
 
                 // Move creator user to the running game
-                gamesSessions.remove(session.userName)
+                lobbySessions.remove(session.userName)
                 val players = mutableListOf(session)
 
                 // Move joined users to the running game
-                players.addAll(descriptor.players.mapNotNull { n -> gamesSessions.remove(n) })
+                players.addAll(descriptor.players.mapNotNull { n -> lobbySessions.remove(n) })
 
                 // Record the running game
                 val game = applicationContext.getBean(GameService::class.java)
@@ -125,13 +125,14 @@ class PlayService {
                 game.initializeRound()
                 runningGames[game.id] = game
 
-                logger.info("Created game #{} ({} player{}, 'capture' type, {} round{}, {} '{}' words), running game count is {}",
+                logger.info("Started game #{} ({} player{}, 'capture' type, {} round{}, {} {} '{}' words), running game count is {}",
                         descriptor.id,
                         players.size,
                         if (players.size > 1) "s" else "",
                         descriptor.rounds,
                         if (descriptor.rounds > 1) "s" else "",
-                        descriptor.words,
+                        descriptor.wordCount,
+                        descriptor.wordLength,
                         descriptor.language,
                         runningGames.size)
 
@@ -139,7 +140,7 @@ class PlayService {
                 game.players.forEach { s -> s.setState(ClientState.PLAYING, game.id, logger) }
 
                 // Notify non playing users
-                sendMessage(gamesSessions.values, GamesListNotification(declaredGames.values))
+                sendMessage(lobbySessions.values, GamesListNotification(declaredGames.values))
 
                 notifyRoundStart(game)
             }
@@ -174,7 +175,7 @@ class PlayService {
 
     fun deleteRunningGame(gameId: Long) {
         runningGames.remove(gameId)
-        logger.info("Deleted game #{}, running game count is {}", gameId, runningGames.size)
+        logger.info("Ended game #{}, running game count is {}", gameId, runningGames.size)
     }
 
     fun startRound(session: WebSocketSession) {
@@ -187,7 +188,7 @@ class PlayService {
 
     fun disconnect(session: WebSocketSession) {
         synchronized(this) {
-            gamesSessions.remove(session.userName)
+            lobbySessions.remove(session.userName)
         }
 
         when (session.state) {

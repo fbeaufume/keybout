@@ -30,6 +30,13 @@ object Constants {
     const val NOTIFICATION_SCORES = "scores"
     const val NOTIFICATION_MANAGER = "manager"
 
+    // Word lengths
+
+    const val LENGTH_SHORTEST = "shortest"
+    const val LENGTH_SHORTER = "shorter"
+    const val LENGTH_LONGER = "longer"
+    const val LENGTH_LONGEST = "longest"
+
     // Misc
 
     /**
@@ -38,19 +45,14 @@ object Constants {
     const val MAX_NAME_LENGTH = 32
 
     /**
-     * Minimum length of words during games.
+     * Minimum length of words loaded from the dictionary files.
      */
-    const val MIN_WORD_LENGTH = 5
+    const val MIN_WORD_LENGTH = 3
 
     /**
-     * Maximum lenght of words during games.
+     * Maximum lenght of words loaded from the dictionary files.
      */
-    const val MAX_WORD_LENGTH = 12
-
-    /**
-     * Minimum amount of loaded words allowed, to prevent incorrect values of minimum and maximum word length.
-     */
-    const val MIN_WORD_COUNT = 200
+    const val MAX_WORD_LENGTH = 14
 
     /**
      * Not technically a constant, single GSON instance used by several classes.

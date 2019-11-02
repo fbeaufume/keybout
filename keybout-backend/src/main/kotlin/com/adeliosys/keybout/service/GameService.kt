@@ -1,9 +1,6 @@
 package com.adeliosys.keybout.service
 
-import com.adeliosys.keybout.model.GameDescriptor
-import com.adeliosys.keybout.model.Score
-import com.adeliosys.keybout.model.ScoreDto
-import com.adeliosys.keybout.model.Word
+import com.adeliosys.keybout.model.*
 import com.adeliosys.keybout.util.userName
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -22,9 +19,13 @@ class GameService {
 
     private var roundsCount: Int = 0
 
+    var language: String = ""
+
     var wordCount: Int = 0
 
-    var language: String = ""
+    var minWordLength = 5
+
+    var maxWordLength = 10
 
     /**
      * Name of the player that starts the next round.
@@ -80,8 +81,17 @@ class GameService {
     fun initialize(gameDescriptor: GameDescriptor, players: MutableList<WebSocketSession>) {
         id = gameDescriptor.id
         roundsCount = gameDescriptor.rounds
-        wordCount = gameDescriptor.words * players.size
         language = gameDescriptor.language
+        wordCount = gameDescriptor.wordCount * players.size
+        var pair = when (gameDescriptor.wordLength) {
+            Constants.LENGTH_SHORTEST -> Pair(3, 6)
+            Constants.LENGTH_SHORTER -> Pair(4, 8)
+            Constants.LENGTH_LONGER -> Pair(6, 12)
+            Constants.LENGTH_LONGEST -> Pair(7, 14)
+            else -> Pair(5, 10)
+        }
+        minWordLength = pair.first
+        maxWordLength = pair.second
         manager = gameDescriptor.creator
         this.players.addAll(players)
 
@@ -95,7 +105,7 @@ class GameService {
         roundStart = System.currentTimeMillis()
         roundDuration = 0
 
-        words = wordGenerator.generateWords(language, wordCount)
+        words = wordGenerator.generateWords(language, wordCount, minWordLength, maxWordLength)
         availableWords = words.size
 
         // Reset the user scores

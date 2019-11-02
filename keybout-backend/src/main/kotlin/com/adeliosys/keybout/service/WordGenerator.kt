@@ -1,7 +1,6 @@
 package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.Constants.MAX_WORD_LENGTH
-import com.adeliosys.keybout.model.Constants.MIN_WORD_COUNT
 import com.adeliosys.keybout.model.Constants.MIN_WORD_LENGTH
 import com.adeliosys.keybout.model.Word
 import org.slf4j.Logger
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
-import kotlin.system.exitProcess
 
 /**
  * Generate random for a game round.
@@ -26,18 +24,10 @@ class WordGenerator {
     @Value("classpath:words-fr.txt")
     private lateinit var wordsFr: Resource
 
-    @Value("\${keybout.min-word-length:$MIN_WORD_LENGTH}")
-    private var minWordsLength = MIN_WORD_LENGTH
-
-    @Value("\${keybout.max-word-length:$MAX_WORD_LENGTH}")
-    private var maxWordsLength = MAX_WORD_LENGTH
-
     private var wordsByLang = mutableMapOf<String, MutableList<String>>()
 
     @PostConstruct
     private fun init() {
-        logger.info("Using minimum word length of {}", minWordsLength)
-        logger.info("Using maximum word length of {}", maxWordsLength)
         loadWords(wordsEn, "en")
         loadWords(wordsFr, "fr")
     }
@@ -52,17 +42,12 @@ class WordGenerator {
 
         // Do not use resource.file, it does not work with a Spring Boot fat jar
         resource.inputStream.bufferedReader(Charsets.UTF_8).readLines().forEach {
-            if (it.length in minWordsLength..maxWordsLength) {
+            if (it.length in MIN_WORD_LENGTH..MAX_WORD_LENGTH) {
                 words.add(it)
             }
         }
 
         logger.info("Loaded {} '{}' words", words.size, lang)
-
-        if (words.size < MIN_WORD_COUNT) {
-            logger.error("Not enough words matching the required length parameters, use a larger range, stopping application")
-            exitProcess(1)
-        }
 
         wordsByLang[lang] = words
     }
@@ -70,12 +55,17 @@ class WordGenerator {
     /**
      * Generate random words.
      */
-    fun generateWords(language: String, count: Int): Map<String, Word> {
+    fun generateWords(language: String, count: Int, minLength: Int, maxLength: Int): Map<String, Word> {
         val possibleWords = wordsByLang[language]!!
         val selectedWords = mutableMapOf<String, Word>()
 
         while (selectedWords.size < count) {
             val selectedWord = possibleWords[(0..possibleWords.size).random()]
+
+            // Check the word length
+            if (selectedWord.length !in minLength..maxLength) {
+                continue
+            }
 
             // Check if no other word begins with the same letters
             var found = false

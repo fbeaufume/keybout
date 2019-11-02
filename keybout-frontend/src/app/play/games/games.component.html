@@ -5,8 +5,9 @@
     <tr>
       <th scope="col">Creator</th>
       <th scope="col">Type</th>
-      <th scope="col">Words</th>
       <th scope="col">Language</th>
+      <th scope="col">Words count</th>
+      <th scope="col">Words length</th>
       <th scope="col">Players</th>
       <th scope="col">Actions</th>
     </tr>
@@ -15,8 +16,9 @@
     <tr *ngFor="let game of games">
       <td>{{game.creator}}</td>
       <td>{{game.type}}</td>
-      <td>{{game.words}}</td>
       <td>{{game.language}}</td>
+      <td>{{game.wordsCount}}</td>
+      <td>{{game.wordsLength}}</td>
       <td>{{game.players.join(', ')}}</td>
       <td>
         <button *ngIf="canDeleteOrStart(game.id)" class="btn btn-primary mr-2" (click)="start()">Start</button>
@@ -26,7 +28,7 @@
       </td>
     </tr>
     <tr *ngIf="noAvailableGame()">
-      <td colspan="6">No available game yet</td>
+      <td colspan="7">No available game yet</td>
     </tr>
     </tbody>
   </table>
@@ -42,18 +44,26 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="inputWords" class="col-sm-2 col-form-label">Words</label>
+      <label for="inputLanguage" class="col-sm-2 col-form-label">Language</label>
       <div class="col-sm-3">
-        <select class="form-control" id="inputWords" [(ngModel)]="wordCount" name="inputWords">
-          <option *ngFor="let w of wordCounts" [selected]="wordCount == w">{{w}}</option>
+        <select class="form-control" id="inputLanguage" [(ngModel)]="language" name="inputLanguage">
+          <option *ngFor="let l of languages" [value]="l.id" [selected]="language == l.id">{{l.name}}</option>
         </select>
       </div>
     </div>
     <div class="form-group row">
-      <label for="inputLanguage" class="col-sm-2 col-form-label">Language</label>
+      <label for="inputWordsCount" class="col-sm-2 col-form-label">Words count</label>
       <div class="col-sm-3">
-        <select class="form-control" id="inputLanguage" [(ngModel)]="language" name="inputLanguage">
-          <option *ngFor="let l of languages" [value]="l.id" [selected]="language == l.name">{{l.name}}</option>
+        <select class="form-control" id="inputWordsCount" [(ngModel)]="wordCount" name="inputWordsCount">
+          <option *ngFor="let wc of wordCounts" [selected]="wordCount == wc">{{wc}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="inputWordsLength" class="col-sm-2 col-form-label">Words length</label>
+      <div class="col-sm-3">
+        <select class="form-control" id="inputWordsLength" [(ngModel)]="wordLength" name="inputWordsLength">
+          <option *ngFor="let wl of wordLengths" [value]="wl.id" [selected]="wordLength == wl.id">{{wl.name}}</option>
         </select>
       </div>
     </div>

@@ -234,9 +234,9 @@ export class PlayService {
     this.socket.close();
   }
 
-  createGame(type: string, words: number, language: string) {
+  createGame(type: string, language: string, wordCount: number, wordLength: string) {
     this.changeState(ClientState.CREATING);
-    this.send(`create-game ${type} ${words} ${language}`);
+    this.send(`create-game ${type} ${language} ${wordCount} ${wordLength}`);
   }
 
   deleteGame() {

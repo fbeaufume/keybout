@@ -101,7 +101,7 @@ class PlayController : TextWebSocketHandler() {
                 ClientState.LOBBY -> {
                     when (action.command) {
                         ACTION_CREATE_GAME -> {
-                            if (action.checkArgumentsCount(4)) {
+                            if (action.checkArgumentsCount(5)) {
                                 val gameDescriptor = GameDescriptor(
                                         session.userName,
                                         action.arguments[0],
@@ -110,12 +110,13 @@ class PlayController : TextWebSocketHandler() {
                                         } catch (e: NumberFormatException) {
                                             1
                                         },
+                                        action.arguments[2],
                                         try {
-                                            action.arguments[2].toInt()
+                                            action.arguments[3].toInt()
                                         } catch (e: NumberFormatException) {
                                             10
                                         },
-                                        action.arguments[3])
+                                        action.arguments[4])
 
                                 service.createGame(session, gameDescriptor)
                             }
