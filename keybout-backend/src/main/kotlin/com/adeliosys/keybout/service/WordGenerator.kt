@@ -2,7 +2,6 @@ package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.Constants.MAX_WORD_LENGTH
 import com.adeliosys.keybout.model.Constants.MIN_WORD_LENGTH
-import com.adeliosys.keybout.model.Word
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -55,9 +54,9 @@ class WordGenerator {
     /**
      * Generate random words.
      */
-    fun generateWords(language: String, count: Int, minLength: Int, maxLength: Int): Map<String, Word> {
+    fun generateWords(language: String, count: Int, minLength: Int, maxLength: Int): List<String> {
         val possibleWords = wordsByLang[language]!!
-        val selectedWords = mutableMapOf<String, Word>()
+        val selectedWords = mutableListOf<String>()
 
         while (selectedWords.size < count) {
             val selectedWord = possibleWords[(0..possibleWords.size).random()]
@@ -69,14 +68,14 @@ class WordGenerator {
 
             // Check if no other word begins with the same letters
             var found = false
-            for (word in selectedWords.values) {
-                if (word.label.startsWith(selectedWord)) {
+            for (word in selectedWords) {
+                if (word.startsWith(selectedWord)) {
                     found = true
                     break
                 }
             }
             if (!found) {
-                selectedWords[selectedWord] = Word(selectedWord)
+                selectedWords.add(selectedWord)
             }
         }
 

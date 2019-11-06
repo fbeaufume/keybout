@@ -49,7 +49,7 @@ class GameService {
     /**
      * Words by label.
      */
-    private var words: Map<String, Word> = mapOf()
+    private var words: MutableMap<String, Word> = mutableMapOf()
 
     /**
      * Number of available words, when it reaches 0 the round ends.
@@ -105,7 +105,10 @@ class GameService {
         roundStart = System.currentTimeMillis()
         roundDuration = 0
 
-        words = wordGenerator.generateWords(language, wordCount, minWordLength, maxWordLength)
+        wordGenerator.generateWords(language, wordCount, minWordLength, maxWordLength).forEach {
+            words[it] = Word(it)
+        }
+
         availableWords = words.size
 
         // Reset the user scores
