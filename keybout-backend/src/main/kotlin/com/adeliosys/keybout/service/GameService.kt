@@ -47,12 +47,12 @@ class GameService {
     var roundDuration: Long = 0
 
     /**
-     * Words by label.
+     * Shared words by label. Used to keep track of who captured what.
      */
     private var words: MutableMap<String, Word> = mutableMapOf()
 
     /**
-     * Number of available words, when it reaches 0 the round ends.
+     * Number of available words. Used to detect the end of the round (when it reaches 0).
      */
     private var availableWords = 0
 
@@ -78,7 +78,7 @@ class GameService {
      * One-time initialization. Should be in a constructor or Kotlin init block,
      * but would not be Spring friendly since this class is a Spring service.
      */
-    fun initialize(gameDescriptor: GameDescriptor, players: MutableList<WebSocketSession>) {
+    fun initializeGame(gameDescriptor: GameDescriptor, players: MutableList<WebSocketSession>) {
         id = gameDescriptor.id
         roundsCount = gameDescriptor.rounds
         language = gameDescriptor.language
@@ -105,6 +105,7 @@ class GameService {
         roundStart = System.currentTimeMillis()
         roundDuration = 0
 
+        // At this point all words are available, i.e. their associated user name is an empty string
         wordGenerator.generateWords(language, wordCount, minWordLength, maxWordLength).forEach {
             words[it] = Word(it)
         }

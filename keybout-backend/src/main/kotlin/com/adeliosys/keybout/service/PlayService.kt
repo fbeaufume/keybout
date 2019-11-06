@@ -121,7 +121,7 @@ class PlayService {
 
                 // Record the running game
                 val game = applicationContext.getBean(GameService::class.java)
-                game.initialize(descriptor, players)
+                game.initializeGame(descriptor, players)
                 game.initializeRound()
                 runningGames[game.id] = game
 
