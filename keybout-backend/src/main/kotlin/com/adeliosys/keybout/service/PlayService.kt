@@ -50,7 +50,7 @@ class PlayService {
     private val executor = Executors.newSingleThreadScheduledExecutor()
 
     @Autowired
-    private lateinit var applicationContext: ApplicationContext
+    private lateinit var gameBuilder: GameBuilder
 
     /**
      * Called after a user identification or after a user quit a game, to go to the lobby.
@@ -120,9 +120,7 @@ class PlayService {
                 players.addAll(descriptor.players.mapNotNull { n -> lobbySessions.remove(n) })
 
                 // Record the running game
-                val game = applicationContext.getBean(GameService::class.java)
-                game.initializeGame(descriptor, players)
-                game.initializeRound()
+                val game = gameBuilder.buildGame(descriptor, players)
                 runningGames[game.id] = game
 
                 logger.info("Started game #{} ({} player{}, 'capture' type, {} round{}, {} {} '{}' words), running game count is {}",
