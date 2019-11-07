@@ -6,7 +6,6 @@ import com.google.gson.Gson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.WebSocketSession
 import java.util.concurrent.Executors
@@ -28,7 +27,7 @@ class PlayService {
     private val lobbySessions = mutableMapOf<String, WebSocketSession>()
 
     /**
-     * Declared games, i.e. games that were created but not started yet.
+     * Declared games, i.e. games visible in the lobby.
      * The key is the game ID.
      * Concurrency is handled by synchronizing on the class instance.
      */
@@ -53,7 +52,7 @@ class PlayService {
     private lateinit var gameBuilder: GameBuilder
 
     /**
-     * Called after a user identification or after a user quit a game, to go to the lobby.
+     * Called after a user identification or after a user quits a game, to go to the lobby.
      */
     fun goToLobby(session: WebSocketSession) {
         synchronized(this) {
@@ -63,6 +62,9 @@ class PlayService {
         }
     }
 
+    /**
+     * A user creates a declared game.
+     */
     fun createGame(session: WebSocketSession, gameDescriptor: GameDescriptor) {
         synchronized(this) {
             session.setState(ClientState.CREATED, gameDescriptor.id, logger)
@@ -71,6 +73,9 @@ class PlayService {
         }
     }
 
+    /**
+     * A user deletes a declared game.
+     */
     fun deleteGame(session: WebSocketSession) {
         synchronized(this) {
             val gameDescriptor = declaredGames[session.gameId]
@@ -88,6 +93,9 @@ class PlayService {
         }
     }
 
+    /**
+     * A user joins a declared game.
+     */
     fun joinGame(session: WebSocketSession, gameId: Long) {
         synchronized(this) {
             if (declaredGames[gameId]?.players?.add(session.userName) == true) {
@@ -97,6 +105,9 @@ class PlayService {
         }
     }
 
+    /**
+     * A user leaves a declared game.
+     */
     fun leaveGame(session: WebSocketSession) {
         synchronized(this) {
             if (declaredGames[session.gameId]?.players?.remove(session.userName) == true) {
@@ -106,6 +117,11 @@ class PlayService {
         }
     }
 
+    /**
+     * A user starts a game.
+     * This involves multiple steps, such as displaying the game countdown,
+     * before the players can actually play the game.
+     */
     fun startGame(session: WebSocketSession) {
         synchronized(this) {
             val descriptor = declaredGames[session.gameId]
@@ -145,7 +161,7 @@ class PlayService {
         }
     }
 
-    fun notifyRoundStart(game: GameService) {
+    private fun notifyRoundStart(game: GameService) {
         // Notify playing users to display the countdown
         sendMessage(game.players, GameStartNotification())
 
@@ -153,6 +169,9 @@ class PlayService {
         executor.schedule({ sendMessage(game.players, WordsListNotification(game.getWordsDto())) }, 5L, TimeUnit.SECONDS)
     }
 
+    /**
+     * A user typed a complete word.
+     */
     fun claimWord(session: WebSocketSession, label: String) {
         val game = runningGames[session.gameId]
         if (game != null) {
@@ -171,11 +190,14 @@ class PlayService {
         }
     }
 
-    fun deleteRunningGame(gameId: Long) {
+    private fun deleteRunningGame(gameId: Long) {
         runningGames.remove(gameId)
         logger.info("Ended game #{}, running game count is {}", gameId, runningGames.size)
     }
 
+    /**
+     * A game manager starts the next round of a game.
+     */
     fun startRound(session: WebSocketSession) {
         val game = runningGames[session.gameId]
         if (game != null) {
@@ -184,6 +206,9 @@ class PlayService {
         }
     }
 
+    /**
+     * A user was disconnected for some reason, do the cleanup.
+     */
     fun disconnect(session: WebSocketSession) {
         synchronized(this) {
             lobbySessions.remove(session.userName)
@@ -196,22 +221,20 @@ class PlayService {
             }
             ClientState.CREATED -> deleteGame(session)
             ClientState.JOINED -> leaveGame(session)
-            ClientState.PLAYING -> disconnectFromGame(session)
-        }
-    }
+            ClientState.PLAYING -> {
+                synchronized(this) {
+                    val game = runningGames[session.gameId]
+                    if (game != null) {
+                        val (changed, manager, empty) = game.removeUser(session)
 
-    fun disconnectFromGame(session: WebSocketSession) {
-        synchronized(this) {
-            val game = runningGames[session.gameId]
-            if (game != null) {
-                val (changed, manager, empty) = game.removeUser(session)
-
-                if (empty) {
-                    // No user left, remove the game
-                    deleteRunningGame(game.id)
-                } else if (changed) {
-                    // Notify the users about the new manager
-                    sendMessage(game.players, ManagerNotification(manager))
+                        if (empty) {
+                            // No user left, remove the game
+                            deleteRunningGame(game.id)
+                        } else if (changed) {
+                            // Notify the users about the new manager
+                            sendMessage(game.players, ManagerNotification(manager))
+                        }
+                    }
                 }
             }
         }

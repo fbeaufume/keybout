@@ -30,19 +30,22 @@ class GameService {
     /**
      * Name of the player that starts the next round.
      */
-
     var manager: String = ""
 
+    /**
+     * All game players, including the manager.
+     */
     val players: MutableList<WebSocketSession> = mutableListOf()
 
     /**
-     * Timestamp of the beginning of the current round.
+     * Timestamp of the beginning of the current round,
+     * used to compute the words/min.
      */
-
     private var roundStart: Long = 0
 
     /**
-     * Duration of the current round.
+     * Duration of the current round,
+     * used to compute the words/min.
      */
     var roundDuration: Long = 0
 
