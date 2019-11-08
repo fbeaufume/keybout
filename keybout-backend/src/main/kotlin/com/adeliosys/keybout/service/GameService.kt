@@ -1,19 +1,21 @@
 package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.*
+import com.adeliosys.keybout.model.Constants.EXECUTOR
+import com.adeliosys.keybout.util.sendMessage
 import com.adeliosys.keybout.util.userName
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.WebSocketSession
+import java.util.concurrent.TimeUnit
 
 /**
  * A running game.
  */
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class GameService {
+class GameService(private val wordGenerator: WordGenerator) {
 
     var id: Long = 0
 
@@ -74,9 +76,6 @@ class GameService {
      */
     private var gameScores: List<Score> = emptyList()
 
-    @Autowired
-    private lateinit var wordGenerator: WordGenerator
-
     /**
      * One-time initialization. Should be in a constructor or Kotlin init block,
      * but would not be Spring friendly since this class is a Spring service.
@@ -102,28 +101,34 @@ class GameService {
     }
 
     /**
-     * Initialization at the beginning of each round.
+     * Start the next round.
      */
-    fun initializeRound() {
+    fun startRound() {
         roundStart = System.currentTimeMillis()
         roundDuration = 0
 
-        // At this point all words are available, i.e. their associated user name is an empty string
+        words.clear()
         wordGenerator.generateWords(language, wordCount, minWordLength, maxWordLength).forEach {
             words[it] = Word(it)
         }
 
         availableWords = words.size
 
-        // Reset the user scores
+        // Reset the players scores
         userScores.forEach { (_, s) -> s.resetPoints() }
+
+        // Notify players to display the countdown
+        sendMessage(players, GameStartNotification())
+
+        // Notify playing users when the round begins
+        EXECUTOR.schedule({ sendMessage(players, WordsListNotification(getWordsDto())) }, 5L, TimeUnit.SECONDS)
     }
 
     /**
      * Return UI friendly words, i.e. the key is the word label
      * and the value is the assigned user name (or empty).
      */
-    fun getWordsDto(): Map<String, String> =
+    private fun getWordsDto(): Map<String, String> =
             words.map { entry -> entry.key to entry.value.userName }.toMap()
 
     /**

@@ -14,7 +14,6 @@ import com.adeliosys.keybout.model.Constants.MAX_NAME_LENGTH
 import com.adeliosys.keybout.util.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.CloseStatus
@@ -31,7 +30,7 @@ import javax.annotation.PostConstruct
  * Also manage the validation of the user name.
  */
 @Service
-class PlayController : TextWebSocketHandler() {
+class PlayController(private val service: PlayService) : TextWebSocketHandler() {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -46,9 +45,6 @@ class PlayController : TextWebSocketHandler() {
     @Value("\${keybout.latency:0}")
     private var latency = 0L
 
-    @Autowired
-    private lateinit var service: PlayService
-
     @PostConstruct
     private fun init() {
         logger.info("Using latency of {} ms", latency)
@@ -56,7 +52,7 @@ class PlayController : TextWebSocketHandler() {
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
         session.userName = ""
-        session.setState(ClientState.OPENED, 0, logger)
+        session.setState(ClientState.OPENED, 0)
     }
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
@@ -79,7 +75,7 @@ class PlayController : TextWebSocketHandler() {
                                 when {
                                     // Check the name length
                                     name.length > MAX_NAME_LENGTH -> {
-                                        session.sendObjectMessage(TooLongNameNotification(), logger)
+                                        session.sendObjectMessage(TooLongNameNotification())
                                     }
                                     // Check the name availability
                                     userNames.add(name) -> {
@@ -89,10 +85,10 @@ class PlayController : TextWebSocketHandler() {
                                         logger.info("User '{}' joined, user count is {}", name, userNames.count())
                                     }
                                     else ->
-                                        session.sendObjectMessage(UsedNameNotification(), logger)
+                                        session.sendObjectMessage(UsedNameNotification())
                                 }
                             } else {
-                                session.sendObjectMessage(IncorrectNameNotification(), logger)
+                                session.sendObjectMessage(IncorrectNameNotification())
                             }
                         }
                         else -> logInvalidMessage(session, message)

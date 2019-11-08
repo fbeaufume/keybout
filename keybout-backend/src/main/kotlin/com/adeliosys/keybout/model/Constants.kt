@@ -1,6 +1,7 @@
 package com.adeliosys.keybout.model
 
 import com.google.gson.Gson
+import java.util.concurrent.Executors
 
 /**
  * Application constants.
@@ -60,7 +61,12 @@ object Constants {
     const val WORDS_PER_MIN_BONUS = 0.2f
 
     /**
-     * Not technically a constant, single GSON instance used by several classes.
+     * GSON instance used by several classes.
      */
     val GSON = Gson()
+
+    /**
+     * Executor used to start games with a delay (a countdown is displayed in the UI).
+     */
+    val EXECUTOR = Executors.newSingleThreadScheduledExecutor()
 }

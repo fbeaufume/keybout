@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
+import kotlin.random.Random
 
 /**
  * Generate random for a game round.
@@ -59,7 +60,7 @@ class WordGenerator {
         val selectedWords = mutableListOf<String>()
 
         while (selectedWords.size < count) {
-            val selectedWord = possibleWords[(0..possibleWords.size).random()]
+            val selectedWord = possibleWords[Random.nextInt(0, possibleWords.size-1)]
 
             // Check the word length
             if (selectedWord.length !in minLength..maxLength) {
