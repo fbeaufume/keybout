@@ -71,7 +71,7 @@ class PlayService(private val gameBuilder: GameBuilder) {
                 session.setState(ClientState.LOBBY, 0)
 
                 // Process the joined players
-                gameDescriptor.players.forEach { n -> lobbySessions[n]?.setState(ClientState.LOBBY, 0) }
+                gameDescriptor.players.forEach { lobbySessions[it]?.setState(ClientState.LOBBY, 0) }
 
                 sendMessage(lobbySessions.values, GamesListNotification(declaredGames.values))
             }
@@ -118,14 +118,14 @@ class PlayService(private val gameBuilder: GameBuilder) {
                 val players = mutableListOf(session)
 
                 // Move joined users to the running game
-                players.addAll(descriptor.players.mapNotNull { n -> lobbySessions.remove(n) })
+                players.addAll(descriptor.players.mapNotNull { lobbySessions.remove(it) })
 
                 // Record the running game
                 val game = gameBuilder.buildGame(descriptor, players)
                 runningGames[game.id] = game
 
                 // Update the state of all players of that game
-                game.players.forEach { s -> s.setState(ClientState.PLAYING, game.id) }
+                game.players.forEach { it.setState(ClientState.PLAYING, game.id) }
 
                 // Notify other users
                 sendMessage(lobbySessions.values, GamesListNotification(declaredGames.values))
@@ -136,8 +136,8 @@ class PlayService(private val gameBuilder: GameBuilder) {
                         if (players.size > 1) "s" else "",
                         descriptor.rounds,
                         if (descriptor.rounds > 1) "s" else "",
-                        descriptor.wordCount,
-                        descriptor.wordLength,
+                        descriptor.wordsCount,
+                        descriptor.wordsLength,
                         descriptor.language,
                         runningGames.size)
             }

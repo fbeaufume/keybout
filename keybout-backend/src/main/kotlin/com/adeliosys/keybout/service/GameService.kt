@@ -23,11 +23,11 @@ class GameService(private val wordGenerator: WordGenerator) {
 
     var language: String = ""
 
-    var wordCount: Int = 0
+    var wordsCount: Int = 0
 
-    var minWordLength = 5
+    var minWordsLength = 5
 
-    var maxWordLength = 10
+    var maxWordsLength = 10
 
     /**
      * Name of the player that starts the next round.
@@ -84,16 +84,16 @@ class GameService(private val wordGenerator: WordGenerator) {
         id = gameDescriptor.id
         roundsCount = gameDescriptor.rounds
         language = gameDescriptor.language
-        wordCount = gameDescriptor.wordCount * players.size
-        val pair = when (gameDescriptor.wordLength) {
+        wordsCount = gameDescriptor.wordsCount * players.size
+        val pair = when (gameDescriptor.wordsLength) {
             Constants.LENGTH_SHORTEST -> Pair(3, 6)
             Constants.LENGTH_SHORTER -> Pair(4, 8)
             Constants.LENGTH_LONGER -> Pair(6, 12)
             Constants.LENGTH_LONGEST -> Pair(7, 14)
             else -> Pair(5, 10)
         }
-        minWordLength = pair.first
-        maxWordLength = pair.second
+        minWordsLength = pair.first
+        maxWordsLength = pair.second
         manager = gameDescriptor.creator
         this.players.addAll(players)
 
@@ -108,7 +108,7 @@ class GameService(private val wordGenerator: WordGenerator) {
         roundDuration = 0
 
         words.clear()
-        wordGenerator.generateWords(language, wordCount, minWordLength, maxWordLength).forEach {
+        wordGenerator.generateWords(language, wordsCount, minWordsLength, maxWordsLength).forEach {
             words[it] = Word(it)
         }
 

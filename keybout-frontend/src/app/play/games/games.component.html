@@ -54,16 +54,16 @@
     <div class="form-group row">
       <label for="inputWordsCount" class="col-sm-2 col-form-label">Words count</label>
       <div class="col-sm-3">
-        <select class="form-control" id="inputWordsCount" [(ngModel)]="wordCount" name="inputWordsCount">
-          <option *ngFor="let wc of wordCounts" [selected]="wordCount == wc">{{wc}}</option>
+        <select class="form-control" id="inputWordsCount" [(ngModel)]="wordsCount" name="inputWordsCount">
+          <option *ngFor="let wc of wordsCounts" [selected]="wordsCount == wc">{{wc}}</option>
         </select>
       </div>
     </div>
     <div class="form-group row">
       <label for="inputWordsLength" class="col-sm-2 col-form-label">Words length</label>
       <div class="col-sm-3">
-        <select class="form-control" id="inputWordsLength" [(ngModel)]="wordLength" name="inputWordsLength">
-          <option *ngFor="let wl of wordLengths" [value]="wl.id" [selected]="wordLength == wl.id">{{wl.name}}</option>
+        <select class="form-control" id="inputWordsLength" [(ngModel)]="wordsLength" name="inputWordsLength">
+          <option *ngFor="let wl of wordsLengths" [value]="wl.id" [selected]="wordsLength == wl.id">{{wl.name}}</option>
         </select>
       </div>
     </div>

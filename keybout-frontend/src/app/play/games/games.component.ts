@@ -24,10 +24,10 @@ export class GamesComponent {
   ];
 
   // Available word counts
-  wordCounts = [5, 7, 10, 15, 20];
+  wordsCounts = [5, 7, 10, 15, 20];
 
   // Available word lengths
-  wordLengths = [
+  wordsLengths = [
     {id: 'shortest', name: 'Shortest'},
     {id: 'shorter', name: 'Shorter'},
     {id: 'standard', name: 'Standard'},
@@ -42,10 +42,10 @@ export class GamesComponent {
   language = this.languages[0].id;
 
   // Selected word count
-  wordCount = this.wordCounts[2];
+  wordsCount = this.wordsCounts[2];
 
   // Selected word length
-  wordLength = this.wordLengths[2].id;
+  wordsLength = this.wordsLengths[2].id;
 
   constructor(public playService: PlayService) {
   }
@@ -77,7 +77,7 @@ export class GamesComponent {
 
   // Create a new game
   create() {
-    this.playService.createGame(this.type, this.language, this.wordCount, this.wordLength);
+    this.playService.createGame(this.type, this.language, this.wordsCount, this.wordsLength);
   }
 
   canDeleteOrStart(id: number) {

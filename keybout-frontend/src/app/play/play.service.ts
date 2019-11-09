@@ -230,9 +230,9 @@ export class PlayService {
     this.socket.close();
   }
 
-  createGame(type: string, language: string, wordCount: number, wordLength: string) {
+  createGame(type: string, language: string, wordsCount: number, wordsLength: string) {
     this.changeState(ClientState.CREATING);
-    this.send(`create-game ${type} ${language} ${wordCount} ${wordLength}`);
+    this.send(`create-game ${type} ${language} ${wordsCount} ${wordsLength}`);
   }
 
   deleteGame() {
@@ -266,8 +266,12 @@ export class PlayService {
     let state = ClientState.IDENTIFIED;
 
     for (const game of games) {
+      // Format the game type
       game.type = `Capture (${game.rounds} round${game.rounds > 1 ? 's' : ''})`;
       game.language = game.language === 'en' ? 'English' : 'French';
+
+      // Format the words length by capitalizing the first letter
+      game.wordsLength = game.wordsLength.charAt(0).toUpperCase() + game.wordsLength.substring(1);
 
       // Verify if the game was created by the user
       if (game.creator === this.userName) {

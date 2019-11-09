@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicLong
 /**
  * A declared game.
  */
-class GameDescriptor(val creator: String, val type: String, val rounds: Int, val language: String, val wordCount: Int, val wordLength: String) {
+class GameDescriptor(val creator: String, val type: String, val rounds: Int, val language: String, val wordsCount: Int, val wordsLength: String) {
 
     companion object {
         val counter: AtomicLong = AtomicLong()
