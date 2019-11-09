@@ -1554,7 +1554,6 @@ ferme
 secondes
 contenu
 quotidien
-flamande
 centaines
 course
 billet
@@ -2813,7 +2812,6 @@ imposable
 journalistes
 manifeste
 provoque
-wallons
 éditeurs
 canal
 fondamentale
@@ -4216,7 +4214,6 @@ privilégier
 prototype
 regain
 regarde
-wallonnes
 accru
 caoutchouc
 cinquante
