@@ -11,33 +11,12 @@ import org.springframework.web.socket.WebSocketSession
 import java.util.concurrent.TimeUnit
 
 /**
- * A running game.
+ * A running capture game.
  */
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class GameService(private val wordGenerator: WordGenerator) {
+class CaptureGameService(private val wordGenerator: WordGenerator) : BaseGameService() {
 
-    var id: Long = 0
-
-    private var roundsCount: Int = 0
-
-    var language: String = ""
-
-    var wordsCount: Int = 0
-
-    var minWordsLength = 5
-
-    var maxWordsLength = 10
-
-    /**
-     * Name of the player that starts the next round.
-     */
-    var manager: String = ""
-
-    /**
-     * All game players, including the manager.
-     */
-    val players: MutableList<WebSocketSession> = mutableListOf()
 
     /**
      * Timestamp of the beginning of the current round,
@@ -61,49 +40,15 @@ class GameService(private val wordGenerator: WordGenerator) {
      */
     private var availableWords = 0
 
-    /**
-     * Round and game scores by user name, updated as the words are assigned.
-     */
-    private val userScores: MutableMap<String, Score> = mutableMapOf()
+    override fun initializeGame(gameDescriptor: GameDescriptor, players: MutableList<WebSocketSession>) {
+        super.initializeGame(gameDescriptor, players)
 
-    /**
-     * Ordered round scores, updated at the end of the round.
-     */
-    private var roundScores: List<Score> = emptyList()
-
-    /**
-     * Ordered game scores, updated at the end of the game.
-     */
-    private var gameScores: List<Score> = emptyList()
-
-    /**
-     * One-time initialization. Should be in a constructor or Kotlin init block,
-     * but would not be Spring friendly since this class is a Spring service.
-     */
-    fun initializeGame(gameDescriptor: GameDescriptor, players: MutableList<WebSocketSession>) {
-        id = gameDescriptor.id
-        roundsCount = gameDescriptor.rounds
-        language = gameDescriptor.language
         wordsCount = gameDescriptor.wordsCount * players.size
-        val pair = when (gameDescriptor.wordsLength) {
-            Constants.LENGTH_SHORTEST -> Pair(3, 6)
-            Constants.LENGTH_SHORTER -> Pair(4, 8)
-            Constants.LENGTH_LONGER -> Pair(6, 12)
-            Constants.LENGTH_LONGEST -> Pair(7, 14)
-            else -> Pair(5, 10)
-        }
-        minWordsLength = pair.first
-        maxWordsLength = pair.second
-        manager = gameDescriptor.creator
-        this.players.addAll(players)
-
-        players.forEach { userScores[it.userName] = Score(it.userName) }
     }
 
-    /**
-     * Start the next round.
-     */
-    fun startRound() {
+    override fun startRound() {
+        super.startRound()
+
         roundStart = System.currentTimeMillis()
         roundDuration = 0
 
@@ -114,12 +59,6 @@ class GameService(private val wordGenerator: WordGenerator) {
 
         availableWords = words.size
 
-        // Reset the players scores
-        userScores.forEach { (_, s) -> s.resetPoints() }
-
-        // Notify players to display the countdown
-        sendMessage(players, GameStartNotification())
-
         // Notify playing users when the round begins
         EXECUTOR.schedule({ sendMessage(players, WordsListNotification(getWordsDto())) }, 5L, TimeUnit.SECONDS)
     }
@@ -129,7 +68,7 @@ class GameService(private val wordGenerator: WordGenerator) {
      * and the value is the assigned user name (or empty).
      */
     private fun getWordsDto(): Map<String, String> =
-            words.map { entry -> entry.key to entry.value.userName }.toMap()
+            words.map { it.key to it.value.userName }.toMap()
 
     /**
      * Assign a word to a user, if currently available.

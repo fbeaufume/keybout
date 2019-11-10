@@ -1,7 +1,5 @@
 package com.adeliosys.keybout.model
 
-import com.adeliosys.keybout.service.GameService
-
 /**
  * Base class for the notifications.
  */
@@ -42,13 +40,11 @@ class WordsListNotification(val words: Map<String, String>) : BaseNotification(C
  */
 class ScoresNotification(
         val words: Map<String, String>,
-        game: GameService) : BaseNotification(Constants.NOTIFICATION_SCORES) {
-    val roundScores: List<ScoreDto> = game.getRoundScoresDto()
-    val gameScores: List<ScoreDto> = game.getGameScoresDto()
-    val manager: String = game.manager
-    val roundDuration: Long = game.roundDuration
-    val gameOver: Boolean = game.isGameOver()
-}
+        val roundScores: List<ScoreDto>,
+        val gameScores: List<ScoreDto>,
+        val manager: String,
+        val roundDuration: Long,
+        val gameOver: Boolean) : BaseNotification(Constants.NOTIFICATION_SCORES)
 
 /**
  * Sent at the end of a round, when the manager changed.

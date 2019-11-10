@@ -34,7 +34,7 @@ class PlayService(private val gameBuilder: GameBuilder) {
      * The key is the game ID.
      * Concurrency is handled by synchronizing on the class instance.
      */
-    private val runningGames = mutableMapOf<Long, GameService>()
+    private val runningGames = mutableMapOf<Long, CaptureGameService>()
 
     /**
      * Called after a user identification or after a user quits a game, to go to the lobby.
@@ -153,7 +153,8 @@ class PlayService(private val gameBuilder: GameBuilder) {
             val map = game.claimWord(session.userName, label)
             if (map.isNotEmpty()) {
                 if (game.isRoundOver()) {
-                    sendMessage(game.players, ScoresNotification(map, game))
+                    sendMessage(game.players, ScoresNotification(map, game.getRoundScoresDto(), game.getGameScoresDto(),
+                            game.manager, game.roundDuration, game.isGameOver()))
 
                     if (game.isGameOver()) {
                         deleteRunningGame(game.id)

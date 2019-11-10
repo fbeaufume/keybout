@@ -11,8 +11,8 @@ import org.springframework.web.socket.WebSocketSession
 @Service
 class GameBuilder(private val applicationContext: ApplicationContext) {
 
-    fun buildGame(descriptor: GameDescriptor, players: MutableList<WebSocketSession>): GameService {
-        return applicationContext.getBean(GameService::class.java).apply {
+    fun buildGame(descriptor: GameDescriptor, players: MutableList<WebSocketSession>): CaptureGameService {
+        return applicationContext.getBean(CaptureGameService::class.java).apply {
             initializeGame(descriptor, players)
             startRound()
         }
