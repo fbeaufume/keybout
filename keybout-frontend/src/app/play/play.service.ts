@@ -8,7 +8,7 @@ import {environment} from '../../environments/environment';
 export enum ClientState {
   UNIDENTIFIED, // Initial state, no used name accepted by the server yet
   IDENTIFYING, // Sending user name
-  IDENTIFIED, // User name accepted by server
+  LOBBY, // User is iedntied and in the lobby getting the list of games
   CREATING, // User is creating a game
   CREATED, // User has created a game
   DELETING, // User is deleting a game
@@ -127,7 +127,7 @@ export class PlayService {
                 break;
             }
             break;
-          case ClientState.IDENTIFIED:
+          case ClientState.LOBBY:
           case ClientState.CREATING:
           case ClientState.DELETING:
           case ClientState.JOINING:
@@ -211,7 +211,7 @@ export class PlayService {
 
       this.socket.onclose = () => {
         if (this.quitting === false) {
-          this.errorMessage = (this.state >= ClientState.IDENTIFIED) ? 'Disconnected from the server' : 'Cannot connect to the server';
+          this.errorMessage = (this.state >= ClientState.LOBBY) ? 'Disconnected from the server' : 'Cannot connect to the server';
         } else {
           this.quitting = false;
         }
@@ -263,7 +263,7 @@ export class PlayService {
   // Update the displayed games list
   updateGamesList(games) {
     this.userName = this.attemptedUserName;
-    let state = ClientState.IDENTIFIED;
+    let state = ClientState.LOBBY;
 
     for (const game of games) {
       // Format the game type

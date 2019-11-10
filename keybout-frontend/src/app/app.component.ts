@@ -12,7 +12,7 @@ export class AppComponent {
   }
 
   isIdentified(): boolean {
-    return this.playService.state >= ClientState.IDENTIFIED;
+    return this.playService.state >= ClientState.LOBBY;
   }
 
   get userName(): string {

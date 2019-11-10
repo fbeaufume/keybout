@@ -64,7 +64,7 @@ export class GamesComponent {
 
   // Is this component visible
   isVisible(): boolean {
-    return this.state >= ClientState.IDENTIFIED && this.state <= ClientState.STARTING_GAME;
+    return this.state >= ClientState.LOBBY && this.state <= ClientState.STARTING_GAME;
   }
 
   noAvailableGame(): boolean {
@@ -72,7 +72,7 @@ export class GamesComponent {
   }
 
   canCreate() {
-    return this.state === ClientState.IDENTIFIED;
+    return this.state === ClientState.LOBBY;
   }
 
   // Create a new game
@@ -95,7 +95,7 @@ export class GamesComponent {
   }
 
   canJoin() {
-    return this.state === ClientState.IDENTIFIED;
+    return this.state === ClientState.LOBBY;
   }
 
   // Join an existing game
