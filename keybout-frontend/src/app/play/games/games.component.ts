@@ -11,20 +11,20 @@ export class GamesComponent {
 
   // Available game types
   types = [
-    {id: 'capture 1', name: 'Capture (1 round)'},
-    {id: 'capture 2', name: 'Capture (2 rounds)'},
-    {id: 'capture 3', name: 'Capture (3 rounds)'},
-    {id: 'capture 5', name: 'Capture (5 rounds)'}
+    {id: 'capture', name: 'Capture'}
   ];
 
-  // Available game langs
+  // Available number of rounds
+  roundsCounts = [1, 2, 3];
+
+  // Available game languages
   languages = [
     {id: 'en', name: 'English'},
     {id: 'fr', name: 'French'}
   ];
 
   // Available word counts
-  wordsCounts = [5, 7, 10, 15, 20];
+  wordsCounts = [3, 5, 7, 10, 15];
 
   // Available word lengths
   wordsLengths = [
@@ -37,6 +37,9 @@ export class GamesComponent {
 
   // Selected game type
   type = this.types[0].id;
+
+  // Selected number of rounds
+  rounds = this.roundsCounts[0];
 
   // Selected lang
   language = this.languages[0].id;
@@ -77,7 +80,7 @@ export class GamesComponent {
 
   // Create a new game
   create() {
-    this.playService.createGame(this.type, this.language, this.wordsCount, this.wordsLength);
+    this.playService.createGame(this.type, this.rounds, this.language, this.wordsCount, this.wordsLength);
   }
 
   canDeleteOrStart(id: number) {
