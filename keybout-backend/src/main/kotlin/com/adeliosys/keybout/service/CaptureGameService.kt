@@ -72,12 +72,14 @@ class CaptureGameService(private val wordGenerator: WordGenerator) : BaseGameSer
 
     /**
      * Assign a word to a user, if currently available.
-     * Return the map of label and user names if the assignment succeeded, an empty map otherwise.
+     * @return true if the game is over
      */
     @Synchronized
-    fun claimWord(userName: String, label: String): Map<String, String> {
-        if (availableWords > 0) {
+    fun claimWord(userName: String, label: String): Boolean {
+        if (!isRoundOver()) {
             val word = words[label]
+
+            // Ensure that the word is available
             if (word != null && word.userName.isEmpty()) {
                 word.userName = userName
 
@@ -85,21 +87,28 @@ class CaptureGameService(private val wordGenerator: WordGenerator) : BaseGameSer
                 userScores[userName]?.incrementPoints()
 
                 availableWords--
+
                 if (isRoundOver()) {
                     roundDuration = System.currentTimeMillis() - roundStart
 
                     updateScores()
-                }
 
-                return getWordsDto()
+                    sendMessage(players, ScoresNotification(getWordsDto(), getRoundScoresDto(), getGameScoresDto(),
+                            manager, roundDuration, isGameOver()))
+
+                    return isGameOver()
+                } else {
+                    sendMessage(players, WordsListNotification(getWordsDto()))
+                }
             }
         }
-        return mapOf()
+
+        return false
     }
 
-    fun isRoundOver() = availableWords <= 0
+    private fun isRoundOver() = availableWords <= 0
 
-    fun isGameOver() = gameScores[0].victories >= roundsCount
+    private fun isGameOver() = gameScores[0].victories >= roundsCount
 
     /**
      * Update round and game scores.

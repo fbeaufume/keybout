@@ -150,18 +150,8 @@ class PlayService(private val gameBuilder: GameBuilder) {
     fun claimWord(session: WebSocketSession, label: String) {
         val game = runningGames[session.gameId]
         if (game != null) {
-            val map = game.claimWord(session.userName, label)
-            if (map.isNotEmpty()) {
-                if (game.isRoundOver()) {
-                    sendMessage(game.players, ScoresNotification(map, game.getRoundScoresDto(), game.getGameScoresDto(),
-                            game.manager, game.roundDuration, game.isGameOver()))
-
-                    if (game.isGameOver()) {
-                        deleteRunningGame(game.id)
-                    }
-                } else {
-                    sendMessage(game.players, WordsListNotification(map))
-                }
+            if (game.claimWord(session.userName, label)) {
+                deleteRunningGame(game.id)
             }
         }
     }
