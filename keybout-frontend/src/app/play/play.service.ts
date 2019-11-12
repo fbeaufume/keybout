@@ -57,9 +57,6 @@ export class PlayService {
   // Manager of the game, i.e. the user that can start the next round
   gameManager = '';
 
-  // Duration in millis of the round
-  roundDuration = 0;
-
   gameOver = false;
 
   errorMessage: string;
@@ -167,7 +164,6 @@ export class PlayService {
               this.roundScores = data.roundScores;
               this.gameScores = data.gameScores;
               this.gameManager = data.manager;
-              this.roundDuration = data.roundDuration;
               this.gameOver = data.gameOver;
               this.changeState(ClientState.END_ROUND);
             }

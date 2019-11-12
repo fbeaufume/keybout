@@ -43,7 +43,6 @@ class ScoresNotification(
         val roundScores: List<ScoreDto>,
         val gameScores: List<ScoreDto>,
         val manager: String,
-        val roundDuration: Long,
         val gameOver: Boolean) : BaseNotification(Constants.NOTIFICATION_SCORES)
 
 /**

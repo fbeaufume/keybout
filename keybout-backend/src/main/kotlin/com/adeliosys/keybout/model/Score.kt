@@ -39,13 +39,8 @@ class Score(val userName: String) {
     /**
      * Update words/min and best words/min.
      */
-    fun updateWordsPerMin(duration: Long) {
-        wordsPerMin = 60000.0f * points / duration
-        updateBestWordsPerMin()
-    }
-
-    fun giveWordsPerMinBonus() {
-        wordsPerMin += WORDS_PER_MIN_BONUS
+    fun updateWordsPerMin(roundStart: Long) {
+        wordsPerMin = if (points > 0) 60000.0f * points / (latestWordTimestamp - roundStart) else 0.0f
         updateBestWordsPerMin()
     }
 

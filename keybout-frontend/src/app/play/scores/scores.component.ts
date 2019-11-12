@@ -45,10 +45,6 @@ export class ScoresComponent {
     return this.playService.userName === this.playService.gameManager;
   }
 
-  get roundDuration(): number {
-    return this.playService.roundDuration;
-  }
-
   isGameOver(): boolean {
     return this.playService.gameOver;
   }

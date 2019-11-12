@@ -25,12 +25,6 @@ class CaptureGameService(private val wordGenerator: WordGenerator, private val s
     private var roundStart: Long = 0
 
     /**
-     * Duration of the current round,
-     * used to compute the words/min.
-     */
-    var roundDuration: Long = 0
-
-    /**
      * Shared words by label. Used to keep track of who captured what.
      */
     private var words: MutableMap<String, Word> = mutableMapOf()
@@ -49,9 +43,6 @@ class CaptureGameService(private val wordGenerator: WordGenerator, private val s
     override fun startRound() {
         super.startRound()
 
-        roundStart = System.currentTimeMillis()
-        roundDuration = 0
-
         words.clear()
         wordGenerator.generateWords(language, wordsCount, minWordsLength, maxWordsLength).forEach {
             words[it] = Word(it)
@@ -60,7 +51,10 @@ class CaptureGameService(private val wordGenerator: WordGenerator, private val s
         availableWords = words.size
 
         // Notify playing users when the round begins
-        scheduler.schedule({ sendMessage(players, WordsListNotification(getWordsDto())) }, Instant.now().plusSeconds(5L))
+        scheduler.schedule({
+            roundStart = System.currentTimeMillis()
+            sendMessage(players, WordsListNotification(getWordsDto()))
+        }, Instant.now().plusSeconds(5L))
     }
 
     /**
@@ -89,12 +83,10 @@ class CaptureGameService(private val wordGenerator: WordGenerator, private val s
                 availableWords--
 
                 if (isRoundOver()) {
-                    roundDuration = System.currentTimeMillis() - roundStart
-
                     updateScores()
 
                     sendMessage(players, ScoresNotification(getWordsDto(), getRoundScoresDto(), getGameScoresDto(),
-                            manager, roundDuration, isGameOver()))
+                            manager, isGameOver()))
 
                     return isGameOver()
                 } else {
@@ -115,16 +107,10 @@ class CaptureGameService(private val wordGenerator: WordGenerator, private val s
      */
     private fun updateScores() {
         // Update the words/min and best words/min
-        userScores.values.forEach { it.updateWordsPerMin(roundDuration) }
+        userScores.values.forEach { it.updateWordsPerMin(roundStart) }
 
         // Get the sorted round scores
-        roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { it.latestWordTimestamp }))
-
-        // If the round winner has won the same number of words than the second player,
-        // give him a small words/min bonus to prevent a frustrating tie in the UI
-        if (roundScores.size > 1 && roundScores[0].points == roundScores[1].points) {
-            roundScores[0].giveWordsPerMinBonus()
-        }
+        roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { -it.wordsPerMin }))
 
         // Give 1 victory to the round winner
         roundScores[0].incrementVictories()
