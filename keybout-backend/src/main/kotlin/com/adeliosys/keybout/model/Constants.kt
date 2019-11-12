@@ -1,7 +1,6 @@
 package com.adeliosys.keybout.model
 
 import com.google.gson.Gson
-import java.util.concurrent.Executors
 
 /**
  * Application constants.
@@ -64,9 +63,4 @@ object Constants {
      * GSON instance used by several classes.
      */
     val GSON = Gson()
-
-    /**
-     * Executor used to start games with a delay (a countdown is displayed in the UI).
-     */
-    val EXECUTOR = Executors.newSingleThreadScheduledExecutor()
 }

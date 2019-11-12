@@ -1,21 +1,21 @@
 package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.*
-import com.adeliosys.keybout.model.Constants.EXECUTOR
 import com.adeliosys.keybout.util.sendMessage
 import com.adeliosys.keybout.util.userName
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.WebSocketSession
-import java.util.concurrent.TimeUnit
+import java.time.Instant
 
 /**
  * A running capture game.
  */
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class CaptureGameService(private val wordGenerator: WordGenerator) : BaseGameService() {
+class CaptureGameService(private val wordGenerator: WordGenerator, private val scheduler: ThreadPoolTaskScheduler) : BaseGameService() {
 
 
     /**
@@ -60,7 +60,7 @@ class CaptureGameService(private val wordGenerator: WordGenerator) : BaseGameSer
         availableWords = words.size
 
         // Notify playing users when the round begins
-        EXECUTOR.schedule({ sendMessage(players, WordsListNotification(getWordsDto())) }, 5L, TimeUnit.SECONDS)
+        scheduler.schedule({ sendMessage(players, WordsListNotification(getWordsDto())) }, Instant.now().plusSeconds(5L))
     }
 
     /**
