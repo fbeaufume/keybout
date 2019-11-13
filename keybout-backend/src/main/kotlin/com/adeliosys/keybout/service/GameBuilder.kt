@@ -1,6 +1,7 @@
 package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.GameDescriptor
+import org.springframework.beans.factory.getBean
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.WebSocketSession
@@ -11,10 +12,12 @@ import org.springframework.web.socket.WebSocketSession
 @Service
 class GameBuilder(private val applicationContext: ApplicationContext) {
 
-    fun buildGame(descriptor: GameDescriptor, players: MutableList<WebSocketSession>): CaptureGameService {
-        return applicationContext.getBean(CaptureGameService::class.java).apply {
+    fun buildGame(descriptor: GameDescriptor, players: MutableList<WebSocketSession>): BaseGameService {
+        val type:Class<out BaseGameService> = if (descriptor.type == "race") RaceGameService::class.java else CaptureGameService::class.java
+
+        return applicationContext.getBean(type).apply {
             initializeGame(descriptor, players)
-            startRound()
+            startCountdown()
         }
     }
 }

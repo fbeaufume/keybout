@@ -34,7 +34,7 @@ class PlayService(private val gameBuilder: GameBuilder) {
      * The key is the game ID.
      * Concurrency is handled by synchronizing on the class instance.
      */
-    private val runningGames = mutableMapOf<Long, CaptureGameService>()
+    private val runningGames = mutableMapOf<Long, BaseGameService>()
 
     /**
      * Called after a user identification or after a user quits a game, to go to the lobby.
@@ -150,7 +150,7 @@ class PlayService(private val gameBuilder: GameBuilder) {
     fun claimWord(session: WebSocketSession, label: String) {
         val game = runningGames[session.gameId]
         if (game != null) {
-            if (game.claimWord(session.userName, label)) {
+            if (game.claimWord(session, label)) {
                 deleteRunningGame(game.id)
             }
         }
@@ -163,9 +163,10 @@ class PlayService(private val gameBuilder: GameBuilder) {
 
     /**
      * A game manager starts the next round of a game.
+     * It actually triggers the start of the round countdown.
      */
     fun startRound(session: WebSocketSession) {
-        runningGames[session.gameId]?.startRound()
+        runningGames[session.gameId]?.startCountdown()
     }
 
     /**
@@ -190,10 +191,10 @@ class PlayService(private val gameBuilder: GameBuilder) {
                         val (changed, manager, empty) = game.removeUser(session)
 
                         if (empty) {
-                            // No user left, remove the game
+                            // No player left, remove the game
                             deleteRunningGame(game.id)
                         } else if (changed) {
-                            // Notify the users about the new manager
+                            // Notify the players about the new manager
                             sendMessage(game.players, ManagerNotification(manager))
                         }
                     }

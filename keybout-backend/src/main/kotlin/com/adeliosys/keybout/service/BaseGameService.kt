@@ -1,21 +1,20 @@
 package com.adeliosys.keybout.service
 
-import com.adeliosys.keybout.model.Constants
-import com.adeliosys.keybout.model.GameDescriptor
-import com.adeliosys.keybout.model.GameStartNotification
-import com.adeliosys.keybout.model.Score
+import com.adeliosys.keybout.model.*
 import com.adeliosys.keybout.util.sendMessage
 import com.adeliosys.keybout.util.userName
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.web.socket.WebSocketSession
+import java.time.Instant
 
 /**
  * Base class for the various game types.
  */
-open class BaseGameService {
+abstract class BaseGameService(private val scheduler: ThreadPoolTaskScheduler) {
 
     var id: Long = 0
 
-    protected var roundsCount: Int = 0
+    private var roundsCount: Int = 0
 
     var language: String = ""
 
@@ -51,6 +50,12 @@ open class BaseGameService {
     protected var gameScores: List<Score> = emptyList()
 
     /**
+     * Timestamp of the beginning of the current round,
+     * used to compute the words/min.
+     */
+    protected var roundStart: Long = 0
+
+    /**
      * One-time initialization. Should be in a constructor or Kotlin init block,
      * but would not be Spring friendly since this class is a Spring service.
      */
@@ -79,13 +84,55 @@ open class BaseGameService {
     }
 
     /**
-     * Start the next round.
+     * Start the countdown for the next round.
      */
-    open fun startRound() {
+    open fun startCountdown() {
         // Reset the players scores
         userScores.forEach { (_, s) -> s.resetPoints() }
 
         // Notify players to display the countdown
         sendMessage(players, GameStartNotification())
+
+        // Notify playing users when the round begins
+        scheduler.schedule({ startPlay() }, Instant.now().plusSeconds(5L))
+    }
+
+    /**
+     * Actually start the round.
+     */
+    open fun startPlay() {
+        roundStart = System.currentTimeMillis()
+    }
+
+    /**
+     * Utility method that returns a UI friendly map of words,
+     * i.e. the key is the word label and the value is the assigned user name (or empty).
+     */
+    fun getWordsDto(words: Map<String, Word>): Map<String, String> = words.map { it.key to it.value.userName }.toMap()
+
+    /**
+     * Update the game state after a player completely typed a word.
+     * @return true if the game is over
+     */
+    abstract fun claimWord(session: WebSocketSession, label: String): Boolean
+
+    protected fun isGameOver() = gameScores[0].victories >= roundsCount
+
+    /**
+     * A user disconnected, remove him from the game.
+     * Return true if the manager changed (when it was the disconnected user),
+     * the new manager name, the number of remaining users.
+     */
+    @Synchronized
+    fun removeUser(session: WebSocketSession): Triple<Boolean, String, Boolean> {
+        var changed = false
+        if (players.remove(session)) {
+            if (players.size > 0 && session.userName == manager) {
+                // Choose a new manager
+                manager = players[0].userName
+                changed = true
+            }
+        }
+        return Triple(changed, manager, players.size <= 0)
     }
 }
