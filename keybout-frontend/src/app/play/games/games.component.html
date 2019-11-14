@@ -4,7 +4,7 @@
     <thead>
     <tr>
       <th scope="col">Creator</th>
-<!--      <th scope="col">Type</th>-->
+      <th scope="col">Type</th>
       <th scope="col">Rounds</th>
       <th scope="col">Language</th>
       <th scope="col">Words count</th>
@@ -16,7 +16,7 @@
     <tbody>
     <tr *ngFor="let game of games">
       <td>{{game.creator}}</td>
-<!--      <td>{{game.type}}</td>-->
+      <td>{{game.type}}</td>
       <td>{{game.rounds}}</td>
       <td>{{game.language}}</td>
       <td>{{game.wordsCount}}</td>
@@ -30,21 +30,21 @@
       </td>
     </tr>
     <tr *ngIf="noAvailableGame()">
-      <td colspan="7">No available game yet</td>
+      <td colspan="8">No available game yet</td>
     </tr>
     </tbody>
   </table>
   <br>
   <h4>Or create a game</h4>
   <form>
-<!--    <div class="form-group row">-->
-<!--      <label for="inputType" class="col-sm-2 col-form-label">Type</label>-->
-<!--      <div class="col-sm-3">-->
-<!--        <select class="form-control" id="inputType" [(ngModel)]="type" name="inputType">-->
-<!--          <option *ngFor="let t of types" [value]="t.id" [selected]="type == t.id">{{t.name}}</option>-->
-<!--        </select>-->
-<!--      </div>-->
-<!--    </div>-->
+    <div class="form-group row">
+      <label for="inputType" class="col-sm-2 col-form-label">Type</label>
+      <div class="col-sm-3">
+        <select class="form-control" id="inputType" [(ngModel)]="type" name="inputType">
+          <option *ngFor="let t of types" [value]="t.id" [selected]="type == t.id">{{t.name}}</option>
+        </select>
+      </div>
+    </div>
     <div class="form-group row">
       <label for="inputRounds" class="col-sm-2 col-form-label">Rounds</label>
       <div class="col-sm-3">

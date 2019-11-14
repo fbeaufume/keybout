@@ -56,6 +56,12 @@ abstract class BaseGameService(private val scheduler: ThreadPoolTaskScheduler) {
     protected var roundStart: Long = 0
 
     /**
+     * Return the game type such as 'capture" or 'race'.
+     * Used by the UI.
+     */
+    abstract fun getGameType(): String
+
+    /**
      * One-time initialization. Should be in a constructor or Kotlin init block,
      * but would not be Spring friendly since this class is a Spring service.
      */
@@ -91,7 +97,7 @@ abstract class BaseGameService(private val scheduler: ThreadPoolTaskScheduler) {
         userScores.forEach { (_, s) -> s.resetPoints() }
 
         // Notify players to display the countdown
-        sendMessage(players, GameStartNotification())
+        sendMessage(players, GameStartNotification(getGameType()))
 
         // Notify playing users when the round begins
         scheduler.schedule({ startPlay() }, Instant.now().plusSeconds(5L))

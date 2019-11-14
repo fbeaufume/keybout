@@ -1,7 +1,6 @@
 package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.GameDescriptor
-import org.springframework.beans.factory.getBean
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.WebSocketSession

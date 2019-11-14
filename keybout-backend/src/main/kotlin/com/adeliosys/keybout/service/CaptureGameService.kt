@@ -26,6 +26,8 @@ class CaptureGameService(private val wordGenerator: WordGenerator, scheduler: Th
      */
     private var availableWords = 0
 
+    override fun getGameType(): String = "capture"
+
     override fun initializeGame(gameDescriptor: GameDescriptor, players: MutableList<WebSocketSession>) {
         super.initializeGame(gameDescriptor, players)
 

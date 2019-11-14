@@ -29,6 +29,8 @@ class RaceGameService(private val wordGenerator: WordGenerator, scheduler: Threa
      */
     private var finishedPlayers = 0
 
+    override fun getGameType(): String = "race"
+
     override fun initializeGame(gameDescriptor: GameDescriptor, players: MutableList<WebSocketSession>) {
         super.initializeGame(gameDescriptor, players)
 
@@ -84,7 +86,7 @@ class RaceGameService(private val wordGenerator: WordGenerator, scheduler: Threa
                     val roundScoresDto = getRoundScoresDto()
                     val gameScoresDto = getGameScoresDto()
                     for (tempSession in players) {
-                        tempSession.sendObjectMessage(RaceScoresNotification(getWordsDto(words[userName]!!), roundScoresDto, gameScoresDto, manager, isGameOver()))
+                        tempSession.sendObjectMessage(RaceScoresNotification(getWordsDto(words[tempSession.userName]!!), roundScoresDto, gameScoresDto, manager, isGameOver()))
                     }
 
                     return isGameOver()

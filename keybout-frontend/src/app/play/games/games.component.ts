@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ClientState, PlayService} from '../play.service';
+import {ClientState, GameType, PlayService} from '../play.service';
 import {Game} from '../game';
 
 @Component({
@@ -11,7 +11,8 @@ export class GamesComponent {
 
   // Available game types
   types = [
-    {id: 'capture', name: 'Capture'}
+    {id: GameType.CAPTURE, name: 'Capture'},
+    {id: GameType.RACE, name: 'Race'}
   ];
 
   // Available number of rounds
@@ -45,7 +46,7 @@ export class GamesComponent {
   language = this.languages[0].id;
 
   // Selected word count
-  wordsCount = this.wordsCounts[2];
+  wordsCount = this.wordsCounts[3];
 
   // Selected word length
   wordsLength = this.wordsLengths[2].id;

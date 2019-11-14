@@ -28,7 +28,7 @@ class GamesListNotification(val games: Collection<GameDescriptor>) : BaseNotific
 /**
  * Sent when a game is starting, to display a countdown in the UI.
  */
-class GameStartNotification : BaseNotification(Constants.NOTIFICATION_GAME_START)
+class GameStartNotification(val gameType: String) : BaseNotification(Constants.NOTIFICATION_GAME_START)
 
 /**
  * Sent when a game begins or the state of a word changes.
