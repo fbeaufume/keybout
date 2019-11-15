@@ -67,15 +67,15 @@ class WordGenerator {
                 continue
             }
 
-            // Check if no other word begins with the same letters
-            var found = false
+            // Check if the selected word does not conflict with another word
+            var conflict = false
             for (word in selectedWords) {
-                if (word.startsWith(selectedWord)) {
-                    found = true
+                if (word.startsWith(selectedWord) || selectedWord.startsWith(word)) {
+                    conflict = true
                     break
                 }
             }
-            if (!found) {
+            if (!conflict) {
                 selectedWords.add(selectedWord)
             }
         }
