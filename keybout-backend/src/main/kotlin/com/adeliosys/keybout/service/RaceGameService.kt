@@ -77,7 +77,7 @@ class RaceGameService(private val wordGenerator: WordGenerator, scheduler: Threa
                 // Has the player finished
                 if (userScore.points >= wordsCount) {
                     finishedPlayers++
-                    userScore.updateDuration(roundStart)
+                    userScore.update(roundStart)
                 }
 
                 if (isRoundOver()) {
@@ -86,7 +86,7 @@ class RaceGameService(private val wordGenerator: WordGenerator, scheduler: Threa
                     val roundScoresDto = getRoundScoresDto()
                     val gameScoresDto = getGameScoresDto()
                     for (tempSession in players) {
-                        tempSession.sendObjectMessage(RaceScoresNotification(getWordsDto(words[tempSession.userName]!!), roundScoresDto, gameScoresDto, manager, isGameOver()))
+                        tempSession.sendObjectMessage(ScoresNotification(getWordsDto(words[tempSession.userName]!!), roundScoresDto, gameScoresDto, manager, isGameOver()))
                     }
 
                     return isGameOver()
@@ -117,14 +117,4 @@ class RaceGameService(private val wordGenerator: WordGenerator, scheduler: Threa
         // Get the sorted game scores
         gameScores = userScores.values.sortedWith(compareBy({ -it.victories }, { it.bestDuration }))
     }
-
-    /**
-     * Return UI friendly round scores.
-     */
-    private fun getRoundScoresDto() = roundScores.map { RaceScoreDto(it.userName, 0, it.duration) }
-
-    /**
-     * Return UI friendly game scores.
-     */
-    private fun getGameScoresDto() = gameScores.map { RaceScoreDto(it.userName, it.victories, it.bestDuration) }
 }

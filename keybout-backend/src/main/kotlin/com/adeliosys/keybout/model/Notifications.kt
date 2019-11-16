@@ -36,22 +36,12 @@ class GameStartNotification(val gameType: String) : BaseNotification(Constants.N
 class WordsListNotification(val words: Map<String, String>) : BaseNotification(Constants.NOTIFICATION_WORDS_LIST)
 
 /**
- * Sent when a capture round ended. Contains the last words update and the scores.
+ * Sent when a round ended. Contains the last words update and the scores.
  */
-class CaptureScoresNotification(
+class ScoresNotification(
         val words: Map<String, String>,
-        val roundScores: List<CaptureScoreDto>,
-        val gameScores: List<CaptureScoreDto>,
-        val manager: String,
-        val gameOver: Boolean) : BaseNotification(Constants.NOTIFICATION_SCORES)
-
-/**
- * Sent when a race round ended. Contains the last words update and the scores.
- */
-class RaceScoresNotification(
-        val words: Map<String, String>,
-        val roundScores: List<RaceScoreDto>,
-        val gameScores: List<RaceScoreDto>,
+        val roundScores: List<ScoreDto>,
+        val gameScores: List<ScoreDto>,
         val manager: String,
         val gameOver: Boolean) : BaseNotification(Constants.NOTIFICATION_SCORES)
 

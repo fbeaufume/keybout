@@ -125,6 +125,16 @@ abstract class BaseGameService(private val scheduler: ThreadPoolTaskScheduler) {
     protected fun isGameOver() = gameScores[0].victories >= roundsCount
 
     /**
+     * Return UI friendly round scores.
+     */
+    fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points, it.duration, it.wordsPerMin) }
+
+    /**
+     * Return UI friendly game scores.
+     */
+    fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories, it.bestDuration, it.bestWordsPerMin) }
+
+    /**
      * A user disconnected, remove him from the game.
      * Return true if the manager changed (when it was the disconnected user),
      * the new manager name, the number of remaining users.

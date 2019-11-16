@@ -45,17 +45,15 @@ class Score(val userName: String) {
     }
 
     /**
-     * Update words/min and best words/min.
+     * Update words/min and durations once all words are caught.
      */
-    fun updateWordsPerMin(roundStart: Long) {
+    fun update(roundStart: Long) {
         wordsPerMin = if (points > 0) 60000.0f * points / (latestWordTimestamp - roundStart) else 0.0f
 
         if (bestWordsPerMin <= 0 || bestWordsPerMin < wordsPerMin) {
             bestWordsPerMin = wordsPerMin
         }
-    }
 
-    fun updateDuration(roundStart: Long) {
         duration = (latestWordTimestamp - roundStart).toInt()
 
         if (bestDuration == 0 || bestDuration > duration) {
@@ -66,6 +64,4 @@ class Score(val userName: String) {
     private fun getTimestamp() = System.currentTimeMillis()
 }
 
-class CaptureScoreDto(val userName: String, val points: Int, val wpm: Float)
-
-class RaceScoreDto(val userName: String, val points: Int, val duration: Int)
+class ScoreDto(val userName: String, val points: Int, val duration: Int, val wpm: Float)

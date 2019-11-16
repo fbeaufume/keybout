@@ -70,7 +70,7 @@ class CaptureGameService(private val wordGenerator: WordGenerator, scheduler: Th
                 if (isRoundOver()) {
                     updateScores()
 
-                    sendMessage(players, CaptureScoresNotification(getWordsDto(words), getRoundScoresDto(), getGameScoresDto(), manager, isGameOver()))
+                    sendMessage(players, ScoresNotification(getWordsDto(words), getRoundScoresDto(), getGameScoresDto(), manager, isGameOver()))
 
                     return isGameOver()
                 } else {
@@ -89,7 +89,7 @@ class CaptureGameService(private val wordGenerator: WordGenerator, scheduler: Th
      */
     private fun updateScores() {
         // Update the words/min and best words/min
-        userScores.values.forEach { it.updateWordsPerMin(roundStart) }
+        userScores.values.forEach { it.update(roundStart) }
 
         // Get the sorted round scores
         roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { -it.wordsPerMin }))
@@ -100,14 +100,4 @@ class CaptureGameService(private val wordGenerator: WordGenerator, scheduler: Th
         // Get the sorted game scores
         gameScores = userScores.values.sortedWith(compareBy({ -it.victories }, { -it.bestWordsPerMin }, { it.latestVictoryTimestamp }))
     }
-
-    /**
-     * Return UI friendly round scores.
-     */
-    private fun getRoundScoresDto() = roundScores.map { CaptureScoreDto(it.userName, it.points, it.wordsPerMin) }
-
-    /**
-     * Return UI friendly game scores.
-     */
-    private fun getGameScoresDto() = gameScores.map { CaptureScoreDto(it.userName, it.victories, it.bestWordsPerMin) }
 }
