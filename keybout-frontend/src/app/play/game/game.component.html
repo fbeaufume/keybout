@@ -6,6 +6,9 @@
     <br>
     <input class="form-control mt-4" type="text" autocomplete="false" [(ngModel)]="inputWord" (keyup)="onKey()"/>
     <br>
+    <div *ngIf="isWaiting()" class="text-center">
+      Waiting for others players to complete the round...
+    </div>
     <div *ngIf="canViewScores()" class="text-center">
       <button class="btn btn-primary" (click)="viewScores()">View scores</button>
     </div>

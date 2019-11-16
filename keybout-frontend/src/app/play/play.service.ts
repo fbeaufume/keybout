@@ -79,6 +79,9 @@ export class PlayService {
   // The key is the word label, the value is the user name or empty is not captured yet
   words: Map<string, string> = new Map();
 
+  // Number of available words, used to display a wait message at the end of a race game round
+  availableWords = 0;
+
   static log(message: string) {
     if (!environment.production) {
       console.log(`PlayService: ${message}`);
@@ -307,9 +310,15 @@ export class PlayService {
   // Update the displayed words
   updateWords(words) {
     this.words.clear();
+    let availableWords = 0;
     for (const k of Object.keys(words)) {
-      this.words.set(k, words[k]);
+      const wordUsername = words[k];
+      if (wordUsername === '') {
+        availableWords++;
+      }
+      this.words.set(k, wordUsername);
     }
+    this.availableWords = availableWords;
   }
 
   changeState(state: ClientState) {
