@@ -73,6 +73,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.adeliosys.keybout.KeyboutApplicationKt</mainClass>
+                </configuration>
             </plugin>
 
             <plugin>
