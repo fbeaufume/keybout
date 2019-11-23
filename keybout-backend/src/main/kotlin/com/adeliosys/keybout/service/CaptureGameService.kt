@@ -83,21 +83,4 @@ class CaptureGameService(private val wordGenerator: WordGenerator, scheduler: Th
     }
 
     private fun isRoundOver() = availableWords <= 0
-
-    /**
-     * Update round and game scores.
-     */
-    private fun updateScores() {
-        // Update the words/min and best words/min
-        userScores.values.forEach { it.update(roundStart) }
-
-        // Get the sorted round scores
-        roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { -it.wordsPerMin }))
-
-        // Give 1 victory to the round winner
-        roundScores[0].incrementVictories()
-
-        // Get the sorted game scores
-        gameScores = userScores.values.sortedWith(compareBy({ -it.victories }, { -it.bestWordsPerMin }, { it.latestVictoryTimestamp }))
-    }
 }

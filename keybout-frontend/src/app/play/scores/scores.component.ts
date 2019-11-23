@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ClientState, GameType, PlayService} from '../play.service';
+import {ClientState, PlayService} from '../play.service';
 import {Score} from '../score';
 
 @Component({
@@ -14,14 +14,6 @@ export class ScoresComponent {
 
   get state(): ClientState {
     return this.playService.state;
-  }
-
-  isCaptureGame(): boolean {
-    return this.playService.isGameType(GameType.CAPTURE);
-  }
-
-  isRaceGame(): boolean {
-    return this.playService.isGameType(GameType.RACE);
   }
 
   get userName(): string {

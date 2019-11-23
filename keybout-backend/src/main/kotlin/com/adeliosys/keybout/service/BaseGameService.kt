@@ -122,17 +122,34 @@ abstract class BaseGameService(private val scheduler: ThreadPoolTaskScheduler) {
      */
     abstract fun claimWord(session: WebSocketSession, label: String): Boolean
 
-    protected fun isGameOver() = gameScores[0].victories >= roundsCount
+    fun isGameOver() = gameScores[0].victories >= roundsCount
+
+    /**
+     * Update round and game scores.
+     */
+    fun updateScores() {
+        // Update the words/min and best words/min
+        userScores.values.forEach { it.update(roundStart) }
+
+        // Get the sorted round scores
+        roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { -it.wordsPerMin }))
+
+        // Give 1 victory to the round winner
+        roundScores[0].incrementVictories()
+
+        // Get the sorted game scores
+        gameScores = userScores.values.sortedWith(compareBy({ -it.victories }, { -it.bestWordsPerMin }, { it.latestVictoryTimestamp }))
+    }
 
     /**
      * Return UI friendly round scores.
      */
-    fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points, it.duration, it.wordsPerMin) }
+    fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points, it.wordsPerMin) }
 
     /**
      * Return UI friendly game scores.
      */
-    fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories, it.bestDuration, it.bestWordsPerMin) }
+    fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories, it.bestWordsPerMin) }
 
     /**
      * A user disconnected, remove him from the game.

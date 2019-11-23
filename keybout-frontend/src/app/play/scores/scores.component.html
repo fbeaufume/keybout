@@ -22,8 +22,7 @@
         <tr>
           <th scope="col">Rank</th>
           <th scope="col">Name</th>
-          <th *ngIf="isCaptureGame()" scope="col">Words</th>
-          <th *ngIf="isRaceGame()" scope="col">Duration</th>
+          <th scope="col">Words</th>
           <th scope="col">Words/min</th>
         </tr>
         </thead>
@@ -31,8 +30,7 @@
         <tr *ngFor="let score of roundScores; index as i">
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{i + 1}}</td>
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.userName}}</td>
-          <td *ngIf="isCaptureGame()" [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.points}}</td>
-          <td *ngIf="isRaceGame()" [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.duration / 1000 | number:'1.1-1'}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.points}}</td>
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.wpm | number:'1.1-1'}}</td>
         </tr>
         </tbody>

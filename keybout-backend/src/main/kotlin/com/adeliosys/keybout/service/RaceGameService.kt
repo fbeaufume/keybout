@@ -77,7 +77,6 @@ class RaceGameService(private val wordGenerator: WordGenerator, scheduler: Threa
                 // Has the player finished
                 if (userScore.points >= wordsCount) {
                     finishedPlayers++
-                    userScore.update(roundStart)
                 }
 
                 if (isRoundOver()) {
@@ -103,18 +102,4 @@ class RaceGameService(private val wordGenerator: WordGenerator, scheduler: Threa
     // that hasn't typed all its words, otherwise such AFK player will prevent the round
     // from being over
     private fun isRoundOver() = finishedPlayers >= players.size
-
-    /**
-     * Update round and game scores.
-     */
-    private fun updateScores() {
-        // Get the sorted round scores
-        roundScores = userScores.values.sortedWith(compareBy { it.duration })
-
-        // Give 1 victory to the round winner
-        roundScores[0].incrementVictories()
-
-        // Get the sorted game scores
-        gameScores = userScores.values.sortedWith(compareBy({ -it.victories }, { it.bestDuration }))
-    }
 }
