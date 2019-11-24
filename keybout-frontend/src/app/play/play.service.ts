@@ -123,7 +123,7 @@ export class PlayService {
           case ClientState.IDENTIFYING:
             switch (data.type) {
               case 'incorrect-name':
-                this.errorMessage = 'Sorry, this is not a valid user name, space is not allowed for instance';
+                this.errorMessage = 'Sorry, this is not a valid user name';
                 this.changeState(ClientState.UNIDENTIFIED);
                 break;
               case 'too-long-name':

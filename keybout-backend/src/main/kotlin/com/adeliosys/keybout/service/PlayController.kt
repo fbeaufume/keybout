@@ -10,7 +10,6 @@ import com.adeliosys.keybout.model.Constants.ACTION_LEAVE_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_QUIT_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_START_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_START_ROUND
-import com.adeliosys.keybout.model.Constants.MAX_NAME_LENGTH
 import com.adeliosys.keybout.util.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,27 +19,16 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
-import java.util.concurrent.ConcurrentHashMap
 import javax.annotation.PostConstruct
 
 /**
  * Receive WebSocket messages, connects and disconnects,
  * then delegate the business processing to [PlayService].
- *
- * Also manage the validation of the user name.
  */
 @Service
-class PlayController(private val service: PlayService) : TextWebSocketHandler() {
+class PlayController(private val userNameService: UserNameService, private val playService: PlayService) : TextWebSocketHandler() {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
-
-    /**
-     * Identified user names, used to check if a new user name is available.
-     * An element is added when a user provides a valid and available name.
-     * An element is removed when the connection is closed.
-     * Concurrency is handled by the attribute.
-     */
-    private val userNames = ConcurrentHashMap.newKeySet<String>()
 
     @Value("\${keybout.latency:0}")
     private var latency = 0L
@@ -72,20 +60,12 @@ class PlayController(private val service: PlayService) : TextWebSocketHandler() 
                             if (action.checkMinimumArgumentsCount(1)) {
                                 val name = action.rawArguments
 
-                                when {
-                                    // Check the name length
-                                    name.length > MAX_NAME_LENGTH -> {
-                                        session.sendObjectMessage(TooLongNameNotification())
-                                    }
-                                    // Check the name availability
-                                    userNames.add(name) -> {
-                                        session.userName = name
-                                        service.goToLobby(session)
-
-                                        logger.info("User '{}' joined, user count is {}", name, userNames.count())
-                                    }
-                                    else ->
-                                        session.sendObjectMessage(UsedNameNotification())
+                                val notification = userNameService.registerUserName(name)
+                                if (notification == null) {
+                                    session.userName = name
+                                    playService.goToLobby(session)
+                                } else {
+                                    session.sendObjectMessage(notification)
                                 }
                             } else {
                                 session.sendObjectMessage(IncorrectNameNotification())
@@ -114,13 +94,13 @@ class PlayController(private val service: PlayService) : TextWebSocketHandler() 
                                         },
                                         action.arguments[4])
 
-                                service.createGame(session, gameDescriptor)
+                                playService.createGame(session, gameDescriptor)
                             }
                         }
                         ACTION_JOIN_GAME -> {
                             if (action.checkArgumentsCount(1)) {
                                 try {
-                                    service.joinGame(session, action.arguments[0].toLong())
+                                    playService.joinGame(session, action.arguments[0].toLong())
                                 } catch (e: NumberFormatException) {
                                     logger.warn("Invalid game in message '{}' for {}", message, session.description)
                                 }
@@ -131,14 +111,14 @@ class PlayController(private val service: PlayService) : TextWebSocketHandler() 
                 }
                 ClientState.CREATED -> {
                     when (action.command) {
-                        ACTION_DELETE_GAME -> service.deleteGame(session)
-                        ACTION_START_GAME -> service.startGame(session)
+                        ACTION_DELETE_GAME -> playService.deleteGame(session)
+                        ACTION_START_GAME -> playService.startGame(session)
                         else -> logInvalidMessage(session, message)
                     }
                 }
                 ClientState.JOINED -> {
                     when (action.command) {
-                        ACTION_LEAVE_GAME -> service.leaveGame(session)
+                        ACTION_LEAVE_GAME -> playService.leaveGame(session)
                         else -> logInvalidMessage(session, message)
                     }
                 }
@@ -146,11 +126,11 @@ class PlayController(private val service: PlayService) : TextWebSocketHandler() 
                     when (action.command) {
                         ACTION_CLAIM_WORD -> {
                             if (action.checkArgumentsCount(1)) {
-                                service.claimWord(session, action.arguments[0])
+                                playService.claimWord(session, action.arguments[0])
                             }
                         }
-                        ACTION_START_ROUND -> service.startRound(session)
-                        ACTION_QUIT_GAME -> service.goToLobby(session)
+                        ACTION_START_ROUND -> playService.startRound(session)
+                        ACTION_QUIT_GAME -> playService.goToLobby(session)
                         else -> logInvalidMessage(session, message)
                     }
                 }
@@ -165,15 +145,13 @@ class PlayController(private val service: PlayService) : TextWebSocketHandler() 
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
-        service.disconnect(session)
+        playService.disconnect(session)
 
-        userNames.remove(session.userName)
+        userNameService.releaseUserName(session)
 
         logger.debug("Closed {} with code {} and reason '{}'",
                 session.description,
                 status.code,
                 status.reason.orEmpty())
-
-        logger.info("User '{}' left, user count is {}", session.userName, userNames.count())
     }
 }
