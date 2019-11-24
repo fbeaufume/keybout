@@ -186,16 +186,10 @@ class PlayService(private val gameBuilder: GameBuilder) {
             ClientState.JOINED -> leaveGame(session)
             ClientState.PLAYING -> {
                 synchronized(this) {
-                    val game = runningGames[session.gameId]
-                    if (game != null) {
-                        val (changed, manager, empty) = game.removeUser(session)
-
-                        if (empty) {
+                    runningGames[session.gameId]?.let {
+                        if (it.removeUser(session)) {
                             // No player left, remove the game
-                            deleteRunningGame(game.id)
-                        } else if (changed) {
-                            // Notify the players about the new manager
-                            sendMessage(game.players, ManagerNotification(manager))
+                            deleteRunningGame(it.id)
                         }
                     }
                 }

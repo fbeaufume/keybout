@@ -42,22 +42,22 @@ abstract class BaseGameService(private val scheduler: ThreadPoolTaskScheduler) {
     /**
      * Ordered round scores, updated at the end of the round.
      */
-    protected var roundScores: List<Score> = emptyList()
+    private var roundScores: List<Score> = emptyList()
 
     /**
      * Ordered game scores, updated at the end of the game.
      */
-    protected var gameScores: List<Score> = emptyList()
+    private var gameScores: List<Score> = emptyList()
 
     /**
      * Timestamp of the beginning of the current round,
      * used to compute the words/min.
      */
-    protected var roundStart: Long = 0
+    private var roundStart: Long = 0
 
     /**
-     * Return the game type such as 'capture" or 'race'.
      * Used by the UI.
+     * @return the game type such as 'capture" or 'race'.
      */
     abstract fun getGameType(): String
 
@@ -142,30 +142,30 @@ abstract class BaseGameService(private val scheduler: ThreadPoolTaskScheduler) {
     }
 
     /**
-     * Return UI friendly round scores.
+     * @return UI friendly round scores.
      */
     fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points, it.wordsPerMin) }
 
     /**
-     * Return UI friendly game scores.
+     * @return UI friendly game scores.
      */
     fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories, it.bestWordsPerMin) }
 
     /**
      * A user disconnected, remove him from the game.
-     * Return true if the manager changed (when it was the disconnected user),
-     * the new manager name, the number of remaining users.
+     *
+     * @return true if there is no player in the game
      */
     @Synchronized
-    fun removeUser(session: WebSocketSession): Triple<Boolean, String, Boolean> {
-        var changed = false
+    fun removeUser(session: WebSocketSession): Boolean {
         if (players.remove(session)) {
             if (players.size > 0 && session.userName == manager) {
                 // Choose a new manager
                 manager = players[0].userName
-                changed = true
+                sendMessage(players, ManagerNotification(manager))
             }
+            return players.size <= 0
         }
-        return Triple(changed, manager, players.size <= 0)
+        return false
     }
 }
