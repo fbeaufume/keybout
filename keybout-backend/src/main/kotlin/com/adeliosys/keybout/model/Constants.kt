@@ -55,9 +55,9 @@ object Constants {
     const val MAX_WORD_LENGTH = 14
 
     /**
-     * Words/min bonus granted to prevent a tie.
+     * Name of a fictional player used to take available words when a race round expires.
      */
-    const val WORDS_PER_MIN_BONUS = 0.2f
+    const val RACE_PLAYER_NAME = "-"
 
     /**
      * GSON instance used by several classes.

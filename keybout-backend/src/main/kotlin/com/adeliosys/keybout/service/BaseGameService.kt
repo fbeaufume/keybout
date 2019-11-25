@@ -10,7 +10,7 @@ import java.time.Instant
 /**
  * Base class for the various game types.
  */
-abstract class BaseGameService(private val scheduler: ThreadPoolTaskScheduler) {
+abstract class BaseGameService(protected val scheduler: ThreadPoolTaskScheduler) {
 
     var id: Long = 0
 
@@ -50,10 +50,15 @@ abstract class BaseGameService(private val scheduler: ThreadPoolTaskScheduler) {
     private var gameScores: List<Score> = emptyList()
 
     /**
+     * ID of the current round.
+     */
+    protected var roundId = 0
+
+    /**
      * Timestamp of the beginning of the current round,
      * used to compute the words/min.
      */
-    private var roundStart: Long = 0
+    private var roundStart = 0L
 
     /**
      * Used by the UI.
@@ -107,6 +112,7 @@ abstract class BaseGameService(private val scheduler: ThreadPoolTaskScheduler) {
      * Actually start the round.
      */
     open fun startPlay() {
+        roundId++
         roundStart = System.currentTimeMillis()
     }
 

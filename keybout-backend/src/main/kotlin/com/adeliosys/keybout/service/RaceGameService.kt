@@ -1,6 +1,7 @@
 package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.*
+import com.adeliosys.keybout.model.Constants.RACE_PLAYER_NAME
 import com.adeliosys.keybout.util.sendMessage
 import com.adeliosys.keybout.util.sendObjectMessage
 import com.adeliosys.keybout.util.userName
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Scope
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.WebSocketSession
+import java.time.Instant
 
 /**
  * A running race game.
@@ -55,6 +57,9 @@ class RaceGameService(private val wordGenerator: WordGenerator, scheduler: Threa
     override fun startPlay() {
         super.startPlay()
 
+        // Notify playing users when the round ends
+        scheduler.schedule({ claimRemainingWords(roundId) }, Instant.now().plusSeconds(5L * wordsCount))
+
         // At the beginning of the round all words of all players have the same status (all are available),
         // so I use the words list of an arbitrary user, the manager
         sendMessage(players, WordsListNotification(getWordsDto(words[manager]!!)))
@@ -80,14 +85,7 @@ class RaceGameService(private val wordGenerator: WordGenerator, scheduler: Threa
                 }
 
                 if (isRoundOver()) {
-                    updateScores()
-
-                    val roundScoresDto = getRoundScoresDto()
-                    val gameScoresDto = getGameScoresDto()
-                    for (tempSession in players) {
-                        tempSession.sendObjectMessage(ScoresNotification(getWordsDto(words[tempSession.userName]!!), roundScoresDto, gameScoresDto, manager, isGameOver()))
-                    }
-
+                    endRound()
                     return isGameOver()
                 } else {
                     session.sendObjectMessage(WordsListNotification(getWordsDto(words[userName]!!)))
@@ -98,8 +96,39 @@ class RaceGameService(private val wordGenerator: WordGenerator, scheduler: Threa
         return false
     }
 
-    // Should probably rather consider the round as over when there is only one player
-    // that hasn't typed all its words, otherwise such AFK player will prevent the round
-    // from being over
     private fun isRoundOver() = finishedPlayers >= players.size
+
+    /**
+     * Called when the current round expired.
+     * Each available word is given to a fictional player name, so they are displayed in red in the UI.
+     */
+    @Synchronized
+    private fun claimRemainingWords(roundId: Int) {
+        if (roundId == this.roundId && !isRoundOver()) {
+            finishedPlayers = players.size
+
+            for (tempSession in players) {
+                words[tempSession.userName]!!.values.forEach {
+                    if (it.userName.isEmpty()) {
+                        it.userName = RACE_PLAYER_NAME
+                    }
+                }
+            }
+
+            endRound()
+        }
+    }
+
+    /**
+     * The round ended, updates the scores and send them to the players.
+     */
+    private fun endRound() {
+        updateScores()
+
+        val roundScoresDto = getRoundScoresDto()
+        val gameScoresDto = getGameScoresDto()
+        for (tempSession in players) {
+            tempSession.sendObjectMessage(ScoresNotification(getWordsDto(words[tempSession.userName]!!), roundScoresDto, gameScoresDto, manager, isGameOver()))
+        }
+    }
 }
