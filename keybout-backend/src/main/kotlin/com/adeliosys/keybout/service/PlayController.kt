@@ -57,18 +57,13 @@ class PlayController(private val userNameService: UserNameService, private val p
                 ClientState.OPENED -> {
                     when (action.command) {
                         ACTION_CONNECT -> {
-                            if (action.checkMinimumArgumentsCount(1)) {
-                                val name = action.rawArguments
-
-                                val notification = userNameService.registerUserName(name)
-                                if (notification == null) {
-                                    session.userName = name
-                                    playService.goToLobby(session)
-                                } else {
-                                    session.sendObjectMessage(notification)
-                                }
+                            val name = action.rawArguments
+                            val notification = userNameService.registerUserName(name)
+                            if (notification == null) {
+                                session.userName = name
+                                playService.goToLobby(session)
                             } else {
-                                session.sendObjectMessage(IncorrectNameNotification())
+                                session.sendObjectMessage(notification)
                             }
                         }
                         else -> logInvalidMessage(session, message)

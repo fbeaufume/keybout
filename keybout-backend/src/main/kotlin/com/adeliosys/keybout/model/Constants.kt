@@ -21,7 +21,7 @@ object Constants {
 
     // Notification types
 
-    const val NOTIFICATION_INCORRECT_NAME = "incorrect-name"
+    const val NOTIFICATION_TOO_SHORT_NAME = "too-short-name"
     const val NOTIFICATION_TOO_LONG_NAME = "too-long-name"
     const val NOTIFICATION_USED_NAME = "used-name"
     const val NOTIFICATION_GAMES_LIST = "games-list"
@@ -38,6 +38,11 @@ object Constants {
     const val LENGTH_LONGEST = "longest"
 
     // Misc
+
+    /**
+     * Minimum length of a player name.
+     */
+    const val MIN_NAME_LENGTH = 2
 
     /**
      * Maximum length of a player name.

@@ -122,8 +122,8 @@ export class PlayService {
         switch (this.state) {
           case ClientState.IDENTIFYING:
             switch (data.type) {
-              case 'incorrect-name':
-                this.errorMessage = 'Sorry, this is not a valid user name';
+              case 'too-short-name':
+                this.errorMessage = 'Sorry, this name is too short';
                 this.changeState(ClientState.UNIDENTIFIED);
                 break;
               case 'too-long-name':
@@ -131,7 +131,7 @@ export class PlayService {
                 this.changeState(ClientState.UNIDENTIFIED);
                 break;
               case 'used-name':
-                this.errorMessage = 'Sorry, this user name is already used';
+                this.errorMessage = 'Sorry, this name is already used';
                 this.changeState(ClientState.UNIDENTIFIED);
                 break;
               case 'games-list':

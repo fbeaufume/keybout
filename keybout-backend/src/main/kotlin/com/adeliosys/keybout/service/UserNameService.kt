@@ -1,9 +1,8 @@
 package com.adeliosys.keybout.service
 
-import com.adeliosys.keybout.model.BaseNotification
-import com.adeliosys.keybout.model.Constants
-import com.adeliosys.keybout.model.TooLongNameNotification
-import com.adeliosys.keybout.model.UsedNameNotification
+import com.adeliosys.keybout.model.*
+import com.adeliosys.keybout.model.Constants.MAX_NAME_LENGTH
+import com.adeliosys.keybout.model.Constants.MIN_NAME_LENGTH
 import com.adeliosys.keybout.util.userName
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -34,8 +33,12 @@ class UserNameService {
      */
     fun registerUserName(userName: String): BaseNotification? {
         return when {
-            // Check the name length
-            userName.length > Constants.MAX_NAME_LENGTH -> {
+            // Check the minimum name length
+            userName.length <= MIN_NAME_LENGTH -> {
+                TooShortNameNotification()
+            }
+            // Check the maximum name length
+            userName.length > MAX_NAME_LENGTH -> {
                 TooLongNameNotification()
             }
             // Check the name availability

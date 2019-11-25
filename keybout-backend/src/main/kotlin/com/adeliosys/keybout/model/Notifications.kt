@@ -6,9 +6,9 @@ package com.adeliosys.keybout.model
 open class BaseNotification(val type: String)
 
 /**
- * Sent when the user name is incorrect (empty for example).
+ * Sent when the user name is too short.
  */
-class IncorrectNameNotification : BaseNotification(Constants.NOTIFICATION_INCORRECT_NAME)
+class TooShortNameNotification : BaseNotification(Constants.NOTIFICATION_TOO_SHORT_NAME)
 
 /**
  * Sent when the user name is too long.
