@@ -128,7 +128,7 @@ abstract class BaseGameService(protected val scheduler: ThreadPoolTaskScheduler)
      */
     abstract fun claimWord(session: WebSocketSession, label: String): Boolean
 
-    fun isGameOver() = gameScores[0].victories >= roundsCount
+    fun isGameOver() = gameScores.isNotEmpty() && gameScores[0].victories >= roundsCount
 
     /**
      * Update round and game scores.
@@ -160,16 +160,18 @@ abstract class BaseGameService(protected val scheduler: ThreadPoolTaskScheduler)
     /**
      * A user disconnected, remove him from the game.
      *
-     * @return true if there is no player in the game
+     * @return true if the game has ended
      */
     @Synchronized
-    fun removeUser(session: WebSocketSession): Boolean {
+    open fun removeUser(session: WebSocketSession): Boolean {
         if (players.remove(session)) {
             if (players.size > 0 && session.userName == manager) {
                 // Choose a new manager
                 manager = players[0].userName
                 sendMessage(players, ManagerNotification(manager))
             }
+
+            // The game has ended because there is no player left
             return players.size <= 0
         }
         return false

@@ -34,7 +34,7 @@ class UserNameService {
     fun registerUserName(userName: String): BaseNotification? {
         return when {
             // Check the minimum name length
-            userName.length <= MIN_NAME_LENGTH -> {
+            userName.length < MIN_NAME_LENGTH -> {
                 TooShortNameNotification()
             }
             // Check the maximum name length

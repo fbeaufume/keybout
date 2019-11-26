@@ -130,7 +130,7 @@ class PlayService(private val gameBuilder: GameBuilder) {
                 // Notify other users
                 sendMessage(lobbySessions.values, GamesListNotification(declaredGames.values))
 
-                logger.info("Started game #{} ({} player{}, 'capture' type, {} round{}, {} {} '{}' words), running game count is {}",
+                logger.info("Started game {} ({} player{}, 'capture' type, {} round{}, {} {} '{}' words), running game count is {}",
                         descriptor.id,
                         players.size,
                         if (players.size > 1) "s" else "",
@@ -156,9 +156,9 @@ class PlayService(private val gameBuilder: GameBuilder) {
         }
     }
 
-    private fun deleteRunningGame(gameId: Long) {
+    fun deleteRunningGame(gameId: Long) {
         runningGames.remove(gameId)
-        logger.info("Ended game #{}, running game count is {}", gameId, runningGames.size)
+        logger.info("Ended game {}, running game count is {}", gameId, runningGames.size)
     }
 
     /**
@@ -188,7 +188,7 @@ class PlayService(private val gameBuilder: GameBuilder) {
                 synchronized(this) {
                     runningGames[session.gameId]?.let {
                         if (it.removeUser(session)) {
-                            // No player left, remove the game
+                            // No player left or race game ended, remove the game
                             deleteRunningGame(it.id)
                         }
                     }

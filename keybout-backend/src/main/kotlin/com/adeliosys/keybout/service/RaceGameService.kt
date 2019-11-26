@@ -17,7 +17,10 @@ import java.time.Instant
  */
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class RaceGameService(private val wordGenerator: WordGenerator, scheduler: ThreadPoolTaskScheduler) : BaseGameService(scheduler) {
+class RaceGameService(
+        private val wordGenerator: WordGenerator,
+        private val playService: PlayService,
+        scheduler: ThreadPoolTaskScheduler) : BaseGameService(scheduler) {
 
     /**
      * Remaining words for each user.
@@ -116,7 +119,29 @@ class RaceGameService(private val wordGenerator: WordGenerator, scheduler: Threa
             }
 
             endRound()
+
+            // Usually the deleteRunningGame method is called from within PlayService
+            // as a response to a call to a game service, but claimRemainingWords is executed
+            // asynchronously, so this is a special case and we make an explicit call
+            // to deleteRunningGame
+            if (isGameOver()) {
+                playService.deleteRunningGame(id)
+            }
         }
+    }
+
+    @Synchronized
+    override fun removeUser(session: WebSocketSession): Boolean {
+        if (super.removeUser(session)) {
+            return true
+        }
+
+        // If the remaining players caught all their words, end the round
+        if (isRoundOver()) {
+            endRound()
+        }
+
+        return isGameOver()
     }
 
     /**
