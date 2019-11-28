@@ -94,6 +94,7 @@ amélioration
 améliorer
 an
 analyse
+ananas
 ancien
 animal
 anniversaire
@@ -110,9 +111,6 @@ appareil
 apparemment
 apparition
 appartement
-appartenant
-appartiennent
-appartient
 appel
 appeler
 application
@@ -219,6 +217,7 @@ bain
 baisser
 balai
 balance
+balcon
 baleine
 balle
 banc
@@ -290,6 +289,7 @@ boursier
 bout
 bouteille
 boutique
+bouée
 boxe
 boîte
 bracelet
@@ -302,6 +302,7 @@ brique
 broche
 brochure
 bronze
+brosse
 bruit
 brut
 brûler
@@ -439,6 +440,7 @@ chef
 chemin
 cheminée
 chemise
+chenille
 cher
 chercher
 chercheur
@@ -464,6 +466,7 @@ chute
 chuter
 chèvre
 chéri
+chêne
 cible
 ciel
 cigale
@@ -542,7 +545,6 @@ communiqué
 compagnie
 comparable
 comparaison
-compare
 comparer
 compartiment
 compensation
@@ -555,18 +557,16 @@ compliqué
 complémentaire
 compléter
 comportant
-comporte
 comportement
+comporter
 composant
 compose
-composent
 composition
 composé
 comprendre
 compromis
 comptabilité
 comptable
-comptait
 comptant
 compte
 compter
@@ -576,16 +576,13 @@ compétition
 compétitivité
 comédie
 concentration
-concentre
 concentrer
 concept
 conception
 concernant
-concernent
 concerner
 concert
 concertation
-concerts
 concevoir
 conclure
 conclusion
@@ -713,11 +710,9 @@ course
 court
 courte
 courtier
-courts
 couture
 couvert
 couverture
-couvre
 couvrir
 coyote
 crabe
@@ -725,16 +720,15 @@ craindre
 crainte
 crayon
 creux
+crevette
 crier
 crise
 critique
 croire
 croissance
 croissant
-croissante
 créance
 créancier
-créant
 créateur
 création
 créativité
@@ -743,6 +737,7 @@ crédit
 créer
 créneau
 crêpe
+cube
 cuir
 cuire
 cuisine
@@ -781,6 +776,7 @@ demandeur
 demeure
 demi
 dent
+dentiste
 depuis
 dernier
 des
@@ -836,8 +832,6 @@ disparaître
 disparition
 disponible
 disposant
-dispose
-disposent
 disposer
 dispositif
 disposition
@@ -887,6 +881,7 @@ doux
 douze
 dramatique
 drame
+drapeau
 droit
 droite
 dromadaire
@@ -970,10 +965,7 @@ détail
 détente
 déterminant
 déterminer
-déterminé
-déterminée
 détester
-détiennent
 détient
 détour
 détriment
@@ -981,7 +973,6 @@ détruire
 détérioration
 dévaluation
 développement
-développent
 développer
 eau
 effectif
@@ -1006,6 +997,7 @@ en
 encadrer
 encore
 encrier
+endive
 endroit
 enfance
 enfant
@@ -1074,8 +1066,8 @@ exemplaire
 exemple
 exercer
 exercice
-exige
 exigence
+exiger
 existence
 exister
 expansion
@@ -1110,6 +1102,8 @@ falloir
 fameux
 familial
 famille
+farce
+farine
 fatigue
 faucon
 faute
@@ -1131,7 +1125,6 @@ fermeté
 festival
 feu
 feuille
-feux
 fiabilité
 fiable
 fibre
@@ -1162,19 +1155,20 @@ finition
 firme
 fisc
 fiscal
-fiscale
 fiscalité
 fixe
 fixer
 flacon
 flamme
 fleur
+fleuve
 flexibilité
 flic
 flocon
 fluctuation
 flux
 foie
+foin
 fois
 folie
 fonction
@@ -1261,6 +1255,7 @@ gestionnaire
 gigantesque
 givre
 glace
+glissade
 glisser
 global
 globalement
@@ -1284,6 +1279,7 @@ grillon
 grimper
 gris
 gros
+grotte
 groupe
 guide
 guise
@@ -1307,6 +1303,7 @@ habiter
 habitude
 hache
 handicap
+haricot
 hasard
 hausse
 haut
@@ -1435,6 +1432,7 @@ issue
 jadis
 jamais
 jambe
+jambon
 janvier
 jardin
 jaune
@@ -1475,8 +1473,8 @@ koala
 la
 label
 laboratoire
+lac
 laine
-laissant
 laisser
 lait
 lama
@@ -1642,6 +1640,7 @@ mensuel
 mentalité
 mention
 mentir
+menton
 menu
 mer
 merci
@@ -1711,6 +1710,7 @@ moteur
 motif
 motivation
 mouche
+mouette
 mouffette
 mouflon
 mourir
@@ -1719,6 +1719,7 @@ moustique
 mouvement
 moyen
 moyenne
+muguet
 multimédia
 multinationale
 multiple
@@ -1756,6 +1757,7 @@ nappe
 national
 nature
 naturel
+navire
 naître
 ne
 neige
@@ -1768,6 +1770,7 @@ nez
 ni
 niche
 nickel
+nid
 niveau
 noir
 noix
@@ -2391,7 +2394,9 @@ rigueur
 rire
 risque
 risquer
+rivière
 robe
+rocher
 roi
 roman
 rose
@@ -2408,6 +2413,7 @@ rue
 rumeur
 rupture
 rythme
+râteau
 réaction
 réagir
 réalisateur
@@ -2466,6 +2472,7 @@ réunion
 réunir
 réussir
 réussite
+réveil
 réveiller
 révision
 révolution
@@ -2746,6 +2753,7 @@ tenir
 tennis
 tension
 tentative
+tente
 tenter
 tenue
 terme
