@@ -51,7 +51,7 @@ fun main(args: Array<String>) {
         getFileForLang(lang).printWriter().use { file -> outputWords.forEach { file.println(it) } }
 
         duration += System.currentTimeMillis()
-        logger.info("Done in {} msec (loaded {} word{}, trimmed {}, lowercased {}, ignored {}, removed {}, wrote {})",
+        logger.info("Done in {} msec: loaded {} word{}, trimmed {}, lowercased {}, ignored {}, removed {}, wrote {}",
                 duration,
                 inputCount,
                 if (inputCount > 1) "s" else "",
