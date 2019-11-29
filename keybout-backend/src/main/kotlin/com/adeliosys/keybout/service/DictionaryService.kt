@@ -11,10 +11,10 @@ import javax.annotation.PostConstruct
 import kotlin.random.Random
 
 /**
- * Generate random for a game round.
+ * Provide the words for a round.
  */
 @Service
-class WordGenerator {
+class DictionaryService {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -27,7 +27,7 @@ class WordGenerator {
     private var wordsByLang = mutableMapOf<String, MutableList<String>>()
 
     @PostConstruct
-    private fun init() {
+    fun postConstruct() {
         loadWords(wordsEn, "en")
         loadWords(wordsFr, "fr")
     }
@@ -60,7 +60,7 @@ class WordGenerator {
         val selectedWords = mutableListOf<String>()
 
         while (selectedWords.size < count) {
-            val selectedWord = possibleWords[Random.nextInt(0, possibleWords.size-1)]
+            val selectedWord = possibleWords[Random.nextInt(0, possibleWords.size - 1)]
 
             // Check the word length
             if (selectedWord.length !in minLength..maxLength) {

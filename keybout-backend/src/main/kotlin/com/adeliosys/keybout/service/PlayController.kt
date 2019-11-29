@@ -34,7 +34,7 @@ class PlayController(private val userNameService: UserNameService, private val p
     private var latency = 0L
 
     @PostConstruct
-    private fun init() {
+    private fun postConstruct() {
         logger.info("Using latency of {} ms", latency)
     }
 

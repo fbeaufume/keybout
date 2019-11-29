@@ -18,7 +18,7 @@ import java.time.Instant
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class RaceGameService(
-        private val wordGenerator: WordGenerator,
+        private val dictionaryService: DictionaryService,
         private val playService: PlayService,
         scheduler: ThreadPoolTaskScheduler) : BaseGameService(scheduler) {
 
@@ -45,7 +45,7 @@ class RaceGameService(
     override fun startCountdown() {
         super.startCountdown()
 
-        val generatedWords = wordGenerator.generateWords(language, wordsCount, minWordsLength, maxWordsLength)
+        val generatedWords = dictionaryService.generateWords(language, wordsCount, minWordsLength, maxWordsLength)
 
         // Initialize the words list for each user
         for (session in players) {

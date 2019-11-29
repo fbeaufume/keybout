@@ -14,7 +14,7 @@ import org.springframework.web.socket.WebSocketSession
  */
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class CaptureGameService(private val wordGenerator: WordGenerator, scheduler: ThreadPoolTaskScheduler) : BaseGameService(scheduler) {
+class CaptureGameService(private val dictionaryService: DictionaryService, scheduler: ThreadPoolTaskScheduler) : BaseGameService(scheduler) {
 
     /**
      * Shared words by label. Used to keep track of who captured what.
@@ -39,7 +39,7 @@ class CaptureGameService(private val wordGenerator: WordGenerator, scheduler: Th
 
         // Initialize the shared list of words
         words.clear()
-        wordGenerator.generateWords(language, wordsCount, minWordsLength, maxWordsLength).forEach {
+        dictionaryService.generateWords(language, wordsCount, minWordsLength, maxWordsLength).forEach {
             words[it] = Word(it)
         }
 
