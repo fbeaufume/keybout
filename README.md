@@ -1,6 +1,6 @@
 # Keybout
 
-KeyBout is a simple web-based multiplayer keyboard racing game, where the players
+Keybout is a simple web-based multiplayer keyboard racing game, where the players
 have to type random words before the other players.
 
 The first version started in 2014 as a sample WebSocket application and used JavaScript,
@@ -13,6 +13,8 @@ This second version is a full rewrite and uses Angular, SockJS, Spring Boot and 
 ![Game creation](doc/keybout-2.png)
 
 ![Gameplay](doc/keybout-3.png)
+
+![Scores](doc/keybout-4.png)
 
 ## Usage
 
