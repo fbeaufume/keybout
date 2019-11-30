@@ -25,7 +25,7 @@ export class GamesComponent {
   ];
 
   // Available word counts
-  wordsCounts = [3, 5, 7, 10, 15];
+  wordsCounts = [3, 5, 7, 10, 15, 20, 30];
 
   // Available word lengths
   wordsLengths = [
