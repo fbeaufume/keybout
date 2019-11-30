@@ -5,10 +5,7 @@
     <tr>
       <th scope="col">Creator</th>
       <th scope="col">Type</th>
-      <th scope="col">Rounds</th>
-      <th scope="col">Language</th>
-      <th scope="col">Words count</th>
-      <th scope="col">Words length</th>
+      <th scope="col">Words</th>
       <th scope="col">Players</th>
       <th scope="col">Actions</th>
     </tr>
@@ -16,12 +13,11 @@
     <tbody>
     <tr *ngFor="let game of games">
       <td>{{game.creator}}</td>
-      <td>{{game.type}}</td>
-      <td>{{game.rounds}}</td>
-      <td>{{game.language}}</td>
-      <td>{{game.wordsCount}}</td>
-      <td>{{game.wordsLength}}</td>
-      <td>{{game.players.join(', ')}}</td>
+      <td>{{game.type}} of {{game.rounds}} round{{ game.rounds > 1 ? 's' : ''}}</td>
+      <td>{{game.wordsCount}} {{game.wordsLength.toLowerCase()}} in {{game.language.toLowerCase()}}</td>
+      <td>
+        <div *ngFor="let player of game.players">{{player}}</div>
+      </td>
       <td>
         <button *ngIf="canDeleteOrStart(game.id)" class="btn btn-primary mr-2" (click)="start()">Start</button>
         <button *ngIf="canDeleteOrStart(game.id)" class="btn btn-danger" (click)="delete()">Delete</button>
@@ -30,7 +26,7 @@
       </td>
     </tr>
     <tr *ngIf="noAvailableGame()">
-      <td colspan="8">No available game yet</td>
+      <td colspan="5">No available game yet</td>
     </tr>
     </tbody>
   </table>

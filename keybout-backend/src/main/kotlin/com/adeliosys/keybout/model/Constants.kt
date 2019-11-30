@@ -47,7 +47,7 @@ object Constants {
     /**
      * Maximum length of a player name.
      */
-    const val MAX_NAME_LENGTH = 32
+    const val MAX_NAME_LENGTH = 16
 
     /**
      * Minimum length of words loaded from the dictionary files.
