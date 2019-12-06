@@ -16,7 +16,7 @@
       <td>{{game.type}}</td>
       <td>{{game.rounds}}</td>
       <td>{{game.language}}</td>
-      <td>{{game.wordsCount}} {{game.wordsLength.toLowerCase()}}</td>
+      <td>{{game.wordsCount}} of {{game.wordsLength.toLowerCase()}} length</td>
       <td>
         <div>{{game.creator}}</div>
         <div *ngFor="let player of game.players">{{player}}</div>
