@@ -10,7 +10,9 @@ import java.time.Instant
 /**
  * Base class for the various game types.
  */
-abstract class BaseGameService(protected val scheduler: ThreadPoolTaskScheduler) {
+abstract class BaseGameService(
+        protected val awardService: AwardService,
+        protected val scheduler: ThreadPoolTaskScheduler) {
 
     var id: Long = 0
 
@@ -150,12 +152,12 @@ abstract class BaseGameService(protected val scheduler: ThreadPoolTaskScheduler)
     /**
      * @return UI friendly round scores.
      */
-    fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points, it.wordsPerMin) }
+    fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points, it.wordsPerMin, it.awards) }
 
     /**
      * @return UI friendly game scores.
      */
-    fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories, it.bestWordsPerMin) }
+    fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories, it.bestWordsPerMin, null) }
 
     /**
      * A user disconnected, remove him from the game.

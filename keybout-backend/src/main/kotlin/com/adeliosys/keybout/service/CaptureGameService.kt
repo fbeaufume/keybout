@@ -14,7 +14,10 @@ import org.springframework.web.socket.WebSocketSession
  */
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class CaptureGameService(private val dictionaryService: DictionaryService, scheduler: ThreadPoolTaskScheduler) : BaseGameService(scheduler) {
+class CaptureGameService(
+        private val dictionaryService: DictionaryService,
+        awardService: AwardService,
+        scheduler: ThreadPoolTaskScheduler) : BaseGameService(awardService, scheduler) {
 
     /**
      * Shared words by label. Used to keep track of who captured what.
@@ -39,9 +42,13 @@ class CaptureGameService(private val dictionaryService: DictionaryService, sched
 
         // Initialize the shared list of words
         words.clear()
-        dictionaryService.generateWords(language, wordsCount, minWordsLength, maxWordsLength).forEach {
-            words[it] = Word(it)
-        }
+        dictionaryService.generateWords(language, wordsCount, minWordsLength, maxWordsLength)
+                .apply {
+                    awardService.initializeRound(this)
+                }
+                .forEach {
+                    words[it] = Word(it)
+                }
 
         availableWords = words.size
     }
@@ -57,23 +64,28 @@ class CaptureGameService(private val dictionaryService: DictionaryService, sched
         if (!isRoundOver()) {
             val userName = session.userName
             val word = words[label]
+            val score = userScores[userName]
 
             // Ensure that the word is available
-            if (word != null && word.userName.isEmpty()) {
+            if (word != null && word.userName.isEmpty() && score != null) {
                 word.userName = userName
 
                 // Add 1 point to the user score
-                userScores[userName]?.incrementPoints()
+                score.incrementPoints()
 
                 availableWords--
 
                 if (isRoundOver()) {
+                    awardService.checkAwards(score, label, true)
+
                     updateScores()
 
                     sendMessage(players, ScoresNotification(getWordsDto(words), getRoundScoresDto(), getGameScoresDto(), manager, isGameOver()))
 
                     return isGameOver()
                 } else {
+                    awardService.checkAwards(score, label, false)
+
                     sendMessage(players, WordsListNotification(getWordsDto(words)))
                 }
             }

@@ -15,6 +15,9 @@ class Score(val userName: String) {
     // Number of words/min for the round, used in capture games only
     var wordsPerMin = 0.0f
 
+    // Awards for the current round, is a bitwise "or" of all the awards
+    var awards = 0
+
     // Number of rounds won
     var victories = 0
 
@@ -24,13 +27,18 @@ class Score(val userName: String) {
     // Best number of words/min so far, used in capture games only
     var bestWordsPerMin = 0.0f
 
+    fun resetPoints() {
+        points = 0
+        awards = 0
+    }
+
     fun incrementPoints() {
         points++
         latestWordTimestamp = getTimestamp()
     }
 
-    fun resetPoints() {
-        points = 0
+    fun addAward(award: Int) {
+        awards = awards or award
     }
 
     fun incrementVictories() {
@@ -52,4 +60,4 @@ class Score(val userName: String) {
     private fun getTimestamp() = System.currentTimeMillis()
 }
 
-class ScoreDto(val userName: String, val points: Int, val wpm: Float)
+class ScoreDto(val userName: String, val points: Int, val wpm: Float, val awards: Int?)

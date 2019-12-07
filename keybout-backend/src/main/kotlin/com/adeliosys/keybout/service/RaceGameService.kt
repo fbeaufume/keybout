@@ -20,7 +20,8 @@ import java.time.Instant
 class RaceGameService(
         private val dictionaryService: DictionaryService,
         private val playService: PlayService,
-        scheduler: ThreadPoolTaskScheduler) : BaseGameService(scheduler) {
+        awardService: AwardService,
+        scheduler: ThreadPoolTaskScheduler) : BaseGameService(awardService, scheduler) {
 
     /**
      * Remaining words for each user.
@@ -46,6 +47,8 @@ class RaceGameService(
         super.startCountdown()
 
         val generatedWords = dictionaryService.generateWords(language, wordsCount, minWordsLength, maxWordsLength)
+
+        awardService.initializeRound(generatedWords)
 
         // Initialize the words list for each user
         for (session in players) {
@@ -73,17 +76,19 @@ class RaceGameService(
         if (!isRoundOver()) {
             val userName = session.userName
             val word = words[userName]?.get(label)
-            val userScore = userScores[userName]
+            val score = userScores[userName]
 
             // Ensure that the word is available
-            if (word != null && word.userName.isEmpty() && userScore != null) {
+            if (word != null && word.userName.isEmpty() && score != null) {
                 word.userName = userName
 
                 // Add 1 point to the user score
-                userScore.incrementPoints()
+                score.incrementPoints()
+
+                awardService.checkAwards(score, label, false)
 
                 // Has the player finished
-                if (userScore.points >= wordsCount) {
+                if (score.points >= wordsCount) {
                     finishedPlayers++
                 }
 

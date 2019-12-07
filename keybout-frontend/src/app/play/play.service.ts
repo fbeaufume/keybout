@@ -177,6 +177,7 @@ export class PlayService {
             if (data.type === 'scores') {
               this.updateWords(data.words);
               this.roundScores = data.roundScores;
+              this.updateRoundAwards();
               this.gameScores = data.gameScores;
               this.gameManager = data.manager;
               this.gameOver = data.gameOver;
@@ -319,6 +320,31 @@ export class PlayService {
       this.words.set(k, wordUsername);
     }
     this.availableWords = availableWords;
+  }
+
+  // The backend sent a single number containing all aggregated awards,
+  // this method extracts the awards name
+  updateRoundAwards() {
+    for (const score of this.roundScores) {
+      score.awardsNames = [];
+
+      // tslint:disable-next-line:no-bitwise
+      if (score.awards & 1) {
+        score.awardsNames.push('First');
+      }
+      // tslint:disable-next-line:no-bitwise
+      if (score.awards & 2) {
+        score.awardsNames.push('Double');
+      }
+      // tslint:disable-next-line:no-bitwise
+      if (score.awards & 4) {
+        score.awardsNames.push('Longest');
+      }
+      // tslint:disable-next-line:no-bitwise
+      if (score.awards & 8) {
+        score.awardsNames.push('Last');
+      }
+    }
   }
 
   changeState(state: ClientState) {

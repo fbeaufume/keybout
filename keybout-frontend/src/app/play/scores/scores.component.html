@@ -24,6 +24,7 @@
           <th scope="col">Name</th>
           <th scope="col">Words</th>
           <th scope="col">Words/min</th>
+          <th scope="col">Awards</th>
         </tr>
         </thead>
         <tbody>
@@ -32,6 +33,11 @@
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.userName}}</td>
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.points}}</td>
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.wpm | number:'1.1-1'}}</td>
+          <td>
+            <div *ngFor="let award of score.awardsNames">
+              <span class="badge" [ngClass]="userName === score.userName ? 'badge-primary' : 'badge-secondary'">{{award}}</span>
+            </div>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -43,7 +49,7 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Name</th>
-          <th scope="col">Rounds won</th>
+          <th scope="col">Victories</th>
           <th scope="col">Best w/m</th>
         </tr>
         </thead>

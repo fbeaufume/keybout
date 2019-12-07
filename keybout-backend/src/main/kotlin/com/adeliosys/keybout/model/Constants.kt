@@ -37,6 +37,13 @@ object Constants {
     const val LENGTH_LONGER = "longer"
     const val LENGTH_LONGEST = "longest"
 
+    // Awards
+
+    const val FIRST_AWARD = 1
+    const val DOUBLE_AWARD = 2
+    const val LONGEST_AWARD = 4
+    const val LAST_AWARD = 8
+
     // Misc
 
     /**
