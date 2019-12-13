@@ -46,7 +46,7 @@ class RaceGameService(
     override fun startCountdown() {
         super.startCountdown()
 
-        val generatedWords = dictionaryService.generateWords(language, wordsCount, minWordsLength, maxWordsLength)
+        val generatedWords = dictionaryService.generateWords(language, wordsCount, wordsLength)
 
         awardService.initializeRound(generatedWords)
 

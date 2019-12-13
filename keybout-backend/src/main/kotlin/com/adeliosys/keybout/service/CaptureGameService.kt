@@ -42,7 +42,7 @@ class CaptureGameService(
 
         // Initialize the shared list of words
         words.clear()
-        dictionaryService.generateWords(language, wordsCount, minWordsLength, maxWordsLength)
+        dictionaryService.generateWords(language, wordsCount, wordsLength)
                 .apply {
                     awardService.initializeRound(this)
                 }

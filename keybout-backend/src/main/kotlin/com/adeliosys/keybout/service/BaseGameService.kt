@@ -22,9 +22,7 @@ abstract class BaseGameService(
 
     var wordsCount: Int = 0
 
-    var minWordsLength = 5
-
-    var maxWordsLength = 10
+    var wordsLength: WordLength = WordLength.STANDARD
 
     /**
      * Name of the player that starts the next round.
@@ -79,15 +77,7 @@ abstract class BaseGameService(
 
         language = gameDescriptor.language
 
-        val pair = when (gameDescriptor.wordsLength) {
-            Constants.LENGTH_SHORTEST -> Pair(3, 6)
-            Constants.LENGTH_SHORTER -> Pair(4, 8)
-            Constants.LENGTH_LONGER -> Pair(6, 12)
-            Constants.LENGTH_LONGEST -> Pair(7, 14)
-            else -> Pair(5, 10)
-        }
-        minWordsLength = pair.first
-        maxWordsLength = pair.second
+        wordsLength = gameDescriptor.wordsLength
 
         manager = gameDescriptor.creator
 

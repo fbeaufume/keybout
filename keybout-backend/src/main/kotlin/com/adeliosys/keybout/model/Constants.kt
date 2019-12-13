@@ -30,13 +30,6 @@ object Constants {
     const val NOTIFICATION_SCORES = "scores"
     const val NOTIFICATION_MANAGER = "manager"
 
-    // Word lengths
-
-    const val LENGTH_SHORTEST = "shortest"
-    const val LENGTH_SHORTER = "shorter"
-    const val LENGTH_LONGER = "longer"
-    const val LENGTH_LONGEST = "longest"
-
     // Awards
 
     const val FIRST_AWARD = 1

@@ -2,12 +2,10 @@ package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.Constants.MAX_WORD_LENGTH
 import com.adeliosys.keybout.model.Constants.MIN_WORD_LENGTH
+import com.adeliosys.keybout.model.WordLength
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
-import javax.annotation.PostConstruct
 import kotlin.random.Random
 
 /**
@@ -18,30 +16,21 @@ class DictionaryService {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    @Value("classpath:words-en.txt")
-    private lateinit var wordsEn: Resource
-
-    @Value("classpath:words-fr.txt")
-    private lateinit var wordsFr: Resource
-
     private var wordsByLang = mutableMapOf<String, MutableList<String>>()
 
-    @PostConstruct
-    fun postConstruct() {
-        loadWords(wordsEn, "en")
-        loadWords(wordsFr, "fr")
+    init {
+        listOf("en", "fr").forEach { loadWords(it) }
     }
 
     /**
      * Load the words for one language.
      */
-    private fun loadWords(resource: Resource, lang: String) {
+    private fun loadWords(lang: String) {
         logger.debug("Loading '{}' words", lang)
 
         val words = mutableListOf<String>()
 
-        // Do not use resource.file, it does not work with a Spring Boot fat jar
-        resource.inputStream.bufferedReader(Charsets.UTF_8).readLines().forEach {
+        javaClass.getResource("/words-$lang.txt").openStream().bufferedReader(Charsets.UTF_8).readLines().forEach {
             if (it.length in MIN_WORD_LENGTH..MAX_WORD_LENGTH) {
                 words.add(it)
             }
@@ -55,7 +44,7 @@ class DictionaryService {
     /**
      * Generate random words.
      */
-    fun generateWords(language: String, count: Int, minLength: Int, maxLength: Int): List<String> {
+    fun generateWords(language: String, count: Int, wordsLength: WordLength): List<String> {
         val possibleWords = wordsByLang[language]!!
         val selectedWords = mutableListOf<String>()
 
@@ -63,7 +52,7 @@ class DictionaryService {
             val selectedWord = possibleWords[Random.nextInt(0, possibleWords.size - 1)]
 
             // Check the word length
-            if (selectedWord.length !in minLength..maxLength) {
+            if (selectedWord.length !in wordsLength.getRange()) {
                 continue
             }
 
