@@ -32,10 +32,10 @@ object Constants {
 
     // Awards
 
-    const val FIRST_AWARD = 1
-    const val DOUBLE_AWARD = 2
-    const val LONGEST_AWARD = 4
-    const val LAST_AWARD = 8
+    const val FIRST_AWARD = 1 // Supported by all game modes
+    const val DOUBLE_AWARD = 2 // Supported by capture mode only
+    const val LONGEST_AWARD = 4 // Supported by all game modes
+    const val LAST_AWARD = 8 // supported by capture mode only
 
     // Misc
 

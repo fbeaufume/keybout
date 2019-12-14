@@ -18,6 +18,9 @@ import java.lang.Integer.max
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class AwardService {
 
+    // Is the "double" award tracked
+    var trackDoubleAward = false
+
     // The latest user who won a word, used to track the "first" and "double" awards
     var latestUserName: String? = null
 
@@ -30,7 +33,9 @@ class AwardService {
     /**
      * Initialize this service at the beginning of each round.
      */
-    fun initializeRound(words: List<String>) {
+    fun initializeRound(words: List<String>, trackDoubleAward: Boolean) {
+        this.trackDoubleAward = trackDoubleAward;
+
         isLongestAvailable = true
 
         latestUserName = null
@@ -48,7 +53,7 @@ class AwardService {
             score.addAward(FIRST_AWARD)
         }
 
-        if (score.userName == latestUserName) {
+        if (trackDoubleAward && score.userName == latestUserName) {
             score.addAward(DOUBLE_AWARD)
         }
 
