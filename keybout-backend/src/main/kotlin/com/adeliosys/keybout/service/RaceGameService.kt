@@ -53,7 +53,7 @@ class RaceGameService(
         // Initialize the words list for each user
         for (session in players) {
             val userWords = mutableMapOf<String, Word>()
-            generatedWords.forEach { userWords[it] = Word(it) }
+            generatedWords.forEach { userWords[it] = Word(it, wordsEffect) }
             words[session.userName] = userWords
         }
 

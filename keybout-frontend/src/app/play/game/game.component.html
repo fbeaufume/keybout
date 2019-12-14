@@ -2,7 +2,7 @@
   <div class="container" *ngIf="isVisible()">
     <h4>Go!</h4>
     <button *ngFor="let word of words | keyvalue" type="button"
-            [class]="getClass(word.key)">{{word.key | uppercase}}</button>
+            [class]="getClass(word.key)">{{word.value.getEffectiveDisplay() | uppercase}}</button>
     <br>
     <input class="form-control mt-4" type="text" autocomplete="false" [(ngModel)]="inputWord" (keyup)="onKey()"/>
     <br>

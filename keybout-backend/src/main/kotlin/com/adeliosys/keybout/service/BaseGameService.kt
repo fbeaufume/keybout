@@ -24,6 +24,8 @@ abstract class BaseGameService(
 
     var wordsLength: WordLength = WordLength.STANDARD
 
+    var wordsEffect: WordEffect = WordEffect.NONE
+
     /**
      * Name of the player that starts the next round.
      */
@@ -79,6 +81,8 @@ abstract class BaseGameService(
 
         wordsLength = gameDescriptor.wordsLength
 
+        wordsEffect = gameDescriptor.wordsEffect
+
         manager = gameDescriptor.creator
 
         this.players.addAll(players)
@@ -112,7 +116,7 @@ abstract class BaseGameService(
      * Utility method that returns a UI friendly map of words,
      * i.e. the key is the word label and the value is the assigned user name (or empty).
      */
-    fun getWordsDto(words: Map<String, Word>): Map<String, String> = words.map { it.key to it.value.userName }.toMap()
+    fun getWordsDto(words: Map<String, Word>): Map<String, Array<String>> = words.map { it.key to arrayOf(it.value.userName, it.value.display) }.toMap()
 
     /**
      * Update the game state after a player completely typed a word.

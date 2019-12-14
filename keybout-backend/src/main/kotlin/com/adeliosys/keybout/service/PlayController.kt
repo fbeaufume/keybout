@@ -72,7 +72,7 @@ class PlayController(private val userNameService: UserNameService, private val p
                 ClientState.LOBBY -> {
                     when (action.command) {
                         ACTION_CREATE_GAME -> {
-                            if (action.checkArgumentsCount(5)) {
+                            if (action.checkArgumentsCount(6)) {
                                 val gameDescriptor = GameDescriptor(
                                         session.userName,
                                         action.arguments[0],
@@ -87,7 +87,8 @@ class PlayController(private val userNameService: UserNameService, private val p
                                         } catch (e: NumberFormatException) {
                                             10
                                         },
-                                        action.arguments[4])
+                                        action.arguments[4],
+                                        action.arguments[5])
 
                                 playService.createGame(session, gameDescriptor)
                             }

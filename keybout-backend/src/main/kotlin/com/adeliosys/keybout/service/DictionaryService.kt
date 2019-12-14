@@ -49,7 +49,7 @@ class DictionaryService {
         val selectedWords = mutableListOf<String>()
 
         while (selectedWords.size < count) {
-            val selectedWord = possibleWords[Random.nextInt(0, possibleWords.size - 1)]
+            val selectedWord = possibleWords[Random.nextInt(0, possibleWords.size)]
 
             // Check the word length
             if (selectedWord.length !in wordsLength.getRange()) {

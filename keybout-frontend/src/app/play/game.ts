@@ -6,5 +6,6 @@ export class Game {
   language: string;
   wordsCount: number;
   wordsLength: string;
+  wordsEffect: string;
   players: string[];
 }

@@ -1,5 +1,6 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {ClientState, GameType, PlayService} from '../play.service';
+import {Word} from '../word';
 
 @Component({
   selector: 'app-game',
@@ -29,7 +30,7 @@ export class GameComponent {
     return this.playService.state;
   }
 
-  get words(): Map<string, string> {
+  get words(): Map<string, Word> {
     return this.playService.words;
   }
 
@@ -40,7 +41,7 @@ export class GameComponent {
 
   // Return the class attribute for a given word
   getClass(label: string) {
-    switch (this.words.get(label)) {
+    switch (this.words.get(label).userName) {
       case '':
         return 'btn btn-primary btn-lg mr-2 mb-2';
       case this.playService.userName:
@@ -56,11 +57,12 @@ export class GameComponent {
       this.inputWord = '';
     } else {
       // Try to match an available word
-      const word = this.inputWord.toLowerCase();
-      const userName = this.playService.words.get(word);
+      const typed = this.inputWord.toLowerCase();
+      const word = this.playService.words.get(typed);
+      const userName = word ? word.userName : null;
       if (userName != null) {
         if (userName === '') {
-          this.playService.claimWord(word);
+          this.playService.claimWord(typed);
         }
         this.inputWord = '';
       }

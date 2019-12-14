@@ -1,5 +1,8 @@
 package com.adeliosys.keybout.model
 
+/**
+ * The word length ranges.
+ */
 enum class WordLength(private val minLength: Int, private val maxLength: Int) {
 
     SHORTEST(3, 6),

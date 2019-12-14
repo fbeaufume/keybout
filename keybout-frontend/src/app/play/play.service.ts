@@ -3,12 +3,13 @@ import * as SockJS from 'sockjs-client';
 import {Subject} from 'rxjs/internal/Subject';
 import {Game} from './game';
 import {Score} from './score';
+import {Word} from './word';
 import {environment} from '../../environments/environment';
 
 export enum ClientState {
   UNIDENTIFIED, // Initial state, no used name accepted by the server yet
   IDENTIFYING, // Sending user name
-  LOBBY, // User is iedntied and in the lobby getting the list of games
+  LOBBY, // User is identified and in the lobby getting the list of games
   CREATING, // User is creating a game
   CREATED, // User has created a game
   DELETING, // User is deleting a game
@@ -77,7 +78,7 @@ export class PlayService {
 
   // Map used to track who captured each word
   // The key is the word label, the value is the user name or empty is not captured yet
-  words: Map<string, string> = new Map();
+  words: Map<string, Word> = new Map();
 
   // Number of available words, used to display a wait message at the end of a race game round
   availableWords = 0;
@@ -242,9 +243,9 @@ export class PlayService {
     this.socket.close();
   }
 
-  createGame(type: string, rounds: number, language: string, wordsCount: number, wordsLength: string) {
+  createGame(type: string, rounds: number, language: string, wordsCount: number, wordsLength: string, wordsEffect: string) {
     this.changeState(ClientState.CREATING);
-    this.send(`create-game ${type} ${rounds} ${language} ${wordsCount} ${wordsLength}`);
+    this.send(`create-game ${type} ${rounds} ${language} ${wordsCount} ${wordsLength} ${wordsEffect}`);
   }
 
   deleteGame() {
@@ -279,14 +280,9 @@ export class PlayService {
     let state = ClientState.LOBBY;
 
     for (const game of games) {
-      // Format the game type
-      game.type = game.type.charAt(0).toUpperCase() + game.type.substring(1);
-
-      // Format the game language
-      game.language = game.language === 'en' ? 'English' : 'French';
-
-      // Format the words length by capitalizing the first letter
-      game.wordsLength = game.wordsLength.charAt(0).toUpperCase() + game.wordsLength.substring(1);
+      // Did not find easy way to produce lower-case values on the backend side, so doing it here
+      game.wordsLength = game.wordsLength.toLowerCase();
+      game.wordsEffect = game.wordsEffect.toLowerCase();
 
       // Verify if the game was created by the user
       if (game.creator === this.userName) {
@@ -313,11 +309,12 @@ export class PlayService {
     this.words.clear();
     let availableWords = 0;
     for (const k of Object.keys(words)) {
-      const wordUsername = words[k];
-      if (wordUsername === '') {
+      const word = words[k];
+      const userName = word[0];
+      if (userName === '') {
         availableWords++;
       }
-      this.words.set(k, wordUsername);
+      this.words.set(k, new Word(k, userName, word[1]));
     }
     this.availableWords = availableWords;
   }

@@ -10,46 +10,61 @@ import {Game} from '../game';
 export class GamesComponent {
 
   // Available game types
-  types = [
-    {id: GameType.CAPTURE, name: 'Capture'},
-    {id: GameType.RACE, name: 'Race'}
-  ];
+  types = [GameType.CAPTURE, GameType.RACE];
+  typesLabels = {
+    capture: 'Capture',
+    race: 'Race'
+  };
+
+  // Selected game type
+  type = GameType.CAPTURE;
 
   // Available number of rounds
   roundsCounts = [1, 2, 3];
 
-  // Available game languages
-  languages = [
-    {id: 'en', name: 'English'},
-    {id: 'fr', name: 'French'}
-  ];
-
-  // Available word counts
-  wordsCounts = [3, 5, 7, 10, 15, 20, 30];
-
-  // Available word lengths
-  wordsLengths = [
-    {id: 'shortest', name: 'Shortest'},
-    {id: 'shorter', name: 'Shorter'},
-    {id: 'standard', name: 'Standard'},
-    {id: 'longer', name: 'Longer'},
-    {id: 'longest', name: 'Longest'}
-  ];
-
-  // Selected game type
-  type = this.types[0].id;
-
   // Selected number of rounds
-  rounds = this.roundsCounts[0];
+  rounds = 1;
+
+  // Available game languages
+  languages = ['en', 'fr'];
+  languagesLabels = {
+    en: 'English',
+    fr: 'French'
+  };
 
   // Selected lang
-  language = this.languages[0].id;
+  language = 'en';
+
+  // Available word counts
+  wordsCounts = [5, 7, 10, 15, 20, 30];
 
   // Selected word count
-  wordsCount = this.wordsCounts[3];
+  wordsCount = 10;
+
+  // Available word lengths
+  wordsLengths = ['shortest', 'shorter', 'standard', 'longer', 'longest'];
+  wordsLengthsLabels = {
+    shortest: 'Shortest',
+    shorter: 'Shorter',
+    standard: 'Standard',
+    longer: 'Longer',
+    longest: 'Longest'
+  };
 
   // Selected word length
-  wordsLength = this.wordsLengths[2].id;
+  wordsLength = 'standard';
+
+  // Available word effects
+  wordsEffects = ['none', 'hidden', 'reverse', 'shuffle'];
+  wordsEffectsLabels = {
+    none: {inForm: 'None', inList: 'No'},
+    hidden: {inForm: 'Hidden', inList: 'Hidden'},
+    reverse: {inForm: 'Reverse', inList: 'Reverse'},
+    shuffle: {inForm: 'Shuffle', inList: 'Shuffle'}
+  };
+
+  // Selected word effect
+  wordsEffect = 'none';
 
   constructor(public playService: PlayService) {
   }
@@ -81,7 +96,7 @@ export class GamesComponent {
 
   // Create a new game
   create() {
-    this.playService.createGame(this.type, this.rounds, this.language, this.wordsCount, this.wordsLength);
+    this.playService.createGame(this.type, this.rounds, this.language, this.wordsCount, this.wordsLength, this.wordsEffect);
   }
 
   canDeleteOrStart(id: number) {
