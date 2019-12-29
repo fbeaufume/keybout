@@ -105,6 +105,7 @@ annuel
 annuellement
 année
 anonyme
+antivol
 apercevoir
 apparaître
 appareil
@@ -151,6 +152,7 @@ assurance
 assurer
 assureur
 assurément
+astre
 atelier
 atout
 attacher
@@ -175,6 +177,7 @@ auquel
 aura
 aussi
 autant
+autel
 auteur
 authentique
 automatique
@@ -211,6 +214,7 @@ aérien
 badge
 bagage
 bague
+baguette
 bail
 bailleur
 bain
@@ -316,6 +320,7 @@ buse
 but
 bâtiment
 bébé
+bélier
 bénéfice
 bénéficiaire
 bénéficier
@@ -354,6 +359,7 @@ capacité
 capitaine
 capital
 capitalisation
+capricorne
 capucin
 car
 caractériser
@@ -691,6 +697,7 @@ cotisation
 coton
 couche
 coucher
+couette
 couleur
 couleuvre
 coup
@@ -708,7 +715,6 @@ courrier
 cours
 course
 court
-courte
 courtier
 couture
 couvert
@@ -1259,10 +1265,12 @@ glissade
 glisser
 global
 globalement
+globe
 gloire
 golf
 gorille
 gosse
+gourde
 gouvernement
 gouverneur
 goût
@@ -1287,6 +1295,7 @@ guitare
 guêpe
 gâteau
 géant
+gémeaux
 génie
 général
 généralement
@@ -1517,6 +1526,7 @@ limite
 limiter
 lin
 linguistique
+lion
 liquidation
 liquide
 liquidité
@@ -1557,6 +1567,7 @@ loyer
 lui
 lumière
 lundi
+lune
 lutte
 lutter
 luxe
@@ -1623,6 +1634,7 @@ mars
 masse
 massif
 massivement
+matelas
 matin
 maturité
 matériau
@@ -1874,9 +1886,7 @@ outil
 outre
 ouverture
 ouvrage
-ouvrages
-ouvre
-ouvriers
+ouvrier
 ouvrir
 oxygène
 page
@@ -1886,6 +1896,7 @@ pain
 pair
 paix
 palais
+palet
 palette
 palme
 panier
@@ -2482,6 +2493,7 @@ rêver
 sa
 sable
 sac
+sagitaire
 saisir
 saison
 salade
@@ -2516,6 +2528,7 @@ schéma
 science
 scientifique
 scolaire
+scorpion
 sculpture
 scène
 scénario
@@ -2736,6 +2749,7 @@ tarif
 tartine
 tatou
 taupe
+taureau
 taux
 taxation
 taxe
@@ -2850,6 +2864,7 @@ tromper
 trop
 trouble
 troupe
+trousse
 trouver
 truc
 truite
@@ -2878,7 +2893,7 @@ unique
 uniquement
 unité
 univers
-universelle
+universel
 universitaire
 université
 urne
@@ -2917,6 +2932,7 @@ vente
 ventre
 verre
 vers
+verseau
 versement
 verser
 version
@@ -2930,7 +2946,6 @@ victoire
 vide
 vidéo
 vie
-vieille
 vieux
 vif
 vigueur
@@ -3057,7 +3072,7 @@ zéro
 étape
 état
 étoile
-étonnant
+étonner
 étrange
 étranger
 étroit
