@@ -1,5 +1,6 @@
 package com.adeliosys.keybout.model
 
+import com.google.gson.annotations.SerializedName
 import kotlin.random.Random
 
 /**
@@ -10,6 +11,7 @@ enum class WordEffect {
     /**
      * No effect, e.g. "history" remains "history".
      */
+    @SerializedName("none")
     NONE {
         override fun transform(word: String): String {
             return word
@@ -18,6 +20,7 @@ enum class WordEffect {
     /**
      * Replace one letter of the word by an underscore, e.g. "history" becomes "hist_ry".
      */
+    @SerializedName("hidden")
     HIDDEN {
         override fun transform(word: String): String {
             val position = Random.nextInt(0, word.length)
@@ -27,6 +30,7 @@ enum class WordEffect {
     /**
      * Reverse the letters, e.g. "history" becomes "yrotsih".
      */
+    @SerializedName("reverse")
     REVERSE {
         override fun transform(word: String): String {
             return word.reversed()
@@ -35,6 +39,7 @@ enum class WordEffect {
     /**
      * Shuffle the letters, e.g. "history" becomes "shyriot".
      */
+    @SerializedName("shuffle")
     SHUFFLE {
         override fun transform(word: String): String {
             return String(word.toList().shuffled().toCharArray())

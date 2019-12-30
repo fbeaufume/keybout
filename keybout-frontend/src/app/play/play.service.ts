@@ -280,10 +280,6 @@ export class PlayService {
     let state = ClientState.LOBBY;
 
     for (const game of games) {
-      // Did not find easy way to produce lower-case values on the backend side, so doing it here
-      game.wordsLength = game.wordsLength.toLowerCase();
-      game.wordsEffect = game.wordsEffect.toLowerCase();
-
       // Verify if the game was created by the user
       if (game.creator === this.userName) {
         this.gameId = game.id;
