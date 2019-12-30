@@ -39,8 +39,8 @@ enum class WordEffect {
     /**
      * Shuffle the letters, e.g. "history" becomes "shyriot".
      */
-    @SerializedName("shuffle")
-    SHUFFLE {
+    @SerializedName("anagram")
+    ANAGRAM {
         override fun transform(word: String): String {
             return String(word.toList().shuffled().toCharArray())
         }

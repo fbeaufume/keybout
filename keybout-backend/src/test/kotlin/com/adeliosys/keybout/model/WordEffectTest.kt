@@ -25,8 +25,8 @@ class WordEffectTest {
     }
 
     @Test
-    fun shuffle() {
-        val result = WordEffect.SHUFFLE.transform("range")
+    fun anagram() {
+        val result = WordEffect.ANAGRAM.transform("range")
         assertEquals(5, result.length)
         assertTrue(result.contains("r") && result.contains("a")
                 && result.contains("n") && result.contains("g") && result.contains("e")) {
