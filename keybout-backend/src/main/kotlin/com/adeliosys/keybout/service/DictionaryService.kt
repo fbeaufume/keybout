@@ -42,10 +42,17 @@ class DictionaryService {
     }
 
     /**
+     * Return the words of a given language.
+     */
+    fun getWords(language: String): List<String> {
+        return wordsByLang[language]!!
+    }
+
+    /**
      * Generate random words.
      */
     fun generateWords(language: String, count: Int, wordsLength: WordLength): List<String> {
-        val possibleWords = wordsByLang[language]!!
+        val possibleWords = getWords(language)
         val selectedWords = mutableListOf<String>()
 
         while (selectedWords.size < count) {
