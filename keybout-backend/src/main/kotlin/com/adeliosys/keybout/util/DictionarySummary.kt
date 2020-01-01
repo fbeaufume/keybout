@@ -1,5 +1,6 @@
 package com.adeliosys.keybout.util
 
+import com.adeliosys.keybout.model.WordLength
 import org.slf4j.LoggerFactory
 import kotlin.math.max
 
@@ -48,8 +49,9 @@ fun main() {
         logger.info("Max length: {}", maxLength)
         logger.info("Words count: {}", wordsCount)
 
-        listOf(3..6, 4..8, 5..10, 6..12, 7..14).forEach { range ->
+        WordLength.values().forEach { length ->
             var count = 0;
+            val range = length.getRange()
             for (i in range) {
                 count += wordsByCount[i]
             }
