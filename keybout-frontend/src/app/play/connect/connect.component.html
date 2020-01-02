@@ -4,7 +4,7 @@
     <form class="form-inline">
       <label for="inputName">Name</label>
       <input class="form-control col-3 mx-2" id="inputName" maxlength="16" [(ngModel)]="userName"
-             (keyup.enter)="connect()" name="inputName" autofocus>
+             (keyup.enter)="connect()" name="inputName">
       <button type="submit" class="btn btn-primary" [disabled]="!canConnect()" (click)="connect()">Connect</button>
     </form>
     <br>
