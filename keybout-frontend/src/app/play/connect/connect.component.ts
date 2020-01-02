@@ -4,8 +4,7 @@ import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-connect',
-  templateUrl: './connect.component.html',
-  styleUrls: ['./connect.component.css']
+  templateUrl: './connect.component.html'
 })
 export class ConnectComponent {
 

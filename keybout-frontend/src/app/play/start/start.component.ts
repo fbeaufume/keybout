@@ -5,8 +5,7 @@ const COUNTDOWN = 5; // Total duration of the countdown
 
 @Component({
   selector: 'app-start',
-  templateUrl: './start.component.html',
-  styleUrls: ['./start.component.css']
+  templateUrl: './start.component.html'
 })
 export class StartComponent {
 

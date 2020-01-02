@@ -4,8 +4,7 @@ import {Score} from '../score';
 
 @Component({
   selector: 'app-scores',
-  templateUrl: './scores.component.html',
-  styleUrls: ['./scores.component.css']
+  templateUrl: './scores.component.html'
 })
 export class ScoresComponent {
 
