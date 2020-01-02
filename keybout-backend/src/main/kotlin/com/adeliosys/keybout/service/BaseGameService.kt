@@ -12,7 +12,7 @@ import java.time.Instant
  */
 abstract class BaseGameService(
         protected val awardService: AwardService,
-        protected val scheduler: ThreadPoolTaskScheduler) {
+        private val scheduler: ThreadPoolTaskScheduler) {
 
     var id: Long = 0
 
@@ -20,7 +20,13 @@ abstract class BaseGameService(
 
     var language: String = ""
 
-    var wordsCount: Int = 0
+    private var declaredWordsCount: Int = 0
+
+    /**
+     * The effective number of words for each round,
+     * based on the declared number of words and the game type.
+     */
+    var effectiveWordsCount: Int = 0
 
     var wordsLength: WordLength = WordLength.STANDARD
 
@@ -79,6 +85,8 @@ abstract class BaseGameService(
 
         language = gameDescriptor.language
 
+        declaredWordsCount = gameDescriptor.wordsCount
+
         wordsLength = gameDescriptor.wordsLength
 
         wordsEffect = gameDescriptor.wordsEffect
@@ -101,7 +109,7 @@ abstract class BaseGameService(
         sendMessage(players, GameStartNotification(getGameType()))
 
         // Notify playing users when the round begins
-        scheduler.schedule({ startPlay() }, Instant.now().plusSeconds(5L))
+        schedule(5L) { startPlay() }
     }
 
     /**
@@ -110,6 +118,14 @@ abstract class BaseGameService(
     open fun startPlay() {
         roundId++
         roundStart = System.currentTimeMillis()
+
+        // Make sure that the round will expire after some time.
+        val currentRoundId = roundId
+        schedule(wordsEffect.getExpirationDuration(declaredWordsCount)) { claimRemainingWords(currentRoundId) }
+    }
+
+    private fun schedule(delay: Long, task: () -> Unit) {
+        scheduler.schedule(task, Instant.now().plusSeconds(delay))
     }
 
     /**
@@ -123,6 +139,12 @@ abstract class BaseGameService(
      * @return true if the game is over
      */
     abstract fun claimWord(session: WebSocketSession, label: String): Boolean
+
+    /**
+     * Game rounds naturally expire after some time. When it happens, this method is called
+     * to notify the players.
+     */
+    abstract fun claimRemainingWords(roundId: Int)
 
     fun isGameOver() = gameScores.isNotEmpty() && gameScores[0].victories >= roundsCount
 

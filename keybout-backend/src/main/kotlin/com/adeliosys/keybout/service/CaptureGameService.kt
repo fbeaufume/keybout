@@ -16,6 +16,7 @@ import org.springframework.web.socket.WebSocketSession
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class CaptureGameService(
         private val dictionaryService: DictionaryService,
+        private val playService: PlayService,
         awardService: AwardService,
         scheduler: ThreadPoolTaskScheduler) : BaseGameService(awardService, scheduler) {
 
@@ -34,15 +35,16 @@ class CaptureGameService(
     override fun initializeGame(gameDescriptor: GameDescriptor, players: MutableList<WebSocketSession>) {
         super.initializeGame(gameDescriptor, players)
 
-        wordsCount = gameDescriptor.wordsCount * players.size
+        effectiveWordsCount = gameDescriptor.wordsCount * players.size
     }
 
+    @Synchronized
     override fun startCountdown() {
         super.startCountdown()
 
         // Initialize the shared list of words
         words.clear()
-        dictionaryService.generateWords(language, wordsCount, wordsLength)
+        dictionaryService.generateWords(language, effectiveWordsCount, wordsLength)
                 .apply {
                     awardService.initializeRound(this, true)
                 }
@@ -53,6 +55,7 @@ class CaptureGameService(
         availableWords = words.size
     }
 
+    @Synchronized
     override fun startPlay() {
         super.startPlay()
 
@@ -78,9 +81,7 @@ class CaptureGameService(
                 if (isRoundOver()) {
                     awardService.checkAwards(score, label, true)
 
-                    updateScores()
-
-                    sendMessage(players, ScoresNotification(getWordsDto(words), getRoundScoresDto(), getGameScoresDto(), manager, isGameOver()))
+                    endRound()
 
                     return isGameOver()
                 } else {
@@ -95,4 +96,36 @@ class CaptureGameService(
     }
 
     private fun isRoundOver() = availableWords <= 0
+
+    override fun claimRemainingWords(roundId: Int) {
+        if (roundId == this.roundId && !isRoundOver()) {
+            availableWords = 0
+
+            // All available words are given to a fictional player name, so they are displayed in red in the UI
+            words.forEach { (_, word) ->
+                if (word.userName.isEmpty()) {
+                    word.userName = Constants.FICTIONAL_PLAYER_NAME
+                }
+            }
+
+            endRound()
+
+            // Usually the deleteRunningGame method is called from within PlayService
+            // as a response to a call to a game service, but claimRemainingWords is executed
+            // asynchronously, so this is a special case and we make an explicit call
+            // to deleteRunningGame
+            if (isGameOver()) {
+                playService.deleteRunningGame(id)
+            }
+        }
+    }
+
+    /**
+     * The round ended, updates the scores and send them to the players.
+     */
+    private fun endRound() {
+        updateScores()
+
+        sendMessage(players, ScoresNotification(getWordsDto(words), getRoundScoresDto(), getGameScoresDto(), manager, isGameOver()))
+    }
 }

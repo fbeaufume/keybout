@@ -6,13 +6,13 @@ import kotlin.random.Random
 /**
  * Effects are used to change the display of words, to make games a little more challenging.
  */
-enum class WordEffect {
+enum class WordEffect(private val delay: Long) {
 
     /**
      * No effect, e.g. "history" remains "history".
      */
     @SerializedName("none")
-    NONE {
+    NONE(5L) {
         override fun transform(word: String): String {
             return word
         }
@@ -21,7 +21,7 @@ enum class WordEffect {
      * Replace one letter of the word by an underscore, e.g. "history" becomes "hist_ry".
      */
     @SerializedName("hidden")
-    HIDDEN {
+    HIDDEN(8L) {
         override fun transform(word: String): String {
             val position = Random.nextInt(0, word.length)
             return word.replaceRange(position, position + 1, "_")
@@ -31,7 +31,7 @@ enum class WordEffect {
      * Reverse the letters, e.g. "history" becomes "yrotsih".
      */
     @SerializedName("reverse")
-    REVERSE {
+    REVERSE(7L) {
         override fun transform(word: String): String {
             return word.reversed()
         }
@@ -40,9 +40,13 @@ enum class WordEffect {
      * Shuffle the letters, e.g. "history" becomes "shyriot".
      */
     @SerializedName("anagram")
-    ANAGRAM {
+    ANAGRAM(10L) {
         override fun transform(word: String): String {
-            return String(word.toList().shuffled().toCharArray())
+            var result: String
+            do {
+                result = String(word.toList().shuffled().toCharArray())
+            } while (result == word)
+            return result
         }
     };
 
@@ -55,4 +59,6 @@ enum class WordEffect {
     }
 
     abstract fun transform(word: String): String
+
+    fun getExpirationDuration(wordCount: Int): Long = delay * wordCount
 }

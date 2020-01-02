@@ -60,9 +60,9 @@ object Constants {
     const val MAX_WORD_LENGTH = 14
 
     /**
-     * Name of a fictional player used to take available words when a race round expires.
+     * Name of a fictional player used to take available words when a game round expires.
      */
-    const val RACE_PLAYER_NAME = "-"
+    const val FICTIONAL_PLAYER_NAME = "-"
 
     /**
      * GSON instance used by several classes.

@@ -1,7 +1,7 @@
 package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.*
-import com.adeliosys.keybout.model.Constants.RACE_PLAYER_NAME
+import com.adeliosys.keybout.model.Constants.FICTIONAL_PLAYER_NAME
 import com.adeliosys.keybout.util.sendMessage
 import com.adeliosys.keybout.util.sendObjectMessage
 import com.adeliosys.keybout.util.userName
@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Scope
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.WebSocketSession
-import java.time.Instant
 
 /**
  * A running race game.
@@ -40,13 +39,14 @@ class RaceGameService(
     override fun initializeGame(gameDescriptor: GameDescriptor, players: MutableList<WebSocketSession>) {
         super.initializeGame(gameDescriptor, players)
 
-        wordsCount = gameDescriptor.wordsCount
+        effectiveWordsCount = gameDescriptor.wordsCount
     }
 
+    @Synchronized
     override fun startCountdown() {
         super.startCountdown()
 
-        val generatedWords = dictionaryService.generateWords(language, wordsCount, wordsLength)
+        val generatedWords = dictionaryService.generateWords(language, effectiveWordsCount, wordsLength)
 
         awardService.initializeRound(generatedWords, false)
 
@@ -60,11 +60,9 @@ class RaceGameService(
         finishedPlayers = 0
     }
 
+    @Synchronized
     override fun startPlay() {
         super.startPlay()
-
-        // Notify playing users when the round ends
-        scheduler.schedule({ claimRemainingWords(roundId) }, Instant.now().plusSeconds(5L * wordsCount))
 
         // At the beginning of the round all words of all players have the same status (all are available),
         // so I use the words list of an arbitrary user, the manager
@@ -88,7 +86,7 @@ class RaceGameService(
                 awardService.checkAwards(score, label, false)
 
                 // Has the player finished
-                if (score.points >= wordsCount) {
+                if (score.points >= effectiveWordsCount) {
                     finishedPlayers++
                 }
 
@@ -106,19 +104,16 @@ class RaceGameService(
 
     private fun isRoundOver() = finishedPlayers >= players.size
 
-    /**
-     * Called when the current round expired.
-     * Each available word is given to a fictional player name, so they are displayed in red in the UI.
-     */
     @Synchronized
-    private fun claimRemainingWords(roundId: Int) {
+    override fun claimRemainingWords(roundId: Int) {
         if (roundId == this.roundId && !isRoundOver()) {
             finishedPlayers = players.size
 
+            // All available words are given to a fictional player name, so they are displayed in red in the UI
             for (tempSession in players) {
                 words[tempSession.userName]!!.values.forEach {
                     if (it.userName.isEmpty()) {
-                        it.userName = RACE_PLAYER_NAME
+                        it.userName = FICTIONAL_PLAYER_NAME
                     }
                 }
             }
