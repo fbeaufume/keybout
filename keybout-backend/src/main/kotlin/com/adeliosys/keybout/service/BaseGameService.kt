@@ -18,7 +18,7 @@ abstract class BaseGameService(
 
     private var roundsCount: Int = 0
 
-    var language: String = ""
+    var language: Language = Language.EN
 
     private var declaredWordsCount: Int = 0
 

@@ -1,6 +1,9 @@
 package com.adeliosys.keybout.service
 
+import com.adeliosys.keybout.model.Language
+import com.adeliosys.keybout.model.Language.*
 import com.adeliosys.keybout.model.WordLength
+import com.adeliosys.keybout.model.WordLength.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -11,12 +14,12 @@ class DictionaryServiceTest {
 
     private val service = DictionaryService()
 
-    private val wordsByLanguageAndLength: MutableMap<String, MutableMap<WordLength, Int>> = mutableMapOf()
+    private val wordsByLanguageAndLength: MutableMap<Language, MutableMap<WordLength, Int>> = mutableMapOf()
 
     @BeforeAll
     fun beforeAll() {
         // Count the words for each length
-        listOf("en", "fr").forEach { lang ->
+        Language.values().forEach { lang ->
             service.getWords(lang).forEach { word ->
                 WordLength.values().forEach { length ->
                     if (word.length in length.getRange()) {
@@ -31,55 +34,55 @@ class DictionaryServiceTest {
 
     @Test
     fun `count shortest en`() {
-        countWords("en", WordLength.SHORTEST)
+        countWords(EN, SHORTEST)
     }
 
     @Test
     fun `count shorter en`() {
-        countWords("en", WordLength.SHORTER)
+        countWords(EN, SHORTER)
     }
 
     @Test
     fun `count standard en`() {
-        countWords("en", WordLength.STANDARD)
+        countWords(EN, STANDARD)
     }
 
     @Test
     fun `count longer en`() {
-        countWords("en", WordLength.LONGER)
+        countWords(EN, LONGER)
     }
 
     @Test
     fun `count longest en`() {
-        countWords("en", WordLength.LONGEST)
+        countWords(EN, LONGEST)
     }
 
     @Test
     fun `count shortest fr`() {
-        countWords("fr", WordLength.SHORTEST)
+        countWords(FR, SHORTEST)
     }
 
     @Test
     fun `count shorter fr`() {
-        countWords("fr", WordLength.SHORTER)
+        countWords(FR, SHORTER)
     }
 
     @Test
     fun `count standard fr`() {
-        countWords("fr", WordLength.STANDARD)
+        countWords(FR, STANDARD)
     }
 
     @Test
     fun `count longer fr`() {
-        countWords("fr", WordLength.LONGER)
+        countWords(FR, LONGER)
     }
 
     @Test
     fun `count longest fr`() {
-        countWords("fr", WordLength.LONGEST)
+        countWords(FR, LONGEST)
     }
 
-    private fun countWords(language: String, length: WordLength) {
+    private fun countWords(language: Language, length: WordLength) {
         val count = wordsByLanguageAndLength[language]!![length]!!
         assertTrue(count >= 500) {
             "Not enough words for length $length in $language, found only $count"
@@ -88,55 +91,55 @@ class DictionaryServiceTest {
 
     @Test
     fun `generate shortest en`() {
-        generateWords("en", WordLength.SHORTEST)
+        generateWords(EN, SHORTEST)
     }
 
     @Test
     fun `generate shorter en`() {
-        generateWords("en", WordLength.SHORTER)
+        generateWords(EN, SHORTER)
     }
 
     @Test
     fun `generate standard en`() {
-        generateWords("en", WordLength.STANDARD)
+        generateWords(EN, STANDARD)
     }
 
     @Test
     fun `generate longer en`() {
-        generateWords("en", WordLength.LONGER)
+        generateWords(EN, LONGER)
     }
 
     @Test
     fun `generate longest en`() {
-        generateWords("en", WordLength.LONGEST)
+        generateWords(EN, LONGEST)
     }
 
     @Test
     fun `generate shortest fr`() {
-        generateWords("fr", WordLength.SHORTEST)
+        generateWords(FR, SHORTEST)
     }
 
     @Test
     fun `generate shorter fr`() {
-        generateWords("fr", WordLength.SHORTER)
+        generateWords(FR, SHORTER)
     }
 
     @Test
     fun `generate standard fr`() {
-        generateWords("fr", WordLength.STANDARD)
+        generateWords(FR, STANDARD)
     }
 
     @Test
     fun `generate longer fr`() {
-        generateWords("fr", WordLength.LONGER)
+        generateWords(FR, LONGER)
     }
 
     @Test
     fun `generate longest fr`() {
-        generateWords("fr", WordLength.LONGEST)
+        generateWords(FR, LONGEST)
     }
 
-    private fun generateWords(language: String, wordsLength: WordLength) {
+    private fun generateWords(language: Language, wordsLength: WordLength) {
         val count = 50 // Number of words to generate
 
         val words = service.generateWords(language, count, wordsLength)

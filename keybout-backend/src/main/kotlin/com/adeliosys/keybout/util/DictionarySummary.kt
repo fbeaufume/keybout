@@ -1,5 +1,6 @@
 package com.adeliosys.keybout.util
 
+import com.adeliosys.keybout.model.Language
 import com.adeliosys.keybout.model.WordLength
 import org.slf4j.LoggerFactory
 import kotlin.math.max
@@ -12,7 +13,7 @@ private const val MAX_LENGTH = 16
  * Log a summary of the content of dictionary files.
  */
 fun main() {
-    listOf("en", "fr").forEach { lang ->
+    Language.values().forEach { lang ->
         logger.info("Processing '{}' dictionary", lang)
 
         // Position i contains the number of words of length i

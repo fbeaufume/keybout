@@ -1,5 +1,6 @@
 package com.adeliosys.keybout.util
 
+import com.adeliosys.keybout.model.Language
 import com.adeliosys.keybout.service.DictionaryService
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -10,7 +11,7 @@ private val logger = LoggerFactory.getLogger("DictionaryCleaner")
  * Clean the dictionary files, i.e. sort the words, remove duplicates, etc.
  */
 fun main(args: Array<String>) {
-    listOf("en", "fr").forEach { lang ->
+    Language.values().forEach { lang ->
         logger.info("Processing '{}' dictionary", lang)
         var duration = -System.currentTimeMillis()
 
@@ -66,5 +67,5 @@ fun main(args: Array<String>) {
 /**
  * Return a dictionary source file.
  */
-fun getFileForLang(lang: String) = File(DictionaryService::class.java.protectionDomain.codeSource.location.path
-        + "../../src/main/resources/words-${lang}.txt")
+fun getFileForLang(lang: Language) = File(DictionaryService::class.java.protectionDomain.codeSource.location.path
+        + "../../src/main/resources/words-${lang.code}.txt")

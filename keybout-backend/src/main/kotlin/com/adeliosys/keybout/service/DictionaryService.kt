@@ -2,6 +2,7 @@ package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.Constants.MAX_WORD_LENGTH
 import com.adeliosys.keybout.model.Constants.MIN_WORD_LENGTH
+import com.adeliosys.keybout.model.Language
 import com.adeliosys.keybout.model.WordLength
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,42 +17,42 @@ class DictionaryService {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    private var wordsByLang = mutableMapOf<String, MutableList<String>>()
+    private var wordsByLang = mutableMapOf<Language, MutableList<String>>()
 
     init {
-        listOf("en", "fr").forEach { loadWords(it) }
+        Language.values().forEach { loadWords(it) }
     }
 
     /**
      * Load the words for one language.
      */
-    private fun loadWords(lang: String) {
-        logger.debug("Loading '{}' words", lang)
+    private fun loadWords(language: Language) {
+        logger.debug("Loading '{}' words", language)
 
         val words = mutableListOf<String>()
 
-        javaClass.getResource("/words-$lang.txt").openStream().bufferedReader(Charsets.UTF_8).readLines().forEach {
+        javaClass.getResource("/words-${language.code}.txt").openStream().bufferedReader(Charsets.UTF_8).readLines().forEach {
             if (it.length in MIN_WORD_LENGTH..MAX_WORD_LENGTH) {
                 words.add(it)
             }
         }
 
-        logger.info("Loaded {} '{}' words", words.size, lang)
+        logger.info("Loaded {} '{}' words", words.size, language)
 
-        wordsByLang[lang] = words
+        wordsByLang[language] = words
     }
 
     /**
      * Return the words of a given language.
      */
-    fun getWords(language: String): List<String> {
+    fun getWords(language: Language): List<String> {
         return wordsByLang[language]!!
     }
 
     /**
      * Generate random words.
      */
-    fun generateWords(language: String, count: Int, wordsLength: WordLength): List<String> {
+    fun generateWords(language: Language, count: Int, wordsLength: WordLength): List<String> {
         val possibleWords = getWords(language)
         val selectedWords = mutableListOf<String>()
 
