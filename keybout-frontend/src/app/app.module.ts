@@ -13,6 +13,7 @@ import {GamesComponent} from './play/games/games.component';
 import {StartComponent} from './play/start/start.component';
 import {GameComponent} from './play/game/game.component';
 import {ScoresComponent} from './play/scores/scores.component';
+import {DocumentationComponent} from './documentation/documentation.component';
 import {AboutComponent} from './about/about.component';
 
 @NgModule({
@@ -25,6 +26,7 @@ import {AboutComponent} from './about/about.component';
     StartComponent,
     GameComponent,
     ScoresComponent,
+    DocumentationComponent,
     AboutComponent
   ],
   imports: [
