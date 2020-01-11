@@ -15,7 +15,7 @@ class GameDescriptor(
         wordsEffect: String) {
 
     companion object {
-        val counter: AtomicLong = AtomicLong()
+        val counter = AtomicLong()
     }
 
     val id: Long = counter.incrementAndGet()

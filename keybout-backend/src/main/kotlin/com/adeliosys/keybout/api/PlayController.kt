@@ -1,4 +1,4 @@
-package com.adeliosys.keybout.service
+package com.adeliosys.keybout.api
 
 import com.adeliosys.keybout.model.*
 import com.adeliosys.keybout.model.Constants.ACTION_CLAIM_WORD
@@ -10,6 +10,8 @@ import com.adeliosys.keybout.model.Constants.ACTION_LEAVE_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_QUIT_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_START_GAME
 import com.adeliosys.keybout.model.Constants.ACTION_START_ROUND
+import com.adeliosys.keybout.service.PlayService
+import com.adeliosys.keybout.service.UserNameService
 import com.adeliosys.keybout.util.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -33,6 +35,8 @@ class PlayController(private val userNameService: UserNameService, private val p
     @Value("\${keybout.latency:0}")
     private var latency = 0L
 
+    val usersCounter = Counter()
+
     @PostConstruct
     private fun postConstruct() {
         logger.info("Using latency of {} ms", latency)
@@ -41,6 +45,7 @@ class PlayController(private val userNameService: UserNameService, private val p
     override fun afterConnectionEstablished(session: WebSocketSession) {
         session.userName = ""
         session.setState(ClientState.OPENED, 0)
+        usersCounter.increment()
     }
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
@@ -141,6 +146,8 @@ class PlayController(private val userNameService: UserNameService, private val p
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
+        usersCounter.decrement()
+
         playService.disconnect(session)
 
         userNameService.releaseUserName(session)

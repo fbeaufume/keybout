@@ -115,7 +115,7 @@ class CaptureGameService(
             // asynchronously, so this is a special case and we make an explicit call
             // to deleteRunningGame
             if (isGameOver()) {
-                playService.deleteRunningGame(id)
+                playService.endGame(id)
             }
         }
     }
