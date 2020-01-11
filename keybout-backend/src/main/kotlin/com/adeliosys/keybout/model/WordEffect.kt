@@ -18,13 +18,24 @@ enum class WordEffect(private val delay: Long) {
         }
     },
     /**
-     * Replace one letter of the word by an underscore, e.g. "history" becomes "hist_ry".
+     * Replace one letter of the word by an underscore, e.g. "history" becomes "hist_r_".
      */
     @SerializedName("hidden")
     HIDDEN(8L) {
         override fun transform(word: String): String {
-            val position = Random.nextInt(0, word.length)
-            return word.replaceRange(position, position + 1, "_")
+            val underscoreCount = when (word.length) {
+                in 1..6 -> 1
+                in 7..10 -> 2
+                else -> 3
+            }
+
+            var result = word
+            do {
+                val position = Random.nextInt(0, word.length)
+                result = result.replaceRange(position, position + 1, "_")
+            } while (result.count { it == '_' } < underscoreCount)
+
+            return result
         }
     },
     /**

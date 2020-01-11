@@ -14,9 +14,20 @@ class WordEffectTest {
     }
 
     @Test
-    fun hidden() {
-        val result = WordEffect.HIDDEN.transform("cat")
-        assertTrue(result == "_at" || result == "c_t" || result == "ca_") { "Incorrect result '$result'" }
+    fun `hidden short`() {
+        val result = WordEffect.HIDDEN.transform("dancer")
+        assertTrue(result == "_ancer" || result == "d_ncer" || result == "da_cer" || result == "dan_er"
+                || result == "danc_r" || result == "dance_") { "Wrong result '$result'" }
+    }
+
+    @Test
+    fun `hidden long`() {
+        val word = "grocery"
+        val result = WordEffect.HIDDEN.transform(word)
+        assertTrue(result.count { it == '_' } == 2) { "Wrong count of underscores in '$result'" }
+        for (i in result.indices) {
+            assertTrue(result[i] == word[i] || result[i] == '_') { "Wrong character in position $i of '$result'" }
+        }
     }
 
     @Test
@@ -30,7 +41,7 @@ class WordEffectTest {
         assertEquals(5, result.length)
         assertTrue(result.contains("r") && result.contains("a")
                 && result.contains("n") && result.contains("g") && result.contains("e")) {
-            "Incorrect result '$result'"
+            "Wrong result '$result'"
         }
     }
 }
