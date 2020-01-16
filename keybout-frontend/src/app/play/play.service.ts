@@ -25,7 +25,7 @@ export enum ClientState {
   QUITTING// User is quitting a game that ended
 }
 
-export enum GameType {
+export enum GameMode {
   CAPTURE = 'capture',
   RACE = 'race'
 }
@@ -63,8 +63,8 @@ export class PlayService {
   // Manager of the game, i.e. the user that can start the next round
   gameManager = '';
 
-  // Type of the game played, such as 'capture' or 'race'
-  gameType = '';
+  // Mode of the game played, such as 'capture' or 'race'
+  gameMode = '';
 
   gameOver = false;
 
@@ -93,8 +93,8 @@ export class PlayService {
     this.changeState(ClientState.UNIDENTIFIED);
   }
 
-  isGameType(gameType: GameType): boolean {
-    return this.gameType === gameType;
+  isGameMode(gameMode: GameMode): boolean {
+    return this.gameMode === gameMode;
   }
 
   connect() {
@@ -156,13 +156,13 @@ export class PlayService {
                 this.updateGamesList(data.games);
                 break;
               case 'game-start':
-                this.gameStarted(data.gameType);
+                this.gameStarted(data.gameMode);
                 break;
             }
             break;
           case ClientState.STARTING_GAME:
             if (data.type === 'game-start') {
-              this.gameStarted(data.gameType);
+              this.gameStarted(data.gameMode);
             }
             break;
           case ClientState.STARTED:
@@ -190,7 +190,7 @@ export class PlayService {
             break;
           case ClientState.END_ROUND:
             if (data.type === 'game-start') {
-              this.gameStarted(data.gameType);
+              this.gameStarted(data.gameMode);
             }
             if (data.type === 'manager') {
               this.gameManager = data.manager;
@@ -198,7 +198,7 @@ export class PlayService {
             break;
           case ClientState.SCORES:
             if (data.type === 'game-start') {
-              this.gameStarted(data.gameType);
+              this.gameStarted(data.gameMode);
             }
             if (data.type === 'manager') {
               this.gameManager = data.manager;
@@ -206,7 +206,7 @@ export class PlayService {
             break;
           case ClientState.STARTING_ROUND:
             if (data.type === 'game-start') {
-              this.gameStarted(data.gameType);
+              this.gameStarted(data.gameMode);
             }
             break;
           case ClientState.QUITTING:
@@ -243,9 +243,9 @@ export class PlayService {
     this.socket.close();
   }
 
-  createGame(type: string, rounds: number, language: string, wordsCount: number, wordsLength: string, wordsEffect: string) {
+  createGame(mode: string, rounds: number, language: string, wordsCount: number, wordsLength: string, wordsEffect: string) {
     this.changeState(ClientState.CREATING);
-    this.send(`create-game ${type} ${rounds} ${language} ${wordsCount} ${wordsLength} ${wordsEffect}`);
+    this.send(`create-game ${mode} ${rounds} ${language} ${wordsCount} ${wordsLength} ${wordsEffect}`);
   }
 
   deleteGame() {
@@ -269,8 +269,8 @@ export class PlayService {
     this.send(`start-game`);
   }
 
-  gameStarted(gameType) {
-    this.gameType = gameType;
+  gameStarted(gameMode) {
+    this.gameMode = gameMode;
     this.changeState(ClientState.STARTED);
   }
 

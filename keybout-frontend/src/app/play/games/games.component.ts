@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ClientState, GameType, PlayService} from '../play.service';
+import {ClientState, GameMode, PlayService} from '../play.service';
 import {Game} from '../game';
 
 @Component({
@@ -8,15 +8,15 @@ import {Game} from '../game';
 })
 export class GamesComponent {
 
-  // Available game types
-  types = [GameType.CAPTURE, GameType.RACE];
-  typesLabels = {
+  // Available game modes
+  modes = [GameMode.CAPTURE, GameMode.RACE];
+  modesLabels = {
     capture: 'Capture',
     race: 'Race'
   };
 
-  // Selected game type
-  type = GameType.CAPTURE;
+  // Selected game mode
+  mode = GameMode.CAPTURE;
 
   // Available number of rounds
   roundsCounts = [1, 2, 3];
@@ -95,7 +95,7 @@ export class GamesComponent {
 
   // Create a new game
   create() {
-    this.playService.createGame(this.type, this.rounds, this.language, this.wordsCount, this.wordsLength, this.wordsEffect);
+    this.playService.createGame(this.mode, this.rounds, this.language, this.wordsCount, this.wordsLength, this.wordsEffect);
   }
 
   canDeleteOrStart(id: number) {

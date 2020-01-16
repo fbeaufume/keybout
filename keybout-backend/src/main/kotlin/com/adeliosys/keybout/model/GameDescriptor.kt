@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong
  */
 class GameDescriptor(
         val creator: String,
-        val type: String,
+        val mode: String,
         val rounds: Int,
         language: String,
         val wordsCount: Int,

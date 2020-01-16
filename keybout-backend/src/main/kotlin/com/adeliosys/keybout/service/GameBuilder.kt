@@ -12,7 +12,7 @@ import org.springframework.web.socket.WebSocketSession
 class GameBuilder(private val applicationContext: ApplicationContext) {
 
     fun buildGame(descriptor: GameDescriptor, players: MutableList<WebSocketSession>): BaseGameService {
-        val type:Class<out BaseGameService> = if (descriptor.type == "race") RaceGameService::class.java else CaptureGameService::class.java
+        val type:Class<out BaseGameService> = if (descriptor.mode == "race") RaceGameService::class.java else CaptureGameService::class.java
 
         return applicationContext.getBean(type).apply {
             initializeGame(descriptor, players)

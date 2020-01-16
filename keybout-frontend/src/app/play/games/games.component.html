@@ -3,7 +3,7 @@
   <table class="table">
     <thead>
     <tr>
-      <th scope="col">Type</th>
+      <th scope="col">Mode</th>
       <th scope="col">Rounds</th>
       <th scope="col">Language</th>
       <th scope="col">Words</th>
@@ -13,7 +13,7 @@
     </thead>
     <tbody>
     <tr *ngFor="let game of games">
-      <td>{{typesLabels[game.type]}}</td>
+      <td>{{modesLabels[game.mode]}}</td>
       <td>{{game.rounds}}</td>
       <td>{{languagesLabels[game.language]}}</td>
       <td>
@@ -41,10 +41,10 @@
   <h4>Or create a game</h4>
   <form>
     <div class="form-group row">
-      <label for="inputType" class="col-sm-2 col-form-label">Type</label>
+      <label for="inputMode" class="col-sm-2 col-form-label">Mode</label>
       <div class="col-sm-3">
-        <select class="form-control" id="inputType" [(ngModel)]="type" name="inputType">
-          <option *ngFor="let t of types" [value]="t" [selected]="type == t">{{typesLabels[t]}}</option>
+        <select class="form-control" id="inputMode" [(ngModel)]="mode" name="inputMode">
+          <option *ngFor="let m of modes" [value]="m" [selected]="mode == m">{{modesLabels[m]}}</option>
         </select>
       </div>
     </div>

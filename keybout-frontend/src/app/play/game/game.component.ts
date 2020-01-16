@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {ClientState, GameType, PlayService} from '../play.service';
+import {ClientState, GameMode, PlayService} from '../play.service';
 import {Word} from '../word';
 
 @Component({
@@ -70,7 +70,7 @@ export class GameComponent {
 
   // The waiting message is displayed for a race game when the user has caught all his words
   isWaiting() {
-    return this.state !== ClientState.END_ROUND && this.playService.isGameType(GameType.RACE) && this.playService.availableWords === 0;
+    return this.state !== ClientState.END_ROUND && this.playService.isGameMode(GameMode.RACE) && this.playService.availableWords === 0;
   }
 
   canViewScores() {

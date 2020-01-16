@@ -34,7 +34,7 @@ val WebSocketSession.state: ClientState
 fun WebSocketSession.setState(state: ClientState, gameId: Long) {
     attributes[STATE] = state
     attributes[GAME_ID] = gameId
-    logger.debug("Changed state to '{}' and game #{} for {}{}{}",
+    logger.debug("Changed state to '{}' and game to {} for {}{}",
             state,
             gameId,
             description,

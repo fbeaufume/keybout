@@ -1,7 +1,7 @@
 export class Game {
   id: number;
   creator: string;
-  type: string;
+  mode: string;
   rounds: number;
   language: string;
   wordsCount: number;
