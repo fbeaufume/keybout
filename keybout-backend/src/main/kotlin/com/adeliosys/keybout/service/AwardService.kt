@@ -1,6 +1,5 @@
 package com.adeliosys.keybout.service
 
-import com.adeliosys.keybout.model.Constants.DOUBLE_AWARD
 import com.adeliosys.keybout.model.Constants.FIRST_AWARD
 import com.adeliosys.keybout.model.Constants.LAST_AWARD
 import com.adeliosys.keybout.model.Constants.LONGEST_AWARD
@@ -18,10 +17,7 @@ import java.lang.Integer.max
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class AwardService {
 
-    // Is the "double" award tracked
-    var trackDoubleAward = false
-
-    // The latest user who won a word, used to track the "first" and "double" awards
+    // The latest user who won a word, used to track the "first" awards
     var latestUserName: String? = null
 
     // Length of the longest word, used to track the "longest" award
@@ -33,9 +29,7 @@ class AwardService {
     /**
      * Initialize this service at the beginning of each round.
      */
-    fun initializeRound(words: List<String>, trackDoubleAward: Boolean) {
-        this.trackDoubleAward = trackDoubleAward;
-
+    fun initializeRound(words: List<String>) {
         isLongestAvailable = true
 
         latestUserName = null
@@ -51,10 +45,6 @@ class AwardService {
     fun checkAwards(score: Score, word: String, lastWord: Boolean) {
         if (latestUserName == null) {
             score.addAward(FIRST_AWARD)
-        }
-
-        if (trackDoubleAward && score.userName == latestUserName) {
-            score.addAward(DOUBLE_AWARD)
         }
 
         if (isLongestAvailable && word.length == longestLength) {

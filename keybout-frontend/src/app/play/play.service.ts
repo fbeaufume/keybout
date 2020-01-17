@@ -327,14 +327,10 @@ export class PlayService {
       }
       // tslint:disable-next-line:no-bitwise
       if (score.awards & 2) {
-        score.awardsNames.push('Double');
-      }
-      // tslint:disable-next-line:no-bitwise
-      if (score.awards & 4) {
         score.awardsNames.push('Longest');
       }
       // tslint:disable-next-line:no-bitwise
-      if (score.awards & 8) {
+      if (score.awards & 4) {
         score.awardsNames.push('Last');
       }
     }

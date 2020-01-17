@@ -46,7 +46,7 @@ class CaptureGameService(
         words.clear()
         dictionaryService.generateWords(language, effectiveWordsCount, wordsLength)
                 .apply {
-                    awardService.initializeRound(this, true)
+                    awardService.initializeRound(this)
                 }
                 .forEach {
                     words[it] = Word(it, wordsEffect)

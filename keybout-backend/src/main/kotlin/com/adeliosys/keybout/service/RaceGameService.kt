@@ -48,7 +48,7 @@ class RaceGameService(
 
         val generatedWords = dictionaryService.generateWords(language, effectiveWordsCount, wordsLength)
 
-        awardService.initializeRound(generatedWords, false)
+        awardService.initializeRound(generatedWords)
 
         // Initialize the words list for each user
         for (session in players) {
