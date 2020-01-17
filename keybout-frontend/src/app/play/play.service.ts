@@ -104,7 +104,7 @@ export class PlayService {
     if (this.socket != null) {
       this.send(`connect ${this.attemptedUserName}`);
     } else {
-      this.socket = new SockJS('/api/websocket', null, {timeout: 5000});
+      this.socket = new SockJS('/api/websocket', null, {timeout: 15000});
       // Uncomment during development to use a specific SockJS transport
       // this.socket = new SockJS('/api/websocket', null, {transports: 'websocket', timeout: 60000});
       // this.socket = new SockJS('/api/websocket', null, {transports: 'xhr-streaming', timeout: 60000});
