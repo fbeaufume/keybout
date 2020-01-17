@@ -58,7 +58,6 @@ export class GamesComponent {
   wordsEffectsLabels = {
     none: {inForm: 'None', inList: 'No'},
     hidden: {inForm: 'Hidden', inList: 'Hidden'},
-    reverse: {inForm: 'Reverse', inList: 'Reverse'},
     anagram: {inForm: 'Anagram', inList: 'Anagram'}
   };
 
