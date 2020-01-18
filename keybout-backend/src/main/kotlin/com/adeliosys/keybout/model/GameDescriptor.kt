@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong
  */
 class GameDescriptor(
         val creator: String,
-        val mode: String,
+        mode: String,
         val rounds: Int,
         language: String,
         val wordsCount: Int,
@@ -21,6 +21,8 @@ class GameDescriptor(
     val id: Long = counter.incrementAndGet()
 
     val players = mutableListOf<String>()
+
+    val mode: GameMode = GameMode.getByCode(mode)
 
     val language: Language = Language.getByCode(language)
 

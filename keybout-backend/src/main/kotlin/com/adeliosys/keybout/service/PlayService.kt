@@ -4,6 +4,7 @@ import com.adeliosys.keybout.model.*
 import com.adeliosys.keybout.util.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.WebSocketSession
 
@@ -11,7 +12,7 @@ import org.springframework.web.socket.WebSocketSession
  * Manage the declared games and users state.
  */
 @Service
-class PlayService(private val gameBuilder: GameBuilder) {
+class PlayService(private val applicationContext: ApplicationContext) {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -129,8 +130,13 @@ class PlayService(private val gameBuilder: GameBuilder) {
             // Move joined users to the running game
             players.addAll(descriptor.players.mapNotNull { lobbySessions.remove(it) })
 
+            // Build the game instance
+            val game = applicationContext.getBean(descriptor.mode.type).apply {
+                initializeGame(descriptor, players)
+                startCountdown()
+            }
+
             // Record the running game
-            val game = gameBuilder.buildGame(descriptor, players)
             runningGames[game.id] = game
             runningGamesCounter.increment()
 

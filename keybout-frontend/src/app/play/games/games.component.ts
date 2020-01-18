@@ -54,7 +54,7 @@ export class GamesComponent {
   wordsLength = 'standard';
 
   // Available word effects
-  wordsEffects = ['none', 'hidden', 'reverse', 'anagram'];
+  wordsEffects = ['none', 'hidden', 'anagram'];
   wordsEffectsLabels = {
     none: {inForm: 'None', inList: 'No'},
     hidden: {inForm: 'Hidden', inList: 'Hidden'},
