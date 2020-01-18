@@ -26,16 +26,16 @@ class UsedNameNotification : BaseNotification(Constants.NOTIFICATION_USED_NAME)
 class GamesListNotification(val games: Collection<GameDescriptor>) : BaseNotification(Constants.NOTIFICATION_GAMES_LIST)
 
 /**
- * Sent when a game is starting, to display a countdown in the UI.
+ * Sent when a round is starting, to display a countdown in the UI.
  */
-class GameStartNotification(val gameMode: String) : BaseNotification(Constants.NOTIFICATION_GAME_START)
+class GameStartNotification : BaseNotification(Constants.NOTIFICATION_GAME_START)
 
 /**
- * Sent when a game begins or the state of a word changes.
+ * Sent when a round begins or the state of a word changes.
  */
 class WordsListNotification(
-        // In the array of strings, the first element is the name of user who caught the word
-        // and the second element is the display of the word (i.e. with the effect)
+        // The map key is word label and the map value is an array where the first element is the name of user
+        // who caught the word and the second element is the display of the word (i.e. with the effect)
         val words: Map<String, Array<String>>) : BaseNotification(Constants.NOTIFICATION_WORDS_LIST)
 
 /**

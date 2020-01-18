@@ -106,7 +106,7 @@ abstract class BaseGameService(
         userScores.forEach { (_, s) -> s.resetPoints() }
 
         // Notify players to display the countdown
-        sendMessage(players, GameStartNotification(getGameType()))
+        sendMessage(players, GameStartNotification())
 
         // Notify playing users when the round begins
         schedule(5L) { startPlay() }

@@ -49,10 +49,11 @@ export class PlayService {
   // used to prevent the error message displayed when the user is disconnected from the server
   quitting = false;
 
+  // The list of declared games received from the server
   games: Game[] = [];
 
-  // ID of the game created or joined by the user
-  gameId = 0;
+  // Game created or joined by the user
+  game: Game;
 
   // Scores of the round that ended
   roundScores: Score[] = [];
@@ -62,9 +63,6 @@ export class PlayService {
 
   // Manager of the game, i.e. the user that can start the next round
   gameManager = '';
-
-  // Mode of the game played, such as 'capture' or 'race'
-  gameMode = '';
 
   gameOver = false;
 
@@ -94,7 +92,7 @@ export class PlayService {
   }
 
   isGameMode(gameMode: GameMode): boolean {
-    return this.gameMode === gameMode;
+    return this.game.mode === gameMode;
   }
 
   connect() {
@@ -156,13 +154,13 @@ export class PlayService {
                 this.updateGamesList(data.games);
                 break;
               case 'game-start':
-                this.gameStarted(data.gameMode);
+                this.gameStarted();
                 break;
             }
             break;
           case ClientState.STARTING_GAME:
             if (data.type === 'game-start') {
-              this.gameStarted(data.gameMode);
+              this.gameStarted();
             }
             break;
           case ClientState.STARTED:
@@ -190,7 +188,7 @@ export class PlayService {
             break;
           case ClientState.END_ROUND:
             if (data.type === 'game-start') {
-              this.gameStarted(data.gameMode);
+              this.gameStarted();
             }
             if (data.type === 'manager') {
               this.gameManager = data.manager;
@@ -198,7 +196,7 @@ export class PlayService {
             break;
           case ClientState.SCORES:
             if (data.type === 'game-start') {
-              this.gameStarted(data.gameMode);
+              this.gameStarted();
             }
             if (data.type === 'manager') {
               this.gameManager = data.manager;
@@ -206,7 +204,7 @@ export class PlayService {
             break;
           case ClientState.STARTING_ROUND:
             if (data.type === 'game-start') {
-              this.gameStarted(data.gameMode);
+              this.gameStarted();
             }
             break;
           case ClientState.QUITTING:
@@ -269,8 +267,7 @@ export class PlayService {
     this.send(`start-game`);
   }
 
-  gameStarted(gameMode) {
-    this.gameMode = gameMode;
+  gameStarted() {
     this.changeState(ClientState.STARTED);
   }
 
@@ -282,13 +279,13 @@ export class PlayService {
     for (const game of games) {
       // Verify if the game was created by the user
       if (game.creator === this.userName) {
-        this.gameId = game.id;
+        this.game = game;
         state = ClientState.CREATED;
       }
 
       // Verify if the game was joined by the user
       if (game.players.includes(this.userName)) {
-        this.gameId = game.id;
+        this.game = game;
         state = ClientState.JOINED;
       }
     }
