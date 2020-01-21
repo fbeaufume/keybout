@@ -81,8 +81,9 @@ export class PlayService {
   // Number of available words, used to display a wait message at the end of a race game round
   availableWords = 0;
 
+  // Logs are active during development or when typing "window.keyboutLogging=true" in the console
   static log(message: string) {
-    if (!environment.production) {
+    if (!environment.production || (window as any).keyboutLogging) {
       console.log(`PlayService: ${message}`);
     }
   }
