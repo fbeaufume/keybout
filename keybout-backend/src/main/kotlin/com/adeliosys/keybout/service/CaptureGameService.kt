@@ -97,6 +97,7 @@ class CaptureGameService(
 
     private fun isRoundOver() = availableWords <= 0
 
+    @Synchronized
     override fun claimRemainingWords(roundId: Int) {
         if (roundId == this.roundId && !isRoundOver()) {
             availableWords = 0
