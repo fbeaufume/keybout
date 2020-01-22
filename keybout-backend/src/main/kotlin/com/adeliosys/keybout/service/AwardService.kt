@@ -7,7 +7,6 @@ import com.adeliosys.keybout.model.Score
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
-import java.lang.Integer.max
 
 /**
  * Awards management service.
@@ -34,8 +33,7 @@ class AwardService {
 
         latestUserName = null
 
-        longestLength = 0
-        words.forEach { longestLength = max(longestLength, it.length) }
+        longestLength = words.maxBy { it.length }!!.length
     }
 
     /**
