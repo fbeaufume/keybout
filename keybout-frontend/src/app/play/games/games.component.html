@@ -13,11 +13,11 @@
     </thead>
     <tbody>
     <tr *ngFor="let game of games">
-      <td>{{modesLabels[game.mode]}}</td>
+      <td>{{modeLabels[game.mode]}}</td>
       <td>{{game.rounds}}</td>
-      <td>{{languagesLabels[game.language]}}</td>
+      <td>{{languageLabels[game.language]}}</td>
       <td>
-        <div>{{wordsEffectsLabels[game.wordsEffect].inList}} effect</div>
+        <div>{{wordEffectLabels[game.wordsEffect].inList}} effect</div>
         <div>{{game.wordsCount}} words</div>
         <div>{{wordsLengthsLabels[game.wordsLength]}} length</div>
       </td>
@@ -44,7 +44,7 @@
       <label for="inputMode" class="col-sm-2 col-form-label">Mode</label>
       <div class="col-sm-3">
         <select class="form-control" id="inputMode" [(ngModel)]="mode" name="inputMode">
-          <option *ngFor="let m of modes" [value]="m" [selected]="mode == m">{{modesLabels[m]}}</option>
+          <option *ngFor="let m of modes" [value]="m" [selected]="mode == m">{{modeLabels[m]}}</option>
         </select>
       </div>
     </div>
@@ -60,15 +60,15 @@
       <label for="inputLanguage" class="col-sm-2 col-form-label">Language</label>
       <div class="col-sm-3">
         <select class="form-control" id="inputLanguage" [(ngModel)]="language" name="inputLanguage">
-          <option *ngFor="let l of languages" [value]="l" [selected]="language == l">{{languagesLabels[l]}}</option>
+          <option *ngFor="let l of languages" [value]="l" [selected]="language == l">{{languageLabels[l]}}</option>
         </select>
       </div>
     </div>
     <div class="form-group row">
       <label for="inputWordsEffect" class="col-sm-2 col-form-label">Words effect</label>
       <div class="col-sm-3">
-        <select class="form-control" id="inputWordsEffect" [(ngModel)]="wordsEffect" name="inputWordsEffect">
-          <option *ngFor="let we of wordsEffects" [value]="we" [selected]="wordsEffect == we">{{wordsEffectsLabels[we].inForm}}</option>
+        <select class="form-control" id="inputWordsEffect" [(ngModel)]="wordEffect" name="inputWordsEffect">
+          <option *ngFor="let we of wordEffects" [value]="we" [selected]="wordEffect == we">{{wordEffectLabels[we].inForm}}</option>
         </select>
       </div>
     </div>

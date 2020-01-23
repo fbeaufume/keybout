@@ -1,5 +1,17 @@
 import {Component} from '@angular/core';
-import {ClientState, GameMode, Game} from '../model';
+import {
+  ClientState,
+  Game,
+  GameMode,
+  GameModeLabels,
+  GameModes,
+  Languages,
+  LanguageLabels,
+  WordEffects,
+  WordEffectLabels,
+  WordLengths,
+  WordLengthLabels
+} from '../model';
 import {PlayService} from '../play.service';
 
 @Component({
@@ -9,11 +21,8 @@ import {PlayService} from '../play.service';
 export class GamesComponent {
 
   // Available game modes
-  modes = [GameMode.CAPTURE, GameMode.RACE];
-  modesLabels = {
-    capture: 'Capture',
-    race: 'Race'
-  };
+  modes = GameModes;
+  modeLabels = GameModeLabels;
 
   // Selected game mode
   mode = GameMode.CAPTURE;
@@ -25,14 +34,18 @@ export class GamesComponent {
   rounds = 1;
 
   // Available game languages
-  languages = ['en', 'fr'];
-  languagesLabels = {
-    en: 'English',
-    fr: 'French'
-  };
+  languages = Languages;
+  languageLabels = LanguageLabels;
 
   // Selected lang
   language = 'en';
+
+  // Available game styles
+  wordEffects = WordEffects;
+  wordEffectLabels = WordEffectLabels;
+
+  // Selected game style
+  wordEffect = 'none';
 
   // Available word counts
   wordsCounts = [5, 7, 10, 15, 20, 30];
@@ -41,28 +54,11 @@ export class GamesComponent {
   wordsCount = 10;
 
   // Available word lengths
-  wordsLengths = ['shortest', 'shorter', 'standard', 'longer', 'longest'];
-  wordsLengthsLabels = {
-    shortest: 'Shortest',
-    shorter: 'Shorter',
-    standard: 'Standard',
-    longer: 'Longer',
-    longest: 'Longest'
-  };
+  wordsLengths = WordLengths;
+  wordsLengthsLabels = WordLengthLabels;
 
   // Selected word length
   wordsLength = 'standard';
-
-  // Available word effects
-  wordsEffects = ['none', 'hidden', 'anagram'];
-  wordsEffectsLabels = {
-    none: {inForm: 'None', inList: 'No'},
-    hidden: {inForm: 'Hidden', inList: 'Hidden'},
-    anagram: {inForm: 'Anagram', inList: 'Anagram'}
-  };
-
-  // Selected word effect
-  wordsEffect = 'none';
 
   constructor(public playService: PlayService) {
   }
@@ -94,7 +90,7 @@ export class GamesComponent {
 
   // Create a new game
   create() {
-    this.playService.createGame(this.mode, this.rounds, this.language, this.wordsCount, this.wordsLength, this.wordsEffect);
+    this.playService.createGame(this.mode, this.rounds, this.language, this.wordsCount, this.wordsLength, this.wordEffect);
   }
 
   canDeleteOrStart(id: number) {

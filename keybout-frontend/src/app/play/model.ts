@@ -22,6 +22,38 @@ export enum GameMode {
   RACE = 'race'
 }
 
+export const GameModes = [GameMode.CAPTURE, GameMode.RACE];
+
+export const GameModeLabels = {
+  capture: 'Capture',
+  race: 'Race'
+};
+
+export const Languages = ['en', 'fr'];
+
+export const LanguageLabels = {
+  en: 'English',
+  fr: 'French'
+};
+
+export const WordEffects = ['none', 'hidden', 'anagram'];
+
+export const WordEffectLabels = {
+  none: {inForm: 'None', inList: 'No'},
+  hidden: {inForm: 'Hidden', inList: 'Hidden'},
+  anagram: {inForm: 'Anagram', inList: 'Anagram'}
+};
+
+export const WordLengths = ['shortest', 'shorter', 'standard', 'longer', 'longest'];
+
+export const WordLengthLabels = {
+  shortest: 'Shortest',
+  shorter: 'Shorter',
+  standard: 'Standard',
+  longer: 'Longer',
+  longest: 'Longest'
+};
+
 export class Game {
   id: number;
   creator: string;
