@@ -16,6 +16,8 @@ abstract class BaseGameService(
 
     var id: Long = 0
 
+    var style: GameStyle = GameStyle.REGULAR
+
     private var roundsCount: Int = 0
 
     var language: Language = Language.EN
@@ -29,8 +31,6 @@ abstract class BaseGameService(
     var effectiveWordsCount: Int = 0
 
     var wordsLength: WordLength = WordLength.STANDARD
-
-    var wordsEffect: WordEffect = WordEffect.NONE
 
     /**
      * Name of the player that starts the next round.
@@ -81,6 +81,8 @@ abstract class BaseGameService(
     open fun initializeGame(gameDescriptor: GameDescriptor, players: MutableList<WebSocketSession>) {
         id = gameDescriptor.id
 
+        style = gameDescriptor.style
+
         roundsCount = gameDescriptor.rounds
 
         language = gameDescriptor.language
@@ -88,8 +90,6 @@ abstract class BaseGameService(
         declaredWordsCount = gameDescriptor.wordsCount
 
         wordsLength = gameDescriptor.wordsLength
-
-        wordsEffect = gameDescriptor.wordsEffect
 
         manager = gameDescriptor.creator
 
@@ -121,7 +121,7 @@ abstract class BaseGameService(
 
         // Make sure that the round will expire after some time.
         val currentRoundId = roundId
-        schedule(wordsEffect.getExpirationDuration(declaredWordsCount)) { claimRemainingWords(currentRoundId) }
+        schedule(style.getExpirationDuration(declaredWordsCount)) { claimRemainingWords(currentRoundId) }
     }
 
     private fun schedule(delay: Long, task: () -> Unit) {

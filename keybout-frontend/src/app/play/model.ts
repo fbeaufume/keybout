@@ -25,8 +25,16 @@ export enum GameMode {
 export const GameModes = [GameMode.CAPTURE, GameMode.RACE];
 
 export const GameModeLabels = {
-  capture: 'Capture',
-  race: 'Race'
+  capture: {pascal: 'Capture', lower: 'capture'},
+  race: {pascal: 'Race', lower: 'race'}
+};
+
+export const GameStyles = ['regular', 'hidden', 'anagram'];
+
+export const GameStyleLabels = {
+  regular: {pascal: 'Regular', lower: 'regular'},
+  hidden: {pascal: 'Hidden', lower: 'hidden'},
+  anagram: {pascal: 'Anagram', lower: 'anagram'}
 };
 
 export const Languages = ['en', 'fr'];
@@ -34,14 +42,6 @@ export const Languages = ['en', 'fr'];
 export const LanguageLabels = {
   en: 'English',
   fr: 'French'
-};
-
-export const WordEffects = ['none', 'hidden', 'anagram'];
-
-export const WordEffectLabels = {
-  none: {inForm: 'None', inList: 'No'},
-  hidden: {inForm: 'Hidden', inList: 'Hidden'},
-  anagram: {inForm: 'Anagram', inList: 'Anagram'}
 };
 
 export const WordLengths = ['shortest', 'shorter', 'standard', 'longer', 'longest'];
@@ -58,11 +58,11 @@ export class Game {
   id: number;
   creator: string;
   mode: string;
+  style: string;
   rounds: number;
   language: string;
   wordsCount: number;
   wordsLength: string;
-  wordsEffect: string;
   players: string[];
 }
 

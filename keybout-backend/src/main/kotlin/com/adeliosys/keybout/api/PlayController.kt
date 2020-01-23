@@ -81,18 +81,18 @@ class PlayController(private val userNameService: UserNameService, private val p
                                 val gameDescriptor = GameDescriptor(
                                         session.userName,
                                         action.arguments[0],
+                                        action.arguments[1],
                                         try {
-                                            action.arguments[1].toInt()
+                                            action.arguments[2].toInt()
                                         } catch (e: NumberFormatException) {
                                             1
                                         },
-                                        action.arguments[2],
+                                        action.arguments[3],
                                         try {
-                                            action.arguments[3].toInt()
+                                            action.arguments[4].toInt()
                                         } catch (e: NumberFormatException) {
                                             10
                                         },
-                                        action.arguments[4],
                                         action.arguments[5])
 
                                 playService.createGame(session, gameDescriptor)

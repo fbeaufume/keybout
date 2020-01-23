@@ -4,8 +4,8 @@
     <thead>
     <tr>
       <th scope="col">Mode</th>
+      <th scope="col">Style</th>
       <th scope="col">Rounds</th>
-      <th scope="col">Language</th>
       <th scope="col">Words</th>
       <th scope="col">Players</th>
       <th scope="col">&nbsp;</th>
@@ -13,11 +13,11 @@
     </thead>
     <tbody>
     <tr *ngFor="let game of games">
-      <td>{{modeLabels[game.mode]}}</td>
+      <td>{{modeLabels[game.mode].pascal}}</td>
+      <td>{{styleLabels[game.style].pascal}}</td>
       <td>{{game.rounds}}</td>
-      <td>{{languageLabels[game.language]}}</td>
       <td>
-        <div>{{wordEffectLabels[game.wordsEffect].inList}} effect</div>
+        <div>{{languageLabels[game.language]}} language</div>
         <div>{{game.wordsCount}} words</div>
         <div>{{wordsLengthsLabels[game.wordsLength]}} length</div>
       </td>
@@ -44,7 +44,15 @@
       <label for="inputMode" class="col-sm-2 col-form-label">Mode</label>
       <div class="col-sm-3">
         <select class="form-control" id="inputMode" [(ngModel)]="mode" name="inputMode">
-          <option *ngFor="let m of modes" [value]="m" [selected]="mode == m">{{modeLabels[m]}}</option>
+          <option *ngFor="let m of modes" [value]="m" [selected]="mode == m">{{modeLabels[m].pascal}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="inputStyle" class="col-sm-2 col-form-label">Style</label>
+      <div class="col-sm-3">
+        <select class="form-control" id="inputStyle" [(ngModel)]="style" name="inputStyle">
+          <option *ngFor="let s of styles" [value]="s" [selected]="style == s">{{styleLabels[s].pascal}}</option>
         </select>
       </div>
     </div>
@@ -65,14 +73,6 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="inputWordsEffect" class="col-sm-2 col-form-label">Words effect</label>
-      <div class="col-sm-3">
-        <select class="form-control" id="inputWordsEffect" [(ngModel)]="wordEffect" name="inputWordsEffect">
-          <option *ngFor="let we of wordEffects" [value]="we" [selected]="wordEffect == we">{{wordEffectLabels[we].inForm}}</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group row">
       <label for="inputWordsCount" class="col-sm-2 col-form-label">Words count</label>
       <div class="col-sm-3">
         <select class="form-control" id="inputWordsCount" [(ngModel)]="wordsCount" name="inputWordsCount">
@@ -84,7 +84,8 @@
       <label for="inputWordsLength" class="col-sm-2 col-form-label">Words length</label>
       <div class="col-sm-3">
         <select class="form-control" id="inputWordsLength" [(ngModel)]="wordsLength" name="inputWordsLength">
-          <option *ngFor="let wl of wordsLengths" [value]="wl" [selected]="wordsLength == wl">{{wordsLengthsLabels[wl]}}</option>
+          <option *ngFor="let wl of wordsLengths" [value]="wl"
+                  [selected]="wordsLength == wl">{{wordsLengthsLabels[wl]}}</option>
         </select>
       </div>
     </div>

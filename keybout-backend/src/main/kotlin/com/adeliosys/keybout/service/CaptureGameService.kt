@@ -49,7 +49,7 @@ class CaptureGameService(
                     awardService.initializeRound(this)
                 }
                 .forEach {
-                    words[it] = Word(it, wordsEffect)
+                    words[it] = Word(it, style)
                 }
 
         availableWords = words.size

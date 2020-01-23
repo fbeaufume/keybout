@@ -2,13 +2,12 @@ import {Component} from '@angular/core';
 import {
   ClientState,
   Game,
-  GameMode,
-  GameModeLabels,
   GameModes,
+  GameModeLabels,
+  GameStyles,
+  GameStyleLabels,
   Languages,
   LanguageLabels,
-  WordEffects,
-  WordEffectLabels,
   WordLengths,
   WordLengthLabels
 } from '../model';
@@ -25,40 +24,40 @@ export class GamesComponent {
   modeLabels = GameModeLabels;
 
   // Selected game mode
-  mode = GameMode.CAPTURE;
+  mode = this.modes[0];
+
+  // Available game styles
+  styles = GameStyles;
+  styleLabels = GameStyleLabels;
+
+  // Selected game style
+  style = this.styles[0];
 
   // Available number of rounds
   roundsCounts = [1, 2, 3];
 
   // Selected number of rounds
-  rounds = 1;
+  rounds = this.roundsCounts[0];
 
   // Available game languages
   languages = Languages;
   languageLabels = LanguageLabels;
 
   // Selected lang
-  language = 'en';
-
-  // Available game styles
-  wordEffects = WordEffects;
-  wordEffectLabels = WordEffectLabels;
-
-  // Selected game style
-  wordEffect = 'none';
+  language = this.languages[0];
 
   // Available word counts
   wordsCounts = [5, 7, 10, 15, 20, 30];
 
   // Selected word count
-  wordsCount = 10;
+  wordsCount = this.wordsCounts[2];
 
   // Available word lengths
   wordsLengths = WordLengths;
   wordsLengthsLabels = WordLengthLabels;
 
   // Selected word length
-  wordsLength = 'standard';
+  wordsLength = this.wordsLengths[2];
 
   constructor(public playService: PlayService) {
   }
@@ -90,7 +89,7 @@ export class GamesComponent {
 
   // Create a new game
   create() {
-    this.playService.createGame(this.mode, this.rounds, this.language, this.wordsCount, this.wordsLength, this.wordEffect);
+    this.playService.createGame(this.mode, this.style, this.rounds, this.language, this.wordsCount, this.wordsLength);
   }
 
   canDeleteOrStart(id: number) {

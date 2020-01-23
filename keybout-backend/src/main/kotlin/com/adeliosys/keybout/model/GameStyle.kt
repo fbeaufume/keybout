@@ -4,21 +4,21 @@ import com.google.gson.annotations.SerializedName
 import kotlin.random.Random
 
 /**
- * Effects are used to change the display of words, to make games a little more challenging.
+ * Styles are used to change the display of words, to make games a little more challenging.
  */
-enum class WordEffect(private val delay: Long) {
+enum class GameStyle(private val delay: Long) {
 
     /**
-     * No effect, e.g. "history" remains "history".
+     * The word is unchanged, e.g. "history" remains "history".
      */
-    @SerializedName("none")
-    NONE(5L) {
+    @SerializedName("regular")
+    REGULAR(5L) {
         override fun transform(word: String): String {
             return word
         }
     },
     /**
-     * Replace one letter of the word by an underscore, e.g. "history" becomes "hist_r_".
+     * Replace one or more letters of the word by an underscore, e.g. "history" becomes "hist_r_".
      */
     @SerializedName("hidden")
     HIDDEN(8L) {
@@ -65,7 +65,7 @@ enum class WordEffect(private val delay: Long) {
         fun getByCode(code: String) = try {
             valueOf(code.toUpperCase())
         } catch (e: Exception) {
-            NONE
+            REGULAR
         }
     }
 

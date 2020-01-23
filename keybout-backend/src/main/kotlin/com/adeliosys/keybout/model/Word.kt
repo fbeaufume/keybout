@@ -1,6 +1,6 @@
 package com.adeliosys.keybout.model
 
-class Word(val label: String, wordEffect: WordEffect) {
+class Word(label: String, style: GameStyle) {
     var userName = ""
-    var display = wordEffect.transform(label)
+    var display = style.transform(label)
 }

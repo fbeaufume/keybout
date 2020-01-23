@@ -8,11 +8,11 @@ import java.util.concurrent.atomic.AtomicLong
 class GameDescriptor(
         val creator: String,
         mode: String,
+        style: String,
         val rounds: Int,
         language: String,
         val wordsCount: Int,
-        wordsLength: String,
-        wordsEffect: String) {
+        wordsLength: String) {
 
     companion object {
         val counter = AtomicLong()
@@ -24,9 +24,9 @@ class GameDescriptor(
 
     val mode: GameMode = GameMode.getByCode(mode)
 
+    val style: GameStyle = GameStyle.getByCode(style)
+
     val language: Language = Language.getByCode(language)
 
     val wordsLength: WordLength = WordLength.getByCode(wordsLength)
-
-    val wordsEffect: WordEffect = WordEffect.getByCode(wordsEffect)
 }
