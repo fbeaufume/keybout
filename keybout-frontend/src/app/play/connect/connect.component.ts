@@ -1,5 +1,6 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {ClientState, PlayService} from '../play.service';
+import {ClientState} from '../model';
+import {PlayService} from '../play.service';
 import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
@@ -8,7 +9,7 @@ import {NavigationEnd, Router} from '@angular/router';
 })
 export class ConnectComponent {
 
-  @ViewChild('outerDiv', { static: true }) outerDiv: ElementRef;
+  @ViewChild('outerDiv', {static: true}) outerDiv: ElementRef;
 
   constructor(private router: Router, public playService: PlayService) {
     this.router.events.subscribe((event) => {

@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {ClientState, GameMode, PlayService} from '../play.service';
-import {Game} from '../game';
+import {ClientState, GameMode, Game} from '../model';
+import {PlayService} from '../play.service';
 
 @Component({
   selector: 'app-games',

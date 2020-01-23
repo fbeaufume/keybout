@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
-import {ClientState, PlayService} from '../play.service';
+import {ClientState} from '../model';
+import {PlayService} from '../play.service';
 
 const COUNTDOWN = 5; // Total duration of the countdown
 

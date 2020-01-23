@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
-import {ClientState, PlayService} from './play/play.service';
+import {ClientState} from './play/model';
+import {PlayService} from './play/play.service';
 
 @Component({
   selector: 'app-root',

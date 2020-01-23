@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {ClientState, PlayService} from '../play.service';
-import {Score} from '../score';
+import {ClientState, Score} from '../model';
+import {PlayService} from '../play.service';
 
 @Component({
   selector: 'app-scores',
