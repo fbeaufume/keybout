@@ -70,7 +70,7 @@ abstract class BaseGameService(
 
     /**
      * Used by the UI.
-     * @return the game type such as 'capture" or 'race'.
+     * @return the game type such as 'capture' or 'race'.
      */
     abstract fun getGameType(): String
 
@@ -102,6 +102,8 @@ abstract class BaseGameService(
      * Start the countdown for the next round.
      */
     open fun startCountdown() {
+        roundId++
+
         // Reset the players scores
         userScores.forEach { (_, s) -> s.resetPoints() }
 
@@ -116,7 +118,6 @@ abstract class BaseGameService(
      * Actually start the round.
      */
     open fun startPlay() {
-        roundId++
         roundStart = System.currentTimeMillis()
 
         // Make sure that the round will expire after some time.
