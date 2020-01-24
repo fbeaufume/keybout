@@ -228,7 +228,6 @@ aside
 ask
 asleep
 aspect
-ass
 assault
 assemble
 assembly
@@ -976,7 +975,6 @@ dealer
 dear
 death
 debate
-debris
 debt
 debut
 decade
@@ -1202,13 +1200,11 @@ dust
 duty
 dying
 dynamic
-dynamics
 each
 eager
 ear
 early
 earn
-earnings
 earth
 earthquake
 ease
@@ -1222,7 +1218,6 @@ echo
 ecological
 economic
 economically
-economics
 economist
 economy
 ecosystem
@@ -1256,7 +1251,6 @@ electric
 electrical
 electricity
 electronic
-electronics
 elegant
 element
 elementary
@@ -1349,7 +1343,6 @@ estimate
 estimated
 etc
 ethical
-ethics
 ethnic
 evaluate
 evaluation
@@ -4124,7 +4117,6 @@ volunteer
 vote
 voter
 voting
-vs
 vulnerable
 wage
 wagon
@@ -4238,7 +4230,6 @@ worker
 working
 workout
 workplace
-works
 workshop
 world
 worldwide
