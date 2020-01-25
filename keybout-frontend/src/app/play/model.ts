@@ -64,6 +64,18 @@ export class Game {
   wordsCount: number;
   wordsLength: string;
   players: string[];
+
+  constructor(id: number, creator: string, mode: string, style: string, rounds: number, language: string, wordsCount: number, wordsLength: string, players: string[]) {
+    this.id = id;
+    this.creator = creator;
+    this.mode = mode;
+    this.style = style;
+    this.rounds = rounds;
+    this.language = language;
+    this.wordsCount = wordsCount;
+    this.wordsLength = wordsLength;
+    this.players = players;
+  }
 }
 
 export class Word {

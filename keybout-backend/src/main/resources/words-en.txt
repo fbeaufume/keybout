@@ -1617,7 +1617,6 @@ frozen
 fruit
 frustrate
 frustration
-fucking
 fuel
 full
 fully
@@ -3683,7 +3682,6 @@ success
 successful
 successfully
 such
-suck
 sudden
 suddenly
 sue
