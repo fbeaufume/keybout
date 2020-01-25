@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as SockJS from 'sockjs-client';
 import {Subject} from 'rxjs/internal/Subject';
-import {ClientState, GameMode, Game, Word, Score} from './model';
+import {ClientState, GameMode, Game, Word, Score, GameModeLabels, GameStyleLabels} from './model';
 import {environment} from '../../environments/environment';
 
 // Contains the play state and communicates with the backend (by sending actions and receiving notifications)
@@ -69,6 +69,14 @@ export class PlayService {
 
   isGameMode(gameMode: GameMode): boolean {
     return this.game.mode === gameMode;
+  }
+
+  getGameModeLower(): string {
+    return GameModeLabels[this.game.mode].lower;
+  }
+
+  getGameStyleLower(): string {
+    return GameStyleLabels[this.game.style].lower;
   }
 
   connect() {

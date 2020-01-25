@@ -11,6 +11,15 @@ export class ScoresComponent {
   constructor(public playService: PlayService) {
   }
 
+  getMode(): string {
+    return this.playService.getGameModeLower();
+  }
+
+  getStyle(): string {
+    return this.playService.getGameStyleLower();
+  }
+
+
   get state(): ClientState {
     return this.playService.state;
   }
