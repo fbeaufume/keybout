@@ -29,8 +29,9 @@ export class GameComponent {
     return this.playService.state;
   }
 
-  get words(): Map<string, Word> {
-    return this.playService.words;
+  getWords(): Word[] {
+    // Returns an array instead of a Map because the 'keyvalue' pipe used on Map sorts the values by key
+    return Array.from(this.playService.words.values());
   }
 
   // Is this component visible
@@ -40,7 +41,7 @@ export class GameComponent {
 
   // Return the class attribute for a given word
   getClass(label: string) {
-    switch (this.words.get(label).userName) {
+    switch (this.playService.words.get(label).userName) {
       case '':
         return 'btn btn-primary btn-lg mr-2 mb-2';
       case this.playService.userName:
