@@ -60,4 +60,7 @@ class Score(val userName: String) {
     private fun getTimestamp() = System.currentTimeMillis()
 }
 
+/**
+ * DTO used for notifications sent to the frontend.
+ */
 class ScoreDto(val userName: String, val points: Int, val wpm: Float, val awards: Int?)

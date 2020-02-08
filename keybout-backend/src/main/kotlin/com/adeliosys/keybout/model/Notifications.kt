@@ -34,16 +34,16 @@ class GameStartNotification : BaseNotification(Constants.NOTIFICATION_GAME_START
  * Sent when a round begins or the state of a word changes.
  */
 class WordsListNotification(
-        // The map key is word label and the map value is an array where the first element is the name of user
-        // who caught the word and the second element is the display of the word (i.e. with the effect)
-        val words: Map<String, Array<String>>) : BaseNotification(Constants.NOTIFICATION_WORDS_LIST)
+        // The string array contains: the word label (e.g. 'dog'), the user who caught it or empty (e.g. ''),
+        // the word display (e.g. 'do_')
+        val words: List<Array<String>>) : BaseNotification(Constants.NOTIFICATION_WORDS_LIST)
 
 /**
  * Sent when a round ended. Contains the last words update and the scores.
  */
 class ScoresNotification(
-        // Same as words attribute in preceding notification
-        val words: Map<String, Array<String>>,
+        // Same as 'words' attribute in preceding notification
+        val words: List<Array<String>>,
         val roundScores: List<ScoreDto>,
         val gameScores: List<ScoreDto>,
         val manager: String,

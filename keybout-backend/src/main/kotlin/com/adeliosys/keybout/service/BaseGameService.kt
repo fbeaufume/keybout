@@ -133,7 +133,7 @@ abstract class BaseGameService(
      * Utility method that returns a UI friendly map of words,
      * i.e. the key is the word label and the value is the assigned user name (or empty).
      */
-    fun getWordsDto(words: Map<String, Word>): Map<String, Array<String>> = words.map { it.key to arrayOf(it.value.userName, it.value.display) }.toMap()
+    fun getWordsDto(words: Map<String, Word>): List<Array<String>> = words.map { arrayOf(it.key, it.value.userName, it.value.display) }.toList()
 
     /**
      * Update the game state after a player completely typed a word.

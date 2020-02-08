@@ -49,9 +49,11 @@ export class PlayService {
   // Observable used for state change notification
   stateObservable$ = this.stateSubject.asObservable();
 
-  // Map used to track who captured each word
-  // The key is the word label, the value is the user name or empty is not captured yet
-  words: Map<string, Word> = new Map();
+  // Used to check if the word typed by the player is a word from the game
+  wordsMap: Map<string, Word> = new Map();
+
+  // Used to display the words
+  wordsArray: Word[];
 
   // Number of available words, used to display a wait message at the end of a race game round
   availableWords = 0;
@@ -283,16 +285,20 @@ export class PlayService {
 
   // Update the displayed words
   updateWords(words) {
-    this.words.clear();
+    this.wordsMap.clear();
     let availableWords = 0;
-    for (const k of Object.keys(words)) {
-      const word = words[k];
-      const userName = word[0];
+
+    words.forEach(word => {
+      const userName = word[1];
       if (userName === '') {
         availableWords++;
       }
-      this.words.set(k, new Word(k, userName, word[1]));
-    }
+      const label = word[0];
+      this.wordsMap.set(label, new Word(label, userName, word[2]));
+    });
+
+    this.wordsArray = Array.from(this.wordsMap.values());
+
     this.availableWords = availableWords;
   }
 
