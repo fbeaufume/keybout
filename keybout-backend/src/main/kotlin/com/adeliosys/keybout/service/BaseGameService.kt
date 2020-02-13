@@ -157,24 +157,24 @@ abstract class BaseGameService(
         userScores.values.forEach { it.update(roundStart) }
 
         // Get the sorted round scores
-        roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { -it.wordsPerMin }))
+        roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { -it.speed }))
 
         // Give 1 victory to the round winner
         roundScores[0].incrementVictories()
 
         // Get the sorted game scores
-        gameScores = userScores.values.sortedWith(compareBy({ -it.victories }, { -it.bestWordsPerMin }, { it.latestVictoryTimestamp }))
+        gameScores = userScores.values.sortedWith(compareBy({ -it.victories }, { -it.bestSpeed }, { it.latestVictoryTimestamp }))
     }
 
     /**
      * @return UI friendly round scores.
      */
-    fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points, it.wordsPerMin, it.awards) }
+    fun getRoundScoresDto() = roundScores.map { ScoreDto(it.userName, it.points, it.speed, it.awards) }
 
     /**
      * @return UI friendly game scores.
      */
-    fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories, it.bestWordsPerMin, null) }
+    fun getGameScoresDto() = gameScores.map { ScoreDto(it.userName, it.victories, it.bestSpeed, null) }
 
     /**
      * A user disconnected, remove him from the game.

@@ -101,7 +101,7 @@ export class Word {
 export class Score {
   userName: string;
   points: number;
-  wpm: number;
+  speed: number;
   awards: number;
   awardsNames: string[];
 }

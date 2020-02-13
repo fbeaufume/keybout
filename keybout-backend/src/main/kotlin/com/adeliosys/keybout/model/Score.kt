@@ -13,7 +13,7 @@ class Score(val userName: String) {
     private var latestWordTimestamp = getTimestamp()
 
     // Number of words/min for the round, used in capture games only
-    var wordsPerMin = 0.0f
+    var speed = 0.0f
 
     // Awards for the current round, is a bitwise "or" of all the awards
     var awards = 0
@@ -25,7 +25,7 @@ class Score(val userName: String) {
     var latestVictoryTimestamp = getTimestamp()
 
     // Best number of words/min so far, used in capture games only
-    var bestWordsPerMin = 0.0f
+    var bestSpeed = 0.0f
 
     fun resetPoints() {
         points = 0
@@ -50,10 +50,10 @@ class Score(val userName: String) {
      * Update words/min and durations once all words are caught.
      */
     fun update(roundStart: Long) {
-        wordsPerMin = if (points > 0) 60000.0f * points / (latestWordTimestamp - roundStart) else 0.0f
+        speed = if (points > 0) 60000.0f * points / (latestWordTimestamp - roundStart) else 0.0f
 
-        if (bestWordsPerMin <= 0 || bestWordsPerMin < wordsPerMin) {
-            bestWordsPerMin = wordsPerMin
+        if (bestSpeed <= 0 || bestSpeed < speed) {
+            bestSpeed = speed
         }
     }
 
@@ -63,4 +63,4 @@ class Score(val userName: String) {
 /**
  * DTO used for notifications sent to the frontend.
  */
-class ScoreDto(val userName: String, val points: Int, val wpm: Float, val awards: Int?)
+class ScoreDto(val userName: String, val points: Int, val speed: Float, val awards: Int?)
