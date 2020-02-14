@@ -5,8 +5,8 @@
     <tr>
       <th scope="col">Mode</th>
       <th scope="col">Style</th>
-      <th scope="col">Rounds</th>
-      <th scope="col">Words</th>
+      <th scope="col">Language</th>
+      <th scope="col">Words length</th>
       <th scope="col">Players</th>
       <th scope="col">&nbsp;</th>
     </tr>
@@ -15,12 +15,8 @@
     <tr *ngFor="let game of games">
       <td>{{modeLabels[game.mode].pascal}}</td>
       <td>{{styleLabels[game.style].pascal}}</td>
-      <td>{{game.rounds}}</td>
-      <td>
-        <div>{{languageLabels[game.language]}} language</div>
-        <div>{{game.wordsCount}} words</div>
-        <div>{{wordsLengthsLabels[game.wordsLength]}} length</div>
-      </td>
+      <td>{{languageLabels[game.language]}}</td>
+      <td>{{wordsLengthsLabels[game.wordsLength]}}</td>
       <td>
         <div>{{game.creator}}</div>
         <div *ngFor="let player of game.players">{{player}}</div>
@@ -57,26 +53,10 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="inputRounds" class="col-sm-2 col-form-label">Rounds</label>
-      <div class="col-sm-3">
-        <select class="form-control" id="inputRounds" [(ngModel)]="rounds" name="inputRounds">
-          <option *ngFor="let r of roundsCounts" [selected]="rounds == r">{{r}}</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group row">
       <label for="inputLanguage" class="col-sm-2 col-form-label">Language</label>
       <div class="col-sm-3">
         <select class="form-control" id="inputLanguage" [(ngModel)]="language" name="inputLanguage">
           <option *ngFor="let l of languages" [value]="l" [selected]="language == l">{{languageLabels[l]}}</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="inputWordsCount" class="col-sm-2 col-form-label">Words count</label>
-      <div class="col-sm-3">
-        <select class="form-control" id="inputWordsCount" [(ngModel)]="wordsCount" name="inputWordsCount">
-          <option *ngFor="let wc of wordsCounts" [selected]="wordsCount == wc">{{wc}}</option>
         </select>
       </div>
     </div>

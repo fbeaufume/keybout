@@ -9,9 +9,7 @@ class GameDescriptor(
         val creator: String,
         mode: String,
         style: String,
-        val rounds: Int,
         language: String,
-        val wordsCount: Int,
         wordsLength: String) {
 
     companion object {
@@ -24,9 +22,13 @@ class GameDescriptor(
 
     val mode: GameMode = GameMode.getByCode(mode)
 
+    val rounds = 2
+
     val style: GameStyle = GameStyle.getByCode(style)
 
     val language: Language = Language.getByCode(language)
+
+    val wordsCount = 10
 
     val wordsLength: WordLength = WordLength.getByCode(wordsLength)
 }

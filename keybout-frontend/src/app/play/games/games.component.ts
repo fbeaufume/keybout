@@ -33,24 +33,12 @@ export class GamesComponent {
   // Selected game style
   style = this.styles[0];
 
-  // Available number of rounds
-  roundsCounts = [1, 2, 3];
-
-  // Selected number of rounds
-  rounds = this.roundsCounts[0];
-
   // Available game languages
   languages = Languages;
   languageLabels = LanguageLabels;
 
   // Selected lang
   language = this.languages[0];
-
-  // Available word counts
-  wordsCounts = [5, 7, 10, 15, 20, 30];
-
-  // Selected word count
-  wordsCount = this.wordsCounts[2];
 
   // Available word lengths
   wordsLengths = WordLengths;
@@ -89,7 +77,7 @@ export class GamesComponent {
 
   // Create a new game
   create() {
-    this.playService.createGame(this.mode, this.style, this.rounds, this.language, this.wordsCount, this.wordsLength);
+    this.playService.createGame(this.mode, this.style, this.language, this.wordsLength);
   }
 
   canDeleteOrStart(id: number) {

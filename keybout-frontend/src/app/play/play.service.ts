@@ -237,9 +237,9 @@ export class PlayService {
     this.socket.close();
   }
 
-  createGame(mode: string, style: string, rounds: number, language: string, wordsCount: number, wordsLength: string) {
+  createGame(mode: string, style: string, language: string, wordsLength: string) {
     this.changeState(ClientState.CREATING);
-    this.send(`create-game ${mode} ${style} ${rounds} ${language} ${wordsCount} ${wordsLength}`);
+    this.send(`create-game ${mode} ${style} ${language} ${wordsLength}`);
   }
 
   deleteGame() {
@@ -344,7 +344,7 @@ export class PlayService {
     PlayService.log(`roundId=${this.roundId}`);
     if (this.roundId > 1) {
       this.gameScores.forEach(score => {
-        if (score.speed <= this.roundScoresByUser.get(score.userName).speed) {
+        if (this.roundScoresByUser.get(score.userName).speed >= score.speed) {
           score.progress = ' \u2B9D';
         }
       });

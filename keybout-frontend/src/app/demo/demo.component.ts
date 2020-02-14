@@ -9,8 +9,8 @@ import {Router} from '@angular/router';
 })
 export class DemoComponent implements OnInit {
 
-  game = new Game(0, 'Chuck Norris', 'capture', 'hidden', 2,
-    'en', 10, 'standard', ['TheLegend27', 'Fatal1ty', 'Leeroy Jenkins']);
+  game = new Game(0, 'Chuck Norris', 'capture', 'hidden',
+    'en', 'standard', ['TheLegend27', 'Fatal1ty', 'Leeroy Jenkins']);
 
   constructor(private playService: PlayService, private router: Router) {
   }
@@ -27,9 +27,7 @@ export class DemoComponent implements OnInit {
         style: this.game.style,
         language: this.game.language,
         wordsLength: this.game.wordsLength,
-        creator: this.game.creator,
-        rounds: this.game.rounds,
-        wordsCount: this.game.wordsCount
+        creator: this.game.creator
       }]);
     this.redirect();
   }
