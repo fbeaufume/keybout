@@ -127,6 +127,6 @@ class CaptureGameService(
     private fun endRound() {
         updateScores()
 
-        sendMessage(players, ScoresNotification(getWordsDto(words), getRoundScoresDto(), getGameScoresDto(), manager, isGameOver()))
+        sendMessage(players, ScoresNotification(getWordsDto(words), getRoundScoresDto(), getGameScoresDto(), manager, roundId, isGameOver()))
     }
 }

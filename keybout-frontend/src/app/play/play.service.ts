@@ -33,11 +33,18 @@ export class PlayService {
   // Scores of the round that ended
   roundScores: Score[] = [];
 
+  // Round scores by user, used to display an 'up arrow' when a user improves his speed
+  roundScoresByUser: Map<string, Score> = new Map();
+
   // Current game scores, when a round ended
   gameScores: Score[] = [];
 
   // Manager of the game, i.e. the user that can start the next round
   gameManager = '';
+
+  // ID of the round that ended, used to display an 'up arrow' next to the speed in game scores
+  // for rounds after the first one
+  roundId = 0;
 
   gameOver = false;
 
@@ -162,9 +169,12 @@ export class PlayService {
             if (data.type === 'scores') {
               this.updateWords(data.words);
               this.roundScores = data.roundScores;
+              this.updateRoundScoresByUser();
               this.updateRoundAwards();
               this.gameScores = data.gameScores;
               this.gameManager = data.manager;
+              this.roundId = data.roundId;
+              this.updateGameProgress();
               this.gameOver = data.gameOver;
               this.changeState(ClientState.END_ROUND);
             }
@@ -302,6 +312,12 @@ export class PlayService {
     this.availableWords = availableWords;
   }
 
+  // Update the round scores map from the round scores array
+  updateRoundScoresByUser() {
+    this.roundScoresByUser.clear();
+    this.roundScores.forEach(score => this.roundScoresByUser.set(score.userName, score));
+  }
+
   // The backend sent a single number containing all aggregated awards,
   // this method extracts the awards name
   updateRoundAwards() {
@@ -320,6 +336,18 @@ export class PlayService {
       if (score.awards & 4) {
         score.awardsNames.push('Last');
       }
+    }
+  }
+
+  // Update the 'progress' attribute for game scores, to display an 'up arrow' when the player improved his speed
+  updateGameProgress() {
+    PlayService.log(`roundId=${this.roundId}`);
+    if (this.roundId > 1) {
+      this.gameScores.forEach(score => {
+        if (score.speed <= this.roundScoresByUser.get(score.userName).speed) {
+          score.progress = ' \u2B9D';
+        }
+      });
     }
   }
 

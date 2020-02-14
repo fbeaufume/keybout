@@ -86,17 +86,17 @@ export class DemoComponent implements OnInit {
   scoresDemo() {
     this.playService.game = this.game;
     this.playService.roundScores = [
-      {userName: 'Chuck Norris', points: 14, speed: 23.34, awards: 3, awardsNames: []},
-      {userName: 'TheLegend27', points: 11, speed: 20.67, awards: 4, awardsNames: []},
-      {userName: 'Fatal1ty', points: 9, speed: 17.25, awards: 0, awardsNames: []},
-      {userName: 'Leeroy Jenkins', points: 6, speed: 12.16, awards: 0, awardsNames: []}
+      {userName: 'Chuck Norris', points: 14, speed: 23.34, awards: 3, awardsNames: [], progress: ''},
+      {userName: 'TheLegend27', points: 11, speed: 20.67, awards: 4, awardsNames: [], progress: ''},
+      {userName: 'Fatal1ty', points: 9, speed: 17.25, awards: 0, awardsNames: [], progress: ''},
+      {userName: 'Leeroy Jenkins', points: 6, speed: 12.16, awards: 0, awardsNames: [], progress: ''}
     ];
     this.playService.updateRoundAwards();
     this.playService.gameScores = [
-      {userName: 'Chuck Norris', points: 1, speed: 23.34, awards: 0, awardsNames: []},
-      {userName: 'TheLegend27', points: 0, speed: 20.67, awards: 0, awardsNames: []},
-      {userName: 'Fatal1ty', points: 0, speed: 17.25, awards: 0, awardsNames: []},
-      {userName: 'Leeroy Jenkins', points: 0, speed: 12.16, awards: 0, awardsNames: []}
+      {userName: 'Chuck Norris', points: 1, speed: 23.34, awards: 0, awardsNames: [], progress: ''},
+      {userName: 'TheLegend27', points: 0, speed: 20.67, awards: 0, awardsNames: [], progress: ''},
+      {userName: 'Fatal1ty', points: 0, speed: 17.25, awards: 0, awardsNames: [], progress: ''},
+      {userName: 'Leeroy Jenkins', points: 0, speed: 12.16, awards: 0, awardsNames: [], progress: ''}
     ];
     this.playService.gameManager = this.game.creator;
     this.playService.gameOver = false;

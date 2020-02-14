@@ -62,7 +62,7 @@
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{i + 1}}</td>
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.userName}}</td>
           <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.points}}</td>
-          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.speed | number:'1.1-1'}}</td>
+          <td [ngClass]="{'text-primary font-weight-bold': userName === score.userName}">{{score.speed | number:'1.1-1'}}{{score.progress}}</td>
         </tr>
         </tbody>
       </table>

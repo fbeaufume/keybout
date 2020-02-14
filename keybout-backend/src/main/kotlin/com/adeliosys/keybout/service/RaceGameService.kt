@@ -154,7 +154,7 @@ class RaceGameService(
         val roundScoresDto = getRoundScoresDto()
         val gameScoresDto = getGameScoresDto()
         for (tempSession in players) {
-            tempSession.sendObjectMessage(ScoresNotification(getWordsDto(words[tempSession.userName]!!), roundScoresDto, gameScoresDto, manager, isGameOver()))
+            tempSession.sendObjectMessage(ScoresNotification(getWordsDto(words[tempSession.userName]!!), roundScoresDto, gameScoresDto, manager, roundId, isGameOver()))
         }
     }
 }
