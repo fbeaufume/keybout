@@ -55,13 +55,14 @@ class PlayController(private val userNameService: UserNameService, private val p
             }
 
             logger.trace("Received message '{}' for {}", message.payload, session.description)
-
+            var processed = false
             val action = Action(message.payload)
 
             when (session.state) {
                 ClientState.OPENED -> {
                     when (action.command) {
                         ACTION_CONNECT -> {
+                            processed = true
                             val name = action.rawArguments
                             val notification = userNameService.registerUserName(name)
                             if (notification == null) {
@@ -71,13 +72,13 @@ class PlayController(private val userNameService: UserNameService, private val p
                                 session.sendObjectMessage(notification)
                             }
                         }
-                        else -> logInvalidMessage(session, message)
                     }
                 }
                 ClientState.LOBBY -> {
                     when (action.command) {
                         ACTION_CREATE_GAME -> {
                             if (action.checkArgumentsCount(4)) {
+                                processed = true
                                 val gameDescriptor = GameDescriptor(
                                         session.userName,
                                         action.arguments[0],
@@ -90,41 +91,58 @@ class PlayController(private val userNameService: UserNameService, private val p
                         }
                         ACTION_JOIN_GAME -> {
                             if (action.checkArgumentsCount(1)) {
+                                processed = true
                                 try {
                                     playService.joinGame(session, action.arguments[0].toLong())
                                 } catch (e: NumberFormatException) {
-                                    logger.warn("Invalid game in message '{}' for {}", message, session.description)
+                                    logger.warn("Invalid game ID in message '{}' for {}", message, session.description)
                                 }
                             }
                         }
-                        else -> logInvalidMessage(session, message)
                     }
                 }
                 ClientState.CREATED -> {
                     when (action.command) {
-                        ACTION_DELETE_GAME -> playService.deleteGame(session)
-                        ACTION_START_GAME -> playService.startGame(session)
-                        else -> logInvalidMessage(session, message)
+                        ACTION_DELETE_GAME -> {
+                            processed = true
+                            playService.deleteGame(session)
+                        }
+                        ACTION_START_GAME -> {
+                            processed = true
+                            playService.startGame(session)
+                        }
                     }
                 }
                 ClientState.JOINED -> {
                     when (action.command) {
-                        ACTION_LEAVE_GAME -> playService.leaveGame(session)
-                        else -> logInvalidMessage(session, message)
+                        ACTION_LEAVE_GAME -> {
+                            processed = true
+                            playService.leaveGame(session)
+                        }
                     }
                 }
                 ClientState.PLAYING -> {
                     when (action.command) {
                         ACTION_CLAIM_WORD -> {
                             if (action.checkArgumentsCount(1)) {
+                                processed = true
                                 playService.claimWord(session, action.arguments[0])
                             }
                         }
-                        ACTION_START_ROUND -> playService.startRound(session)
-                        ACTION_QUIT_GAME -> playService.goToLobby(session)
-                        else -> logInvalidMessage(session, message)
+                        ACTION_START_ROUND -> {
+                            processed = true
+                            playService.startRound(session)
+                        }
+                        ACTION_QUIT_GAME -> {
+                            processed = true
+                            playService.goToLobby(session)
+                        }
                     }
                 }
+            }
+
+            if (!processed) {
+                logInvalidMessage(session, message)
             }
         } catch (e: Exception) {
             logger.error("Caught an exception during message processing", e)
