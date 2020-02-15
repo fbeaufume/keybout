@@ -40,18 +40,16 @@ export const GameStyleLabels = {
 export const Languages = ['en', 'fr'];
 
 export const LanguageLabels = {
-  en: 'English',
-  fr: 'French'
+  en: {pascal: 'English', lower: 'english'},
+  fr: {pascal: 'French', lower: 'french'}
 };
 
-export const WordLengths = ['shortest', 'shorter', 'standard', 'longer', 'longest'];
+export const Difficulties = ['easy', 'normal', 'hard'];
 
-export const WordLengthLabels = {
-  shortest: 'Shortest',
-  shorter: 'Shorter',
-  standard: 'Standard',
-  longer: 'Longer',
-  longest: 'Longest'
+export const DifficultyLabels = {
+  easy: {pascal: 'Easy', lower: 'easy'},
+  normal: {pascal: 'Normal', lower: 'normal'},
+  hard: {pascal: 'Hard', lower: 'hard'},
 };
 
 export class Game {
@@ -60,16 +58,16 @@ export class Game {
   mode: string;
   style: string;
   language: string;
-  wordsLength: string;
+  difficulty: string;
   players: string[];
 
-  constructor(id: number, creator: string, mode: string, style: string, language: string, wordsLength: string, players: string[]) {
+  constructor(id: number, creator: string, mode: string, style: string, language: string, difficulty: string, players: string[]) {
     this.id = id;
     this.creator = creator;
     this.mode = mode;
     this.style = style;
     this.language = language;
-    this.wordsLength = wordsLength;
+    this.difficulty = difficulty;
     this.players = players;
   }
 }

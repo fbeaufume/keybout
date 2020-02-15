@@ -30,7 +30,7 @@ abstract class BaseGameService(
      */
     var effectiveWordsCount: Int = 0
 
-    var wordsLength: WordLength = WordLength.STANDARD
+    var difficulty: Difficulty = Difficulty.EASY
 
     /**
      * Name of the player that starts the next round.
@@ -89,7 +89,7 @@ abstract class BaseGameService(
 
         declaredWordsCount = gameDescriptor.wordsCount
 
-        wordsLength = gameDescriptor.wordsLength
+        difficulty = gameDescriptor.difficulty
 
         manager = gameDescriptor.creator
 

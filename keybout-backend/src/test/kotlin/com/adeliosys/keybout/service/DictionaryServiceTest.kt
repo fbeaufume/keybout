@@ -1,12 +1,13 @@
 package com.adeliosys.keybout.service
 
+import com.adeliosys.keybout.model.Difficulty
+import com.adeliosys.keybout.model.GameStyle
 import com.adeliosys.keybout.model.Language
-import com.adeliosys.keybout.model.Language.*
-import com.adeliosys.keybout.model.WordLength
-import com.adeliosys.keybout.model.WordLength.*
+import com.adeliosys.keybout.model.Word
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -14,17 +15,19 @@ class DictionaryServiceTest {
 
     private val service = DictionaryService()
 
-    private val wordsByLanguageAndLength: MutableMap<Language, MutableMap<WordLength, Int>> = mutableMapOf()
+    private val wordsByLanguageAndLength: MutableMap<Language, MutableMap<Pair<GameStyle, Difficulty>, Int>> = mutableMapOf()
 
     @BeforeAll
     fun beforeAll() {
-        // Count the words for each length
+        // Count the words for each style-difficulty pair
         Language.values().forEach { lang ->
-            service.getWords(lang).forEach { word ->
-                WordLength.values().forEach { length ->
-                    if (word.length in length.getRange()) {
-                        with(wordsByLanguageAndLength.getOrPut(lang) { mutableMapOf() }) {
-                            put(length, getOrPut(length) { 0 } + 1)
+            service.getLabels(lang).forEach { value ->
+                GameStyle.values().forEach { style ->
+                    Difficulty.values().forEach { difficulty ->
+                        if (value.length in difficulty.getRange(style)) {
+                            with(wordsByLanguageAndLength.getOrPut(lang) { mutableMapOf() }) {
+                                put(Pair(style, difficulty), getOrPut(Pair(style, difficulty)) { 0 } + 1)
+                            }
                         }
                     }
                 }
@@ -32,137 +35,75 @@ class DictionaryServiceTest {
         }
     }
 
-    @Test
-    fun `count shortest en`() {
-        countWords(EN, SHORTEST)
+    @TestFactory
+    fun countWords(): List<DynamicTest> {
+        val tests = mutableListOf<DynamicTest>()
+        GameStyle.values().forEach { style ->
+            Language.values().forEach { language ->
+                Difficulty.values().forEach { difficulty ->
+                    tests.add(DynamicTest.dynamicTest("count $style $language $difficulty") {
+                        countWords(style, language, difficulty)
+                    })
+                }
+            }
+        }
+        return tests
     }
 
-    @Test
-    fun `count shorter en`() {
-        countWords(EN, SHORTER)
-    }
-
-    @Test
-    fun `count standard en`() {
-        countWords(EN, STANDARD)
-    }
-
-    @Test
-    fun `count longer en`() {
-        countWords(EN, LONGER)
-    }
-
-    @Test
-    fun `count longest en`() {
-        countWords(EN, LONGEST)
-    }
-
-    @Test
-    fun `count shortest fr`() {
-        countWords(FR, SHORTEST)
-    }
-
-    @Test
-    fun `count shorter fr`() {
-        countWords(FR, SHORTER)
-    }
-
-    @Test
-    fun `count standard fr`() {
-        countWords(FR, STANDARD)
-    }
-
-    @Test
-    fun `count longer fr`() {
-        countWords(FR, LONGER)
-    }
-
-    @Test
-    fun `count longest fr`() {
-        countWords(FR, LONGEST)
-    }
-
-    private fun countWords(language: Language, length: WordLength) {
-        val count = wordsByLanguageAndLength[language]!![length]!!
+    private fun countWords(style: GameStyle, language: Language, difficulty: Difficulty) {
+        val count = wordsByLanguageAndLength[language]!![Pair(style, difficulty)]!!
         assertTrue(count >= 500) {
-            "Not enough words for length $length in $language, found only $count"
+            "Not enough words for style $style and difficulty $difficulty in $language, found only $count"
         }
     }
 
-    @Test
-    fun `generate shortest en`() {
-        generateWords(EN, SHORTEST)
+    @TestFactory
+    fun generateWords(): List<DynamicTest> {
+        val tests = mutableListOf<DynamicTest>()
+        GameStyle.values().forEach { style ->
+            Language.values().forEach { language ->
+                Difficulty.values().forEach { difficulty ->
+                    tests.add(DynamicTest.dynamicTest("generate $style $language $difficulty") {
+                        generateWords(style, language, difficulty)
+                    })
+                }
+            }
+        }
+        return tests
     }
 
-    @Test
-    fun `generate shorter en`() {
-        generateWords(EN, SHORTER)
-    }
+    private fun generateWords(style: GameStyle, language: Language, difficulty: Difficulty) {
+        val count = 80 // Number of words to generate
 
-    @Test
-    fun `generate standard en`() {
-        generateWords(EN, STANDARD)
-    }
-
-    @Test
-    fun `generate longer en`() {
-        generateWords(EN, LONGER)
-    }
-
-    @Test
-    fun `generate longest en`() {
-        generateWords(EN, LONGEST)
-    }
-
-    @Test
-    fun `generate shortest fr`() {
-        generateWords(FR, SHORTEST)
-    }
-
-    @Test
-    fun `generate shorter fr`() {
-        generateWords(FR, SHORTER)
-    }
-
-    @Test
-    fun `generate standard fr`() {
-        generateWords(FR, STANDARD)
-    }
-
-    @Test
-    fun `generate longer fr`() {
-        generateWords(FR, LONGER)
-    }
-
-    @Test
-    fun `generate longest fr`() {
-        generateWords(FR, LONGEST)
-    }
-
-    private fun generateWords(language: Language, wordsLength: WordLength) {
-        val count = 50 // Number of words to generate
-
-        val words = service.generateWords(language, count, wordsLength)
+        val words = service.generateWords(language, count, style, difficulty)
 
         // Check the number of words
-        assertEquals(count, words.size)
+        assertEquals(count, words.size) {
+            "Words count of $count is incorrect"
+        }
 
         // Check the words length
         words.forEach {
-            assertTrue(it.length in wordsLength.getRange()) {
-                "Incorrect length of word '$it', expected between ${wordsLength.getRange().first} and ${wordsLength.getRange().last}"
+            val range = difficulty.getRange(style)
+            assertTrue(it.label.length in range) {
+                "Incorrect length of word '${it.label}', expected between ${range.first} and ${range.last}"
             }
         }
 
-        // Check that no word is the beginning of another word
-        for (i in 0 until count - 1) {
-            for (j in i + 1 until count) {
-                assertFalse(words[i].startsWith(words[j])) {
-                    "${words[i]} starts with ${words[j]}"
-                }
-                assertFalse(words[j].startsWith(words[i])) {
-                    "${words[j]} starts with ${words[i]}"
-                }
+        checkConflicts(words)
+    }
+
+}
+
+/**
+ * Check that no word is the beginning of another word.
+ */
+fun checkConflicts(words: List<Word>) {
+    val count = words.size
+    for (i in 0 until count - 1) {
+        for (j in i + 1 until count) {
+            assertFalse(words[i].conflictsWith(words[j].label)) {
+                "${words[i].display} conflicts with ${words[j].display}"
             }
         }
     }

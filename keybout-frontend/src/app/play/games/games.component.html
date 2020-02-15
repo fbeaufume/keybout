@@ -6,7 +6,7 @@
       <th scope="col">Mode</th>
       <th scope="col">Style</th>
       <th scope="col">Language</th>
-      <th scope="col">Words length</th>
+      <th scope="col">Difficulty</th>
       <th scope="col">Players</th>
       <th scope="col">&nbsp;</th>
     </tr>
@@ -15,8 +15,8 @@
     <tr *ngFor="let game of games">
       <td>{{modeLabels[game.mode].pascal}}</td>
       <td>{{styleLabels[game.style].pascal}}</td>
-      <td>{{languageLabels[game.language]}}</td>
-      <td>{{wordsLengthsLabels[game.wordsLength]}}</td>
+      <td>{{languageLabels[game.language].pascal}}</td>
+      <td>{{difficultyLabels[game.difficulty].pascal}}</td>
       <td>
         <div>{{game.creator}}</div>
         <div *ngFor="let player of game.players">{{player}}</div>
@@ -56,16 +56,15 @@
       <label for="inputLanguage" class="col-sm-2 col-form-label">Language</label>
       <div class="col-sm-3">
         <select class="form-control" id="inputLanguage" [(ngModel)]="language" name="inputLanguage">
-          <option *ngFor="let l of languages" [value]="l" [selected]="language == l">{{languageLabels[l]}}</option>
+          <option *ngFor="let l of languages" [value]="l" [selected]="language == l">{{languageLabels[l].pascal}}</option>
         </select>
       </div>
     </div>
     <div class="form-group row">
-      <label for="inputWordsLength" class="col-sm-2 col-form-label">Words length</label>
+      <label for="inputDifficulty" class="col-sm-2 col-form-label">Difficulty</label>
       <div class="col-sm-3">
-        <select class="form-control" id="inputWordsLength" [(ngModel)]="wordsLength" name="inputWordsLength">
-          <option *ngFor="let wl of wordsLengths" [value]="wl"
-                  [selected]="wordsLength == wl">{{wordsLengthsLabels[wl]}}</option>
+        <select class="form-control" id="inputDifficulty" [(ngModel)]="difficulty" name="inputDifficulty">
+          <option *ngFor="let d of difficulties" [value]="d" [selected]="difficulty == d">{{difficultyLabels[d].pascal}}</option>
         </select>
       </div>
     </div>

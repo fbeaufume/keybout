@@ -10,7 +10,7 @@ class GameDescriptor(
         mode: String,
         style: String,
         language: String,
-        wordsLength: String) {
+        difficulty: String) {
 
     companion object {
         val counter = AtomicLong()
@@ -30,5 +30,5 @@ class GameDescriptor(
 
     val wordsCount = 10
 
-    val wordsLength: WordLength = WordLength.getByCode(wordsLength)
+    val difficulty: Difficulty = Difficulty.getByCode(difficulty)
 }

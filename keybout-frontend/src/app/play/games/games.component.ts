@@ -8,8 +8,8 @@ import {
   GameStyleLabels,
   Languages,
   LanguageLabels,
-  WordLengths,
-  WordLengthLabels
+  Difficulties,
+  DifficultyLabels
 } from '../model';
 import {PlayService} from '../play.service';
 
@@ -40,12 +40,12 @@ export class GamesComponent {
   // Selected lang
   language = this.languages[0];
 
-  // Available word lengths
-  wordsLengths = WordLengths;
-  wordsLengthsLabels = WordLengthLabels;
+  // Available difficulties
+  difficulties = Difficulties;
+  difficultyLabels = DifficultyLabels;
 
-  // Selected word length
-  wordsLength = this.wordsLengths[2];
+  // Selected difficulty
+  difficulty = this.difficulties[0];
 
   constructor(public playService: PlayService) {
   }
@@ -77,7 +77,7 @@ export class GamesComponent {
 
   // Create a new game
   create() {
-    this.playService.createGame(this.mode, this.style, this.language, this.wordsLength);
+    this.playService.createGame(this.mode, this.style, this.language, this.difficulty);
   }
 
   canDeleteOrStart(id: number) {

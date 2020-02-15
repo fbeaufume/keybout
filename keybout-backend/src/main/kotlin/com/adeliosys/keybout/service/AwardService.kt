@@ -4,6 +4,7 @@ import com.adeliosys.keybout.model.Constants.FIRST_AWARD
 import com.adeliosys.keybout.model.Constants.LAST_AWARD
 import com.adeliosys.keybout.model.Constants.LONGEST_AWARD
 import com.adeliosys.keybout.model.Score
+import com.adeliosys.keybout.model.Word
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -28,12 +29,12 @@ class AwardService {
     /**
      * Initialize this service at the beginning of each round.
      */
-    fun initializeRound(words: List<String>) {
+    fun initializeRound(words: List<Word>) {
         isLongestAvailable = true
 
         latestUserName = null
 
-        longestLength = words.maxBy { it.length }!!.length
+        longestLength = words.maxBy { it.label.length }!!.label.length
     }
 
     /**

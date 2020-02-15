@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as SockJS from 'sockjs-client';
 import {Subject} from 'rxjs/internal/Subject';
-import {ClientState, GameMode, Game, Word, Score, GameModeLabels, GameStyleLabels} from './model';
+import {ClientState, GameMode, Game, Word, Score, GameModeLabels, GameStyleLabels, DifficultyLabels} from './model';
 import {environment} from '../../environments/environment';
 
 // Contains the play state and communicates with the backend (by sending actions and receiving notifications)
@@ -86,6 +86,10 @@ export class PlayService {
 
   getGameStyleLower(): string {
     return GameStyleLabels[this.game.style].lower;
+  }
+
+  getDifficultyLower(): string {
+    return DifficultyLabels[this.game.difficulty].lower;
   }
 
   connect() {
@@ -237,9 +241,9 @@ export class PlayService {
     this.socket.close();
   }
 
-  createGame(mode: string, style: string, language: string, wordsLength: string) {
+  createGame(mode: string, style: string, language: string, difficulty: string) {
     this.changeState(ClientState.CREATING);
-    this.send(`create-game ${mode} ${style} ${language} ${wordsLength}`);
+    this.send(`create-game ${mode} ${style} ${language} ${difficulty}`);
   }
 
   deleteGame() {

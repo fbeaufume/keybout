@@ -1,7 +1,8 @@
 package com.adeliosys.keybout.util
 
+import com.adeliosys.keybout.model.Difficulty
+import com.adeliosys.keybout.model.GameStyle
 import com.adeliosys.keybout.model.Language
-import com.adeliosys.keybout.model.WordLength
 import org.slf4j.LoggerFactory
 import kotlin.math.max
 
@@ -50,13 +51,15 @@ fun main() {
         logger.info("Max length: {}", maxLength)
         logger.info("Words count: {}", wordsCount)
 
-        WordLength.values().forEach { length ->
-            var count = 0;
-            val range = length.getRange()
-            for (i in range) {
-                count += wordsByCount[i]
+        GameStyle.values().forEach { style ->
+            Difficulty.values().forEach { difficulty ->
+                var count = 0;
+                val range = difficulty.getRange(style)
+                for (i in range) {
+                    count += wordsByCount[i]
+                }
+                logger.info("Available words for '{}' style and '{}' difficulty (i.e. {} to {} letters): {}", style, difficulty, range.first, range.last, count)
             }
-            logger.info("Words of length between {} and {}: {}", range.first, range.last, count)
         }
     }
 }

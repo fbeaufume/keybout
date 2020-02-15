@@ -27,6 +27,4 @@ class Action(message: String) {
     }
 
     fun checkArgumentsCount(count: Int) = arguments.size == count
-
-    fun checkMinimumArgumentsCount(count: Int) = arguments.size >= count
 }

@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
 export class DemoComponent implements OnInit {
 
   game = new Game(0, 'Chuck Norris', 'capture', 'hidden',
-    'en', 'standard', ['TheLegend27', 'Fatal1ty', 'Leeroy Jenkins']);
+    'en', 'normal', ['TheLegend27', 'Fatal1ty', 'Leeroy Jenkins']);
 
   constructor(private playService: PlayService, private router: Router) {
   }
@@ -26,7 +26,7 @@ export class DemoComponent implements OnInit {
         mode: this.game.mode,
         style: this.game.style,
         language: this.game.language,
-        wordsLength: this.game.wordsLength,
+        difficulty: this.game.difficulty,
         creator: this.game.creator
       }]);
     this.redirect();

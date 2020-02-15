@@ -44,12 +44,12 @@ class CaptureGameService(
 
         // Initialize the shared list of words
         words.clear()
-        dictionaryService.generateWords(language, effectiveWordsCount, wordsLength)
+        dictionaryService.generateWords(language, effectiveWordsCount, style, difficulty)
                 .apply {
                     awardService.initializeRound(this)
                 }
                 .forEach {
-                    words[it] = Word(it, style)
+                    words[it.label] = it
                 }
 
         availableWords = words.size

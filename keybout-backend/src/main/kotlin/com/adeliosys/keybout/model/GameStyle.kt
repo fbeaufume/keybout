@@ -13,8 +13,8 @@ enum class GameStyle(private val delay: Long) {
      */
     @SerializedName("regular")
     REGULAR(5L) {
-        override fun transform(word: String): String {
-            return word
+        override fun transform(label: String, difficulty: Difficulty): String {
+            return label
         }
     },
     /**
@@ -22,16 +22,16 @@ enum class GameStyle(private val delay: Long) {
      */
     @SerializedName("hidden")
     HIDDEN(8L) {
-        override fun transform(word: String): String {
-            val underscoreCount = when (word.length) {
-                in 1..6 -> 1
-                in 7..10 -> 2
-                else -> 3
+        override fun transform(label: String, difficulty: Difficulty): String {
+            val underscoreCount = when (difficulty) {
+                Difficulty.EASY -> 1
+                Difficulty.NORMAL -> 2
+                Difficulty.HARD -> 3
             }
 
-            var result = word
+            var result = label
             do {
-                val position = Random.nextInt(0, word.length)
+                val position = Random.nextInt(0, label.length)
                 result = result.replaceRange(position, position + 1, "_")
             } while (result.count { it == '_' } < underscoreCount)
 
@@ -39,24 +39,15 @@ enum class GameStyle(private val delay: Long) {
         }
     },
     /**
-     * Reverse the letters, e.g. "history" becomes "yrotsih".
-     */
-    @SerializedName("reverse")
-    REVERSE(7L) {
-        override fun transform(word: String): String {
-            return word.reversed()
-        }
-    },
-    /**
      * Shuffle the letters, e.g. "history" becomes "shyriot".
      */
     @SerializedName("anagram")
     ANAGRAM(10L) {
-        override fun transform(word: String): String {
+        override fun transform(label: String, difficulty: Difficulty): String {
             var result: String
             do {
-                result = String(word.toList().shuffled().toCharArray())
-            } while (result == word)
+                result = String(label.toList().shuffled().toCharArray())
+            } while (result == label)
             return result
         }
     };
@@ -69,7 +60,7 @@ enum class GameStyle(private val delay: Long) {
         }
     }
 
-    abstract fun transform(word: String): String
+    abstract fun transform(label: String, difficulty: Difficulty): String
 
     fun getExpirationDuration(wordCount: Int): Long = delay * wordCount
 }

@@ -46,7 +46,7 @@ class RaceGameService(
     override fun startCountdown() {
         super.startCountdown()
 
-        val generatedWords = dictionaryService.generateWords(language, effectiveWordsCount, wordsLength)
+        val generatedWords = dictionaryService.generateWords(language, effectiveWordsCount, style, difficulty)
 
         awardService.initializeRound(generatedWords)
 
@@ -54,7 +54,7 @@ class RaceGameService(
         words.clear()
         for (session in players) {
             val userWords = mutableMapOf<String, Word>()
-            generatedWords.forEach { userWords[it] = Word(it, style) }
+            generatedWords.forEach { userWords[it.label] = it }
             words[session.userName] = userWords
         }
 

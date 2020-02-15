@@ -19,6 +19,9 @@ export class ScoresComponent {
     return this.playService.getGameStyleLower();
   }
 
+  getDifficulty(): string {
+    return this.playService.getDifficultyLower();
+  }
 
   get state(): ClientState {
     return this.playService.state;
