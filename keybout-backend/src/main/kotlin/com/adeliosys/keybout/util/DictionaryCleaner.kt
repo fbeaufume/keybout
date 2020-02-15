@@ -11,7 +11,7 @@ private val logger = LoggerFactory.getLogger("DictionaryCleaner")
  * Clean the dictionary files, i.e. sort the words, remove duplicates, etc.
  */
 fun main(args: Array<String>) {
-    Language.values().forEach { lang ->
+    Language.realLanguages().forEach { lang ->
         logger.info("Processing '{}' dictionary", lang)
         var duration = -System.currentTimeMillis()
 

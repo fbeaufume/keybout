@@ -14,7 +14,7 @@ private const val MAX_LENGTH = 16
  * Log a summary of the content of dictionary files.
  */
 fun main() {
-    Language.values().forEach { lang ->
+    Language.realLanguages().forEach { lang ->
         logger.info("Processing '{}' dictionary", lang)
 
         // Position i contains the number of words of length i
@@ -51,10 +51,10 @@ fun main() {
         logger.info("Max length: {}", maxLength)
         logger.info("Words count: {}", wordsCount)
 
-        GameStyle.values().forEach { style ->
+        GameStyle.letterStyles().forEach { style ->
             Difficulty.values().forEach { difficulty ->
                 var count = 0;
-                val range = difficulty.getRange(style)
+                val range = difficulty.getLetterRange(style)
                 for (i in range) {
                     count += wordsByCount[i]
                 }

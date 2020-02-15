@@ -13,25 +13,23 @@ enum class GameStyle(private val delay: Long) {
      */
     @SerializedName("regular")
     REGULAR(5L) {
-        override fun transform(label: String, difficulty: Difficulty): String {
-            return label
-        }
+        override fun transform(value: String, difficulty: Difficulty): String = value
     },
     /**
      * Replace one or more letters of the word by an underscore, e.g. "history" becomes "hist_r_".
      */
     @SerializedName("hidden")
     HIDDEN(8L) {
-        override fun transform(label: String, difficulty: Difficulty): String {
+        override fun transform(value: String, difficulty: Difficulty): String {
             val underscoreCount = when (difficulty) {
                 Difficulty.EASY -> 1
                 Difficulty.NORMAL -> 2
                 Difficulty.HARD -> 3
             }
 
-            var result = label
+            var result = value
             do {
-                val position = Random.nextInt(0, label.length)
+                val position = Random.nextInt(0, value.length)
                 result = result.replaceRange(position, position + 1, "_")
             } while (result.count { it == '_' } < underscoreCount)
 
@@ -43,16 +41,25 @@ enum class GameStyle(private val delay: Long) {
      */
     @SerializedName("anagram")
     ANAGRAM(10L) {
-        override fun transform(label: String, difficulty: Difficulty): String {
+        override fun transform(value: String, difficulty: Difficulty): String {
             var result: String
             do {
-                result = String(label.toList().shuffled().toCharArray())
-            } while (result == label)
+                result = String(value.toList().shuffled().toCharArray())
+            } while (result == value)
             return result
         }
+    },
+    /**
+     * Use a calculus, e.g. "16 + 7".
+     */
+    @SerializedName("calculus")
+    CALCULUS(10L) {
+        override fun transform(value: String, difficulty: Difficulty): String = value
     };
 
     companion object {
+        fun letterStyles() = listOf(REGULAR, HIDDEN, ANAGRAM)
+
         fun getByCode(code: String) = try {
             valueOf(code.toUpperCase())
         } catch (e: Exception) {
@@ -60,7 +67,7 @@ enum class GameStyle(private val delay: Long) {
         }
     }
 
-    abstract fun transform(label: String, difficulty: Difficulty): String
+    abstract fun transform(value: String, difficulty: Difficulty): String
 
     fun getExpirationDuration(wordCount: Int): Long = delay * wordCount
 }

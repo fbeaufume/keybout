@@ -1,9 +1,12 @@
 <div class="container" *ngIf="isVisible()">
   <div *ngIf="!isGameOver(); else gameOver">
     <h4>Round over</h4>
+
     <p>Round with <span class="text-primary">{{getMode()}}</span> mode,
-      <span class="text-primary">{{getStyle()}}</span> style and
-      <span class="text-primary">{{getDifficulty()}}</span> difficulty has ended.</p>
+      <span class="text-primary">{{getStyle()}}</span> style
+      <span *ngIf="game.style != 'calculus'">, <span class="text-primary">{{getLanguage()}}</span> language</span>
+      and <span class="text-primary">{{getDifficulty()}}</span> difficulty has ended.</p>
+
     <p>Round winner is <span [ngClass]="(userName === topRoundUser)?'text-success':'text-danger'"
                              class="font-weight-bold">{{topRoundUser}}</span>.
     </p>
@@ -12,8 +15,12 @@
   </div>
   <ng-template #gameOver>
     <h4>Game over</h4>
-    <p>Game with <span class="text-primary">{{getMode()}}</span> mode and
-      <span class="text-primary">{{getStyle()}}</span> style has ended.</p>
+
+    <p>Game with <span class="text-primary">{{getMode()}}</span> mode,
+      <span class="text-primary">{{getStyle()}}</span> style
+      <span *ngIf="game.style != 'calculus'">, <span class="text-primary">{{getLanguage()}}</span> language</span>
+      and <span class="text-primary">{{getDifficulty()}}</span> difficulty has ended.</p>
+
     <p>Game winner is <span [ngClass]="(userName === topGameUser)?'text-success':'text-danger'"
                             class="font-weight-bold">{{topGameUser}}</span>.
     </p>
@@ -27,7 +34,7 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Name</th>
-          <th scope="col">Words</th>
+          <th scope="col">Score</th>
           <th scope="col">Speed</th>
           <th scope="col">Awards</th>
         </tr>

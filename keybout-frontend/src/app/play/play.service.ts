@@ -1,7 +1,17 @@
 import {Injectable} from '@angular/core';
 import * as SockJS from 'sockjs-client';
 import {Subject} from 'rxjs/internal/Subject';
-import {ClientState, GameMode, Game, Word, Score, GameModeLabels, GameStyleLabels, DifficultyLabels} from './model';
+import {
+  ClientState,
+  GameMode,
+  Game,
+  Word,
+  Score,
+  GameModeLabels,
+  GameStyleLabels,
+  LanguageLabels,
+  DifficultyLabels
+} from './model';
 import {environment} from '../../environments/environment';
 
 // Contains the play state and communicates with the backend (by sending actions and receiving notifications)
@@ -86,6 +96,10 @@ export class PlayService {
 
   getGameStyleLower(): string {
     return GameStyleLabels[this.game.style].lower;
+  }
+
+  getLanguageLower(): string {
+    return LanguageLabels[this.game.language].lower;
   }
 
   getDifficultyLower(): string {
@@ -307,8 +321,8 @@ export class PlayService {
       if (userName === '') {
         availableWords++;
       }
-      const label = word[0];
-      this.wordsMap.set(label, new Word(label, userName, word[2]));
+      const value = word[0];
+      this.wordsMap.set(value, new Word(value, userName, word[2]));
     });
 
     this.wordsArray = Array.from(this.wordsMap.values());
@@ -349,7 +363,7 @@ export class PlayService {
     if (this.roundId > 1) {
       this.gameScores.forEach(score => {
         if (this.roundScoresByUser.get(score.userName).speed >= score.speed) {
-          score.progress = ' \u2B9D';
+          score.progress = ' \u2B06';
         }
       });
     }

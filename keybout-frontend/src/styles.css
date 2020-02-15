@@ -6,7 +6,7 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-.larger {
+a.larger {
   font-size: 130%;
 }
 
@@ -83,4 +83,8 @@ h5 {
 
 .connecting span:nth-child(3) {
   animation-delay: 0.4s;
+}
+
+button.larger {
+  width: 140px;
 }

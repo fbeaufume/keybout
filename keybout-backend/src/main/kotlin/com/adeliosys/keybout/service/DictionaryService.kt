@@ -1,5 +1,6 @@
 package com.adeliosys.keybout.service
 
+import com.adeliosys.keybout.model.Constants.MAX_GENERATOR_ATTEMPTS
 import com.adeliosys.keybout.model.Constants.MAX_WORD_LENGTH
 import com.adeliosys.keybout.model.Constants.MIN_WORD_LENGTH
 import com.adeliosys.keybout.model.Difficulty
@@ -19,16 +20,16 @@ class DictionaryService {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    private var labelsByLang = mutableMapOf<Language, MutableList<String>>()
+    private var valuesByLang = mutableMapOf<Language, MutableList<String>>()
 
     init {
-        Language.values().forEach { loadLabels(it) }
+        Language.realLanguages().forEach { loadValues(it) }
     }
 
     /**
-     * Load the labels for one language.
+     * Load the values for one language.
      */
-    private fun loadLabels(language: Language) {
+    private fun loadValues(language: Language) {
         logger.debug("Loading '{}' words", language)
 
         val words = mutableListOf<String>()
@@ -41,44 +42,56 @@ class DictionaryService {
 
         logger.info("Loaded {} '{}' words", words.size, language)
 
-        labelsByLang[language] = words
+        valuesByLang[language] = words
     }
 
     /**
-     * Return the labels of a given language.
+     * Return the values of a given language.
      */
-    fun getLabels(language: Language): List<String> {
-        return labelsByLang[language]!!
+    fun getValues(language: Language): List<String> {
+        return valuesByLang[language]!!
     }
 
     /**
      * Generate random words.
      */
-    fun generateWords(language: Language, count: Int, style: GameStyle, difficulty: Difficulty): List<Word> {
-        val possibleLabels = getLabels(language)
+    fun generateWords(language: Language, count: Int, style: GameStyle, difficulty: Difficulty): Pair<List<Word>, Int> {
+        val possibleValues = getValues(language)
         val selectedWords = mutableListOf<Word>()
+        var attempts = 0
 
-        while (selectedWords.size < count) {
-            val label = possibleLabels[Random.nextInt(0, possibleLabels.size)]
+        while (selectedWords.size < count && attempts < MAX_GENERATOR_ATTEMPTS) {
+            val value = possibleValues[Random.nextInt(0, possibleValues.size)]
 
             // Check the word length
-            if (label.length !in difficulty.getRange(style)) {
+            if (value.length !in difficulty.getLetterRange(style)) {
                 continue
             }
 
-            // Check if the selected word does not conflict with another word
-            var conflict = false
-            for (word in selectedWords) {
-                if (word.conflictsWith(label)) {
-                    conflict = true
-                    break
-                }
-            }
-            if (!conflict) {
-                selectedWords.add(Word(label, style.transform(label, difficulty)))
+            addIfNoConflict(value, selectedWords, style, difficulty)
+
+            attempts++
+        }
+
+        return Pair(selectedWords, attempts)
+    }
+
+    /**
+     * Add a word to the list of words, only if the word does not conflict with any other words.
+     */
+    private fun addIfNoConflict(value: String, words: MutableList<Word>, style: GameStyle, difficulty: Difficulty) {
+        var conflict = false
+
+        for (word in words) {
+            if (word.conflictsWith(value)) {
+                conflict = true
+                break
             }
         }
 
-        return selectedWords
+        if (!conflict) {
+            words.add(Word(value, style.transform(value, difficulty)))
+        }
     }
 }
+

@@ -11,6 +11,8 @@ import java.time.Instant
  * Base class for the various game types.
  */
 abstract class BaseGameService(
+        private val dictionaryService: DictionaryService,
+        private val calculusService: CalculusService,
         protected val awardService: AwardService,
         private val scheduler: ThreadPoolTaskScheduler) {
 
@@ -98,6 +100,13 @@ abstract class BaseGameService(
         players.forEach { userScores[it.userName] = Score(it.userName) }
     }
 
+    fun generateWords(): List<Word> {
+        return when (style) {
+            GameStyle.CALCULUS -> calculusService.generateOperations(effectiveWordsCount, difficulty).first
+            else -> dictionaryService.generateWords(language, effectiveWordsCount, style, difficulty).first
+        }
+    }
+
     /**
      * Start the countdown for the next round.
      */
@@ -131,7 +140,7 @@ abstract class BaseGameService(
 
     /**
      * Utility method that returns a UI friendly map of words,
-     * i.e. the key is the word label and the value is the assigned user name (or empty).
+     * i.e. the map key is the word value and the map value is the assigned user name (or empty).
      */
     fun getWordsDto(words: Map<String, Word>): List<Array<String>> = words.map { arrayOf(it.key, it.value.userName, it.value.display) }.toList()
 
@@ -139,7 +148,7 @@ abstract class BaseGameService(
      * Update the game state after a player completely typed a word.
      * @return true if the game is over
      */
-    abstract fun claimWord(session: WebSocketSession, label: String): Boolean
+    abstract fun claimWord(session: WebSocketSession, value: String): Boolean
 
     /**
      * Game rounds naturally expire after some time. When it happens, this method is called

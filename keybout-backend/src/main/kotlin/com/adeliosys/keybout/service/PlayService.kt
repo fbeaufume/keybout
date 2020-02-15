@@ -161,10 +161,10 @@ class PlayService(private val applicationContext: ApplicationContext) {
     /**
      * A user typed a complete word.
      */
-    fun claimWord(session: WebSocketSession, label: String) {
+    fun claimWord(session: WebSocketSession, value: String) {
         val game = runningGames[session.gameId]
         if (game != null) {
-            if (game.claimWord(session, label)) {
+            if (game.claimWord(session, value)) {
                 endGame(game.id)
             }
         }

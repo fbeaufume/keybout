@@ -17,15 +17,16 @@ import org.springframework.web.socket.WebSocketSession
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class RaceGameService(
-        private val dictionaryService: DictionaryService,
+        dictionaryService: DictionaryService,
+        calculusService: CalculusService,
         private val playService: PlayService,
         awardService: AwardService,
-        scheduler: ThreadPoolTaskScheduler) : BaseGameService(awardService, scheduler) {
+        scheduler: ThreadPoolTaskScheduler) : BaseGameService(dictionaryService, calculusService, awardService, scheduler) {
 
     /**
      * Remaining words for each user.
      * The key of the map is the player name.
-     * The key of the sub-map is the word label.
+     * The key of the sub-map is the word value.
      */
     private var words: MutableMap<String, MutableMap<String, Word>> = mutableMapOf()
 
@@ -46,7 +47,7 @@ class RaceGameService(
     override fun startCountdown() {
         super.startCountdown()
 
-        val generatedWords = dictionaryService.generateWords(language, effectiveWordsCount, style, difficulty)
+        val generatedWords = generateWords()
 
         awardService.initializeRound(generatedWords)
 
@@ -54,7 +55,7 @@ class RaceGameService(
         words.clear()
         for (session in players) {
             val userWords = mutableMapOf<String, Word>()
-            generatedWords.forEach { userWords[it.label] = it }
+            generatedWords.forEach { userWords[it.value] = it }
             words[session.userName] = userWords
         }
 
@@ -71,10 +72,10 @@ class RaceGameService(
     }
 
     @Synchronized
-    override fun claimWord(session: WebSocketSession, label: String): Boolean {
+    override fun claimWord(session: WebSocketSession, value: String): Boolean {
         if (!isRoundOver()) {
             val userName = session.userName
-            val word = words[userName]?.get(label)
+            val word = words[userName]?.get(value)
             val score = userScores[userName]
 
             // Ensure that the word is available
@@ -84,7 +85,7 @@ class RaceGameService(
                 // Add 1 point to the user score
                 score.incrementPoints()
 
-                awardService.checkAwards(score, label, false)
+                awardService.checkAwards(score, value, false)
 
                 // Has the player finished
                 if (score.points >= effectiveWordsCount) {

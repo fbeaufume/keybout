@@ -10,13 +10,30 @@ enum class Language(val code: String) {
     @SerializedName("en")
     EN("en"),
     @SerializedName("fr")
-    FR("fr");
+    FR("fr"),
+    @SerializedName("none")
+    NONE("none");
 
     companion object {
-        fun getByCode(code: String) = try {
-            valueOf(code.toUpperCase())
+        fun realLanguages() = listOf(EN, FR)
+
+        fun getByCode(code: String, style: GameStyle) = try {
+            var language = valueOf(code.toUpperCase())
+
+            if (style == GameStyle.CALCULUS) {
+                // Calculus style does not use any language
+                language = NONE
+            }
+            else if (language == NONE) {
+                // Other styles require a real language
+                language = default
+            }
+
+            language
         } catch (e: Exception) {
-            EN
+            default
         }
+
+        private val default = EN;
     }
 }

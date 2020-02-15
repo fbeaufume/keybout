@@ -34,7 +34,7 @@ class GameStartNotification : BaseNotification(Constants.NOTIFICATION_GAME_START
  * Sent when a round begins or the state of a word changes.
  */
 class WordsListNotification(
-        // The string array contains: the word label (e.g. 'dog'), the user who caught it or empty (e.g. ''),
+        // The string array contains: the word value (e.g. 'dog'), the user who caught it or empty (e.g. ''),
         // the word display (e.g. 'do_')
         val words: List<Array<String>>) : BaseNotification(Constants.NOTIFICATION_WORDS_LIST)
 

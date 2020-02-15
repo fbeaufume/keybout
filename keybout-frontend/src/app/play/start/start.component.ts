@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ClientState} from '../model';
+import {ClientState, Game} from '../model';
 import {PlayService} from '../play.service';
 
 const COUNTDOWN = 5; // Total duration of the countdown
@@ -30,12 +30,20 @@ export class StartComponent {
     return this.playService.getGameStyleLower();
   }
 
+  getLanguage(): string {
+    return this.playService.getLanguageLower();
+  }
+
   getDifficulty(): string {
     return this.playService.getDifficultyLower();
   }
 
   get state(): ClientState {
     return this.playService.state;
+  }
+
+  get game(): Game {
+    return this.playService.game;
   }
 
   // Is this component visible

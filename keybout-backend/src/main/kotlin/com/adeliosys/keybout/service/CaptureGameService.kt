@@ -15,13 +15,14 @@ import org.springframework.web.socket.WebSocketSession
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class CaptureGameService(
-        private val dictionaryService: DictionaryService,
+        dictionaryService: DictionaryService,
+        calculusService: CalculusService,
         private val playService: PlayService,
         awardService: AwardService,
-        scheduler: ThreadPoolTaskScheduler) : BaseGameService(awardService, scheduler) {
+        scheduler: ThreadPoolTaskScheduler) : BaseGameService(dictionaryService, calculusService, awardService, scheduler) {
 
     /**
-     * Shared words by label. Used to keep track of who captured what.
+     * Shared words by value. Used to keep track of who captured what.
      */
     private var words: MutableMap<String, Word> = mutableMapOf()
 
@@ -44,12 +45,12 @@ class CaptureGameService(
 
         // Initialize the shared list of words
         words.clear()
-        dictionaryService.generateWords(language, effectiveWordsCount, style, difficulty)
+        generateWords()
                 .apply {
                     awardService.initializeRound(this)
                 }
                 .forEach {
-                    words[it.label] = it
+                    words[it.value] = it
                 }
 
         availableWords = words.size
@@ -63,10 +64,10 @@ class CaptureGameService(
     }
 
     @Synchronized
-    override fun claimWord(session: WebSocketSession, label: String): Boolean {
+    override fun claimWord(session: WebSocketSession, value: String): Boolean {
         if (!isRoundOver()) {
             val userName = session.userName
-            val word = words[label]
+            val word = words[value]
             val score = userScores[userName]
 
             // Ensure that the word is available
@@ -79,13 +80,13 @@ class CaptureGameService(
                 availableWords--
 
                 if (isRoundOver()) {
-                    awardService.checkAwards(score, label, true)
+                    awardService.checkAwards(score, value, true)
 
                     endRound()
 
                     return isGameOver()
                 } else {
-                    awardService.checkAwards(score, label, false)
+                    awardService.checkAwards(score, value, false)
 
                     sendMessage(players, WordsListNotification(getWordsDto(words)))
                 }

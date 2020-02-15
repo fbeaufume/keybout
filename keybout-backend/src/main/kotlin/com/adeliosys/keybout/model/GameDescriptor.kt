@@ -26,7 +26,7 @@ class GameDescriptor(
 
     val style: GameStyle = GameStyle.getByCode(style)
 
-    val language: Language = Language.getByCode(language)
+    val language: Language = Language.getByCode(language, this.style)
 
     val wordsCount = 10
 

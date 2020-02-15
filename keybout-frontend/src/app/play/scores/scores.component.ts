@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ClientState, Score} from '../model';
+import {ClientState, Game, Score} from '../model';
 import {PlayService} from '../play.service';
 
 @Component({
@@ -19,12 +19,20 @@ export class ScoresComponent {
     return this.playService.getGameStyleLower();
   }
 
+  getLanguage(): string {
+    return this.playService.getLanguageLower();
+  }
+
   getDifficulty(): string {
     return this.playService.getDifficultyLower();
   }
 
   get state(): ClientState {
     return this.playService.state;
+  }
+
+  get game(): Game {
+    return this.playService.game;
   }
 
   get userName(): string {

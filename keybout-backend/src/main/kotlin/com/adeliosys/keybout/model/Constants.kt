@@ -54,9 +54,14 @@ object Constants {
     const val MIN_WORD_LENGTH = 3
 
     /**
-     * Maximum lenght of words loaded from the dictionary files.
+     * Maximum length of words loaded from the dictionary files.
      */
-    const val MAX_WORD_LENGTH = 14
+    const val MAX_WORD_LENGTH = 9
+
+    /**
+     * Maximum number of attempts when generating words.
+     */
+    const val MAX_GENERATOR_ATTEMPTS = 500
 
     /**
      * Name of a fictional player used to take available words when a game round expires.

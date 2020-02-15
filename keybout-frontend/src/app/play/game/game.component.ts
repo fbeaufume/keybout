@@ -43,11 +43,11 @@ export class GameComponent {
   getClass(label: string) {
     switch (this.playService.wordsMap.get(label).userName) {
       case '':
-        return 'btn btn-primary btn-lg mr-2 mb-2';
+        return 'btn btn-primary btn-lg mr-2 mb-2 larger';
       case this.playService.userName:
-        return 'btn btn-success btn-lg mr-2 mb-2';
+        return 'btn btn-success btn-lg mr-2 mb-2 larger';
       default:
-        return 'btn btn-danger btn-lg mr-2 mb-2';
+        return 'btn btn-danger btn-lg mr-2 mb-2 larger';
     }
   }
 

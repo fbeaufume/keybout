@@ -1,8 +1,11 @@
 package com.adeliosys.keybout.model
 
-class Word(val label: String, val display: String) {
+/**
+ * A word or other type or expression (such as a calculus) typed by a user.
+ */
+class Word(val value: String, val display: String) {
 
     var userName = ""
 
-    fun conflictsWith(otherLabel: String): Boolean = label.startsWith(otherLabel) || otherLabel.startsWith(label)
+    fun conflictsWith(otherValue: String): Boolean = value.startsWith(otherValue) || otherValue.startsWith(value)
 }

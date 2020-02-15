@@ -34,7 +34,7 @@ class AwardService {
 
         latestUserName = null
 
-        longestLength = words.maxBy { it.label.length }!!.label.length
+        longestLength = words.maxBy { it.value.length }!!.value.length
     }
 
     /**

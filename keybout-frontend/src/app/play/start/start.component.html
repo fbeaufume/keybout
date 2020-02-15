@@ -1,8 +1,9 @@
 <div class="container" *ngIf="isVisible()">
   <h4>Get ready</h4>
   <p class="text-center">Round with <span class="text-primary">{{getMode()}}</span> mode,
-    <span class="text-primary">{{getStyle()}}</span> style and
-    <span class="text-primary">{{getDifficulty()}}</span> difficulty is about to start...</p>
+    <span class="text-primary">{{getStyle()}}</span> style
+    <span *ngIf="game.style != 'calculus'">, <span class="text-primary">{{getLanguage()}}</span> language</span>
+    and <span class="text-primary">{{getDifficulty()}}</span> difficulty is about to start...</p>
   <br>
   <h1 class="countdown">{{countdown}}</h1>
   <br>

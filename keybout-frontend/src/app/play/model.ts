@@ -29,19 +29,21 @@ export const GameModeLabels = {
   race: {pascal: 'Race', lower: 'race'}
 };
 
-export const GameStyles = ['regular', 'hidden', 'anagram'];
+export const GameStyles = ['regular', 'hidden', 'anagram', 'calculus'];
 
 export const GameStyleLabels = {
   regular: {pascal: 'Regular', lower: 'regular'},
   hidden: {pascal: 'Hidden', lower: 'hidden'},
-  anagram: {pascal: 'Anagram', lower: 'anagram'}
+  anagram: {pascal: 'Anagram', lower: 'anagram'},
+  calculus: {pascal: 'Calculus', lower: 'calculus'}
 };
 
 export const Languages = ['en', 'fr'];
 
 export const LanguageLabels = {
   en: {pascal: 'English', lower: 'english'},
-  fr: {pascal: 'French', lower: 'french'}
+  fr: {pascal: 'French', lower: 'french'},
+  none: {pascal: '-', lower: '-'}
 };
 
 export const Difficulties = ['easy', 'normal', 'hard'];
@@ -73,12 +75,12 @@ export class Game {
 }
 
 export class Word {
-  label: string;
+  value: string;
   userName: string;
   display: string;
 
-  constructor(label: string, userName: string, display: string) {
-    this.label = label;
+  constructor(value: string, userName: string, display: string) {
+    this.value = value;
     this.userName = userName;
     this.display = display;
   }
@@ -87,7 +89,7 @@ export class Word {
     if (this.userName === '') {
       return this.display;
     } else {
-      return this.label;
+      return this.value;
     }
   }
 }
