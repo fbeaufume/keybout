@@ -2,9 +2,7 @@ package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.Constants.MAX_GENERATOR_ATTEMPTS
 import com.adeliosys.keybout.model.Difficulty
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.fail
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.TestInstance
@@ -42,7 +40,7 @@ class CalculusServiceTest {
         }
 
         // Check the number of attempts
-        Assertions.assertTrue(attempts <= MAX_GENERATOR_ATTEMPTS / 2) {
+        assertTrue(attempts <= MAX_GENERATOR_ATTEMPTS / 2) {
             "Attempts count of $attempts is too high"
         }
 
@@ -59,7 +57,6 @@ class CalculusServiceTest {
             val operator: (Int, Int) -> Int = when (val part = parts[1]) {
                 "+" -> { a, b -> a + b }
                 "-" -> { a, b -> a - b }
-                "*" -> { a, b -> a * b }
                 else -> {
                     fail("Unknown operator '$part'")
                 }

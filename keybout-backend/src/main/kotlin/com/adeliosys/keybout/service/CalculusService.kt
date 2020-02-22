@@ -20,29 +20,21 @@ class CalculusService {
         val words = mutableListOf<Word>()
         var attempts = 0
 
-//        println("-----------------------------------------") // TODO
-
         while (words.size < count && attempts < MAX_GENERATOR_ATTEMPTS) {
-            val word = when (Random.nextInt(3)) {
+            val word = when (Random.nextInt(2)) {
                 0 -> {
                     // Generate an addition
-                    val p = Pair(Random.nextInt(difficulty.additionLeftRange), Random.nextInt(difficulty.additionRightRange))
+                    val p = Pair(Random.nextInt(difficulty.additionRanges.first), Random.nextInt(difficulty.additionRanges.second))
                     Word("${p.first + p.second}", "${p.first} + ${p.second}")
                 }
-                1 -> {
-                    // Generate a subtraction
-                    val p = Pair(Random.nextInt(difficulty.subtractionLeftRange), Random.nextInt(difficulty.subtractionRightRange))
-                    Word("${p.first - p.second}", "${p.first} - ${p.second}")
-                }
                 else -> {
-                    // Generate a multiplication
-                    val p = Pair(Random.nextInt(difficulty.multiplicationLeftRange), Random.nextInt(difficulty.multiplicationRightRange))
-                    Word("${p.first * p.second}", "${p.first} * ${p.second}")
+                    // Generate a subtraction
+                    val p = Pair(Random.nextInt(difficulty.subtractionRanges.first), Random.nextInt(difficulty.subtractionRanges.second))
+                    Word("${p.first - p.second}", "${p.first} - ${p.second}")
                 }
             }
 
             addIfNoConflict(word, words)
-//            println("display=${word.display}     value=${word.value}     count=${words.size}     attempt=$attempts") // TODO
 
             attempts++
         }
