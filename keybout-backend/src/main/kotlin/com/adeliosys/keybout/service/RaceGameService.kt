@@ -49,7 +49,7 @@ class RaceGameService(
 
         val generatedWords = generateWords()
 
-        awardService.initializeRound(generatedWords)
+        awardService.initializeRound(style.isLetterStyle, generatedWords)
 
         // Initialize the words list for each user
         words.clear()

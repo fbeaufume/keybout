@@ -6,20 +6,20 @@ import kotlin.random.Random
 /**
  * Styles are used to change the display of words, to make games a little more challenging.
  */
-enum class GameStyle(private val delay: Long) {
+enum class GameStyle(val isLetterStyle: Boolean, private val delay: Long) {
 
     /**
      * The word is unchanged, e.g. "history" remains "history".
      */
     @SerializedName("regular")
-    REGULAR(5L) {
+    REGULAR(true, 5L) {
         override fun transform(value: String, difficulty: Difficulty): String = value
     },
     /**
      * Replace one or more letters of the word by an underscore, e.g. "history" becomes "hist_r_".
      */
     @SerializedName("hidden")
-    HIDDEN(8L) {
+    HIDDEN(true, 8L) {
         override fun transform(value: String, difficulty: Difficulty): String {
             val underscoreCount = when (difficulty) {
                 Difficulty.EASY -> 1
@@ -40,7 +40,7 @@ enum class GameStyle(private val delay: Long) {
      * Shuffle the letters, e.g. "history" becomes "shyriot".
      */
     @SerializedName("anagram")
-    ANAGRAM(10L) {
+    ANAGRAM(true, 10L) {
         override fun transform(value: String, difficulty: Difficulty): String {
             var result: String
             do {
@@ -53,12 +53,12 @@ enum class GameStyle(private val delay: Long) {
      * Use a calculus, e.g. "16 + 7".
      */
     @SerializedName("calculus")
-    CALCULUS(10L) {
+    CALCULUS(false, 10L) {
         override fun transform(value: String, difficulty: Difficulty): String = value
     };
 
     companion object {
-        fun letterStyles() = listOf(REGULAR, HIDDEN, ANAGRAM)
+        val letterStyles = values().filter { it.isLetterStyle }
 
         fun getByCode(code: String) = try {
             valueOf(code.toUpperCase())

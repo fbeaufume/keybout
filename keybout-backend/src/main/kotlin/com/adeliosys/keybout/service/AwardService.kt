@@ -20,21 +20,26 @@ class AwardService {
     // The latest user who won a word, used to track the "first" awards
     var latestUserName: String? = null
 
-    // Length of the longest word, used to track the "longest" award
-    var longestLength = 0
-
     // Used to prevent the "longest" award to be given multiple times
     var isLongestAvailable = true
+
+    // Length of the longest word, used to track the "longest" award
+    var longestLength = 0
 
     /**
      * Initialize this service at the beginning of each round.
      */
-    fun initializeRound(words: List<Word>) {
-        isLongestAvailable = true
-
+    fun initializeRound(trackLongest: Boolean, words: List<Word>) {
         latestUserName = null
 
-        longestLength = words.maxBy { it.value.length }!!.value.length
+        if (trackLongest) {
+            isLongestAvailable = true
+
+            longestLength = words.maxBy { it.value.length }!!.value.length
+        }
+        else {
+            isLongestAvailable = false
+        }
     }
 
     /**

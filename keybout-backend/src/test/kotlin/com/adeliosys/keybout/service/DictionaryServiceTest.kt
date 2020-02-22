@@ -27,7 +27,7 @@ class DictionaryServiceTest {
         // Count the words for each style-difficulty pair
         Language.realLanguages().forEach { lang ->
             service.getValues(lang).forEach { value ->
-                GameStyle.letterStyles().forEach { style ->
+                GameStyle.letterStyles.forEach { style ->
                     Difficulty.values().forEach { difficulty ->
                         if (value.length in difficulty.getLetterRange(style)) {
                             with(wordsByLanguageAndLength.getOrPut(lang) { mutableMapOf() }) {
@@ -43,7 +43,7 @@ class DictionaryServiceTest {
     @TestFactory
     fun countWords(): List<DynamicTest> {
         val tests = mutableListOf<DynamicTest>()
-        GameStyle.letterStyles().forEach { style ->
+        GameStyle.letterStyles.forEach { style ->
             Language.realLanguages().forEach { language ->
                 Difficulty.values().forEach { difficulty ->
                     tests.add(DynamicTest.dynamicTest("count $style $language $difficulty") {
@@ -65,7 +65,7 @@ class DictionaryServiceTest {
     @TestFactory
     fun generateWords(): List<DynamicTest> {
         val tests = mutableListOf<DynamicTest>()
-        GameStyle.letterStyles().forEach { style ->
+        GameStyle.letterStyles.forEach { style ->
             Language.realLanguages().forEach { language ->
                 Difficulty.values().forEach { difficulty ->
                     tests.add(DynamicTest.dynamicTest("generate $style $language $difficulty") {

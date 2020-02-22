@@ -46,8 +46,8 @@ class CaptureGameService(
         // Initialize the shared list of words
         words.clear()
         generateWords()
-                .apply {
-                    awardService.initializeRound(this)
+                .also {
+                    awardService.initializeRound(this.style.isLetterStyle, it)
                 }
                 .forEach {
                     words[it.value] = it
