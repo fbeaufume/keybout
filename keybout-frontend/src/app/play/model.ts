@@ -100,5 +100,5 @@ export class Score {
   speed: number;
   awards: number;
   awardsNames: string[];
-  progress: string;
+  progress: boolean;
 }
