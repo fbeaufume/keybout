@@ -362,12 +362,7 @@ export class PlayService {
     PlayService.log(`roundId=${this.roundId}`);
     if (this.roundId > 1) {
       this.gameScores.forEach(score => {
-        if (this.roundScoresByUser.get(score.userName).speed >= score.speed) {
-          score.progress = true;
-        }
-        else {
-          score.progress = false;
-        }
+        score.progress = this.roundScoresByUser.get(score.userName).speed >= score.speed;
       });
     }
   }

@@ -16,6 +16,7 @@ import {ScoresComponent} from './play/scores/scores.component';
 import {DemoComponent} from './demo/demo.component';
 import {DocumentationComponent} from './documentation/documentation.component';
 import {AboutComponent} from './about/about.component';
+import { StatsComponent } from './stats/stats.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {AboutComponent} from './about/about.component';
     ScoresComponent,
     DemoComponent,
     DocumentationComponent,
-    AboutComponent
+    AboutComponent,
+    StatsComponent
   ],
   imports: [
     BrowserModule,
