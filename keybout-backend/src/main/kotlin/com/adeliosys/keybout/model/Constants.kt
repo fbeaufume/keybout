@@ -69,6 +69,10 @@ object Constants {
     const val FICTIONAL_PLAYER_NAME = "-"
 
     /**
+     * Maximum number of scores.
+     */
+    const val SCORES_LENGTH = 10
+    /**
      * GSON instance used by several classes.
      */
     val GSON = Gson()

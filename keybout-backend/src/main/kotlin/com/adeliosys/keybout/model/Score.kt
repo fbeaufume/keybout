@@ -9,7 +9,7 @@ class Score(val userName: String) {
     // Number of words caught in a round
     var points = 0
 
-    // Timestamp of the latest word won, used in capture games only
+    // Timestamp of the latest word won
     private var latestWordTimestamp = getTimestamp()
 
     // Number of words/min for the round, used in capture games only
@@ -21,11 +21,26 @@ class Score(val userName: String) {
     // Number of rounds won
     var victories = 0
 
-    // Timestamp of the latest victory, used in capture games only
+    // Timestamp of the latest victory
     var latestVictoryTimestamp = getTimestamp()
 
-    // Best number of words/min so far, used in capture games only
+    // Best number of words/min so far in the game
     var bestSpeed = 0.0f
+
+    // Rank position, 0 means not ranke (used only in race games)
+    var topRank = 0
+
+    // Top speed, if ranked (used only in race games)
+    var topSpeed = 0.0f
+
+    constructor(userName: String, speed: Float): this(userName) {
+        this.speed = speed
+    }
+
+    constructor(rank: Int, speed: Float): this("") {
+        topRank = rank
+        topSpeed = speed
+    }
 
     fun resetPoints() {
         points = 0
@@ -49,12 +64,20 @@ class Score(val userName: String) {
     /**
      * Update words/min and durations once all words are caught.
      */
-    fun update(roundStart: Long) {
+    fun updateSpeeds(roundStart: Long) {
         speed = if (points > 0) 60000.0f * points / (latestWordTimestamp - roundStart) else 0.0f
 
         if (bestSpeed <= 0 || bestSpeed < speed) {
             bestSpeed = speed
         }
+    }
+
+    /**
+     * Update the top rank and top speed.
+     */
+    fun updateTops(rank: Int, speed: Float) {
+        topRank = rank;
+        topSpeed = speed;
     }
 
     private fun getTimestamp() = System.currentTimeMillis()
@@ -64,3 +87,8 @@ class Score(val userName: String) {
  * DTO used for notifications sent to the frontend.
  */
 class ScoreDto(val userName: String, val points: Int, val speed: Float, val awards: Int?)
+
+/**
+ * Score of a ranked player.
+ */
+data class TopScore(val userName: String = "", val speed: Float = 0.0f)

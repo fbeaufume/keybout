@@ -163,7 +163,7 @@ abstract class BaseGameService(
      */
     fun updateScores() {
         // Update the words/min and best words/min
-        userScores.values.forEach { it.update(roundStart) }
+        userScores.values.forEach { it.updateSpeeds(roundStart) }
 
         // Get the sorted round scores
         roundScores = userScores.values.sortedWith(compareBy({ -it.points }, { -it.speed }))
