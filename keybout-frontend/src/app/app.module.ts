@@ -12,11 +12,11 @@ import {ConnectComponent} from './play/connect/connect.component';
 import {GamesComponent} from './play/games/games.component';
 import {StartComponent} from './play/start/start.component';
 import {GameComponent} from './play/game/game.component';
-import {ScoresComponent} from './play/scores/scores.component';
+import {ResultComponent} from './play/result/result.component';
 import {DemoComponent} from './demo/demo.component';
 import {DocumentationComponent} from './documentation/documentation.component';
 import {AboutComponent} from './about/about.component';
-import { StatsComponent } from './stats/stats.component';
+import {StatsComponent} from './stats/stats.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { StatsComponent } from './stats/stats.component';
     GamesComponent,
     StartComponent,
     GameComponent,
-    ScoresComponent,
+    ResultComponent,
     DemoComponent,
     DocumentationComponent,
     AboutComponent,

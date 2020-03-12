@@ -4,9 +4,9 @@ import {PlayService} from '../play.service';
 
 @Component({
   selector: 'app-scores',
-  templateUrl: './scores.component.html'
+  templateUrl: './result.component.html'
 })
-export class ScoresComponent {
+export class ResultComponent {
 
   constructor(public playService: PlayService) {
   }
