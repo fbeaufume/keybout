@@ -1,0 +1,54 @@
+<div class="container">
+  <h4>Top scores in race mode</h4>
+  <div class="row mb-2">
+    <div class="col-2">Style</div>
+    <div class="col-2">Language</div>
+  </div>
+  <div class="row mb-4">
+    <div class="col-2">
+      <select class="form-control" id="inputStyle" [(ngModel)]="style" name="inputStyle">
+        <option *ngFor="let s of styles" [value]="s" [selected]="style == s">{{styleLabels[s].pascal}}</option>
+      </select>
+    </div>
+    <div class="col-2">
+      <select class="form-control" id="inputLanguage" [(ngModel)]="language" name="inputLanguage">
+        <option *ngFor="let l of languages" [value]="l" [selected]="language == l">{{languageLabels[l].pascal}}</option>
+      </select>
+    </div>
+    <div class="col-2">
+      <button class="btn btn-primary" (click)="reload()">Reload</button>
+    </div>
+  </div>
+
+  <div *ngIf="(scores$ | async) as scores">
+    <table class="table w-auto">
+      <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th colspan="2">Easy</th>
+        <th colspan="2">Normal</th>
+        <th colspan="2">Hard</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>#</td>
+        <td>Player</td>
+        <td>Speed</td>
+        <td>Player</td>
+        <td>Speed</td>
+        <td>Player</td>
+        <td>Speed</td>
+      </tr>
+      <tr *ngFor="let score of scores; let i = index">
+        <td>{{i + 1}}</td>
+        <td>{{score[0].userName}}</td>
+        <td>{{score[0].speed}}</td>
+        <td>{{score[1].userName}}</td>
+        <td>{{score[1].speed}}</td>
+        <td>{{score[2].userName}}</td>
+        <td>{{score[2].speed}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

@@ -3,7 +3,7 @@ import {ClientState, Game, Score} from '../model';
 import {PlayService} from '../play.service';
 
 @Component({
-  selector: 'app-scores',
+  selector: 'app-result',
   templateUrl: './result.component.html'
 })
 export class ResultComponent {

@@ -13,13 +13,17 @@ class ScoreController(private val scoreService: ScoreService) {
 
     @GetMapping("/scores")
     fun getTopScoresStats(
-            @RequestParam(required = false, defaultValue = "REGULAR") style: GameStyle,
-            @RequestParam(required = false, defaultValue = "EN") language: Language,
+            @RequestParam(required = false, defaultValue = "") style: String,
+            @RequestParam(required = false, defaultValue = "") language: String,
             @RequestParam(required = false, defaultValue = "") difficulty: String
-    ): List<TopScoresDto> =
-            if (difficulty.isEmpty()) {
-                scoreService.getTopScores(style, language)
-            } else {
-                scoreService.getTopScores(style, language, Difficulty.getByCode(difficulty))
-            }
+    ): List<TopScoresDto> {
+        val s = GameStyle.getByCode(style)
+        val l = Language.getByCode(language, s)
+
+        return if (difficulty.isEmpty()) {
+            scoreService.getTopScores(s, l)
+        } else {
+            scoreService.getTopScores(s, l, Difficulty.getByCode(difficulty))
+        }
+    }
 }

@@ -91,7 +91,7 @@ class ScoreDto(val userName: String, val points: Int, val speed: Float, val awar
 /**
  * Score of a ranked player.
  */
-data class TopScore(val userName: String = "", val speed: Float = 0.0f)
+data class TopScore(val userName: String = "-", val speed: Float = 0.0f)
 
 /**
  * DTO used to send all the top scores for a given category.
