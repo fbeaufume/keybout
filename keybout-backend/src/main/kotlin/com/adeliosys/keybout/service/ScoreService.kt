@@ -15,9 +15,14 @@ class ScoreService(val size: Int = SCORES_LENGTH) {
     private val topScoresByType: MutableMap<Type, MutableList<TopScore>> = mutableMapOf()
 
     @Synchronized
-    fun getTopScores(style: GameStyle, language: Language, difficulty: Difficulty): List<TopScore> =
-            // Duplicate the list to prevent concurrency issues
-            getTopScoresInternal(style, language, difficulty).toList()
+    fun getTopScores(style: GameStyle, language: Language): List<TopScoresDto> =
+            MutableList(Difficulty.values().size) {
+                TopScoresDto(style, language, Difficulty.values()[it], getTopScoresInternal(style, language, Difficulty.values()[it]))
+            }
+
+    @Synchronized
+    fun getTopScores(style: GameStyle, language: Language, difficulty: Difficulty): List<TopScoresDto> =
+            listOf(TopScoresDto(style, language, difficulty, getTopScoresInternal(style, language, difficulty)))
 
     private fun getTopScoresInternal(style: GameStyle, language: Language, difficulty: Difficulty): MutableList<TopScore> =
             topScoresByType.getOrPut(Type(style, language, difficulty)) {

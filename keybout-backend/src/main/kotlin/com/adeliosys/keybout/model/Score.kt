@@ -27,7 +27,7 @@ class Score(val userName: String) {
     // Best number of words/min so far in the game
     var bestSpeed = 0.0f
 
-    // Rank position, 0 means not ranke (used only in race games)
+    // Rank position, 0 means not ranked (used only in race games)
     var topRank = 0
 
     // Top speed, if ranked (used only in race games)
@@ -92,3 +92,12 @@ class ScoreDto(val userName: String, val points: Int, val speed: Float, val awar
  * Score of a ranked player.
  */
 data class TopScore(val userName: String = "", val speed: Float = 0.0f)
+
+/**
+ * DTO used to send all the top scores for a given category.
+ */
+class TopScoresDto(val style: GameStyle, val language: Language, val difficulty: Difficulty, scores: List<TopScore>) {
+
+    // Duplicate the lists to prevent concurrency issues
+    val scores = scores.toList()
+}

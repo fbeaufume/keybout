@@ -167,6 +167,6 @@ class ScoreServiceTest {
     }
 
     private fun verifyTopScores(style: GameStyle, language: Language, difficulty: Difficulty, vararg expectedScores: TopScore) {
-        assertEquals(expectedScores.asList(), service.getTopScores(style, language, difficulty))
+        assertEquals(expectedScores.asList(), service.getTopScores(style, language, difficulty)[0].scores)
     }
 }
