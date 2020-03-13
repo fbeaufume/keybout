@@ -3,10 +3,10 @@ import {ClientState, Game, Score} from '../model';
 import {PlayService} from '../play.service';
 
 @Component({
-  selector: 'app-result',
-  templateUrl: './result.component.html'
+  selector: 'app-results',
+  templateUrl: './results.component.html'
 })
-export class ResultComponent {
+export class ResultsComponent {
 
   constructor(public playService: PlayService) {
   }

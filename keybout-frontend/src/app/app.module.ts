@@ -12,7 +12,7 @@ import {ConnectComponent} from './play/connect/connect.component';
 import {GamesComponent} from './play/games/games.component';
 import {StartComponent} from './play/start/start.component';
 import {GameComponent} from './play/game/game.component';
-import {ResultComponent} from './play/result/result.component';
+import {ResultsComponent} from './play/results/results.component';
 import {DemoComponent} from './demo/demo.component';
 import {ScoresComponent} from './scores/scores.component';
 import {StatsComponent} from './stats/stats.component';
@@ -28,7 +28,7 @@ import {AboutComponent} from './about/about.component';
     GamesComponent,
     StartComponent,
     GameComponent,
-    ResultComponent,
+    ResultsComponent,
     DemoComponent,
     ScoresComponent,
     StatsComponent,
