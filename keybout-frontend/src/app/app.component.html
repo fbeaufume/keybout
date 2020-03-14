@@ -15,6 +15,18 @@
           <a routerLinkActive="white" class="nav-link ml-2" routerLink="/play">Play</a>
         </li>
 
+        <li *ngIf="isAdmin()" class="nav-item">
+          <a class="nav-link" routerLink="/demo" routerLinkActive="white">Demo</a>
+        </li>
+
+        <li *ngIf="isAdmin()" class="nav-item">
+          <a class="nav-link" routerLink="/scores" routerLinkActive="white">Scores</a>
+        </li>
+
+        <li *ngIf="isAdmin()" class="nav-item">
+          <a class="nav-link" routerLink="/stats" routerLinkActive="white">Stats</a>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link" routerLink="/docs" routerLinkActive="white">Docs</a>
         </li>

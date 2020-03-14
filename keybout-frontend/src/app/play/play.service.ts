@@ -20,6 +20,8 @@ import {environment} from '../../environments/environment';
 })
 export class PlayService {
 
+  static adminMode = localStorage.getItem('admin') === 'true';
+
   state: ClientState;
 
   socket: SockJS; // lazy initialized during the first "Connect"
@@ -75,9 +77,9 @@ export class PlayService {
   // Number of available words, used to display a wait message at the end of a race game round
   availableWords = 0;
 
-  // Logs are active during development or when typing "window.keyboutLogging=true" in the console
+  // Logs are active during development or when using the admin mode
   static log(message: string) {
-    if (!environment.production || (window as any).keyboutLogging) {
+    if (!environment.production || this.adminMode) {
       console.log(`PlayService: ${message}`);
     }
   }

@@ -19,6 +19,10 @@ export class AppComponent {
     return this.playService.userName;
   }
 
+  isAdmin(): boolean {
+    return PlayService.adminMode;
+  }
+
   quit() {
     this.playService.quit();
   }
