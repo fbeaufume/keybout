@@ -154,7 +154,7 @@ class ScoreServiceTest {
 
     private fun updateTopScores(vararg scores: Score): List<Score> {
         return scores.asList().also {
-            service.updateTopScores(REGULAR, EN, NORMAL, it)
+            service.updateTopScores(REGULAR, EN, NORMAL, it, 0)
         }
     }
 

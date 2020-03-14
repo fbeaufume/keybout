@@ -14,6 +14,7 @@ abstract class BaseGameService(
         private val dictionaryService: DictionaryService,
         private val calculusService: CalculusService,
         protected val awardService: AwardService,
+        private val scoreService: ScoreService,
         private val scheduler: ThreadPoolTaskScheduler) {
 
     var id: Long = 0
@@ -173,6 +174,13 @@ abstract class BaseGameService(
 
         // Get the sorted game scores
         gameScores = userScores.values.sortedWith(compareBy({ -it.victories }, { -it.bestSpeed }, { it.latestVictoryTimestamp }))
+    }
+
+    /**
+     * Update the top scores.
+     */
+    fun updateTopScores() {
+        scoreService.updateTopScores(style, language, difficulty, roundScores, effectiveWordsCount)
     }
 
     /**

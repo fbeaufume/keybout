@@ -6,12 +6,12 @@
   </div>
   <div class="row mb-4">
     <div class="col-2">
-      <select class="form-control" id="inputStyle" [(ngModel)]="style" name="inputStyle">
+      <select class="form-control" id="inputStyle" [(ngModel)]="style" name="inputStyle" (change)="reload()">
         <option *ngFor="let s of styles" [value]="s" [selected]="style == s">{{styleLabels[s].pascal}}</option>
       </select>
     </div>
     <div class="col-2">
-      <select class="form-control" id="inputLanguage" [(ngModel)]="language" name="inputLanguage">
+      <select class="form-control" id="inputLanguage" [(ngModel)]="language" name="inputLanguage" (change)="reload()">
         <option *ngFor="let l of languages" [value]="l" [selected]="language == l">{{languageLabels[l].pascal}}</option>
       </select>
     </div>
@@ -42,12 +42,12 @@
       </tr>
       <tr *ngFor="let score of scores; let i = index">
         <td>{{i + 1}}</td>
-        <td>{{score[0].userName}}</td>
-        <td>{{score[0].speed}}</td>
-        <td>{{score[1].userName}}</td>
-        <td>{{score[1].speed}}</td>
-        <td>{{score[2].userName}}</td>
-        <td>{{score[2].speed}}</td>
+        <td [ngClass]="{'text-primary font-weight-bold': userName === score[0].userName}">{{score[0].userName}}</td>
+        <td [ngClass]="{'text-primary font-weight-bold': userName === score[0].userName}">{{score[0].speed  | number:'1.1-1'}}</td>
+        <td [ngClass]="{'text-primary font-weight-bold': userName === score[1].userName}">{{score[1].userName}}</td>
+        <td [ngClass]="{'text-primary font-weight-bold': userName === score[1].userName}">{{score[1].speed  | number:'1.1-1'}}</td>
+        <td [ngClass]="{'text-primary font-weight-bold': userName === score[2].userName}">{{score[2].userName}}</td>
+        <td [ngClass]="{'text-primary font-weight-bold': userName === score[2].userName}">{{score[2].speed  | number:'1.1-1'}}</td>
       </tr>
     </table>
   </div>

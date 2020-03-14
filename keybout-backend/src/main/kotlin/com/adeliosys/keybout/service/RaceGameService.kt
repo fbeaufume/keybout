@@ -21,7 +21,8 @@ class RaceGameService(
         calculusService: CalculusService,
         private val playService: PlayService,
         awardService: AwardService,
-        scheduler: ThreadPoolTaskScheduler) : BaseGameService(dictionaryService, calculusService, awardService, scheduler) {
+        scoreService: ScoreService,
+        scheduler: ThreadPoolTaskScheduler) : BaseGameService(dictionaryService, calculusService, awardService, scoreService, scheduler) {
 
     /**
      * Remaining words for each user.
@@ -150,7 +151,11 @@ class RaceGameService(
      * The round ended, updates the scores and send them to the players.
      */
     private fun endRound() {
+        // First update and sort the round and game scores
         updateScores()
+
+        // Then update the top scores
+        updateTopScores()
 
         val roundScoresDto = getRoundScoresDto()
         val gameScoresDto = getGameScoresDto()

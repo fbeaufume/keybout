@@ -33,61 +33,65 @@ class ScoreService(val size: Int = SCORES_LENGTH) {
      * Update the stored top scores with some round scores (that are expected to be sorted by decreasing speed).
      */
     @Synchronized
-    fun updateTopScores(style: GameStyle, language: Language, difficulty: Difficulty, scores: List<Score>) {
+    fun updateTopScores(style: GameStyle, language: Language, difficulty: Difficulty, scores: List<Score>, wordsCount: Int) {
         val topScores = getTopScoresInternal(style, language, difficulty)
 
         // Since the round scores are sorted by decreasing speed, a single pass is enough
         scores.forEach { score ->
-            var previousRank = 0 // one-indexed, 0 means not ranked
-            var newRank = 0 // one-indexed, 0 means not ranked
-            var speed = 0.0f
+            // Ignore scores that did not caught all words
+            if (score.points == wordsCount) {
 
-            // Find the previous and new rank of the player
-            for (i in topScores.size - 1 downTo 0) {
-                val topScore = topScores[i]
+                var previousRank = 0 // one-indexed, 0 means not ranked
+                var newRank = 0 // one-indexed, 0 means not ranked
+                var speed = 0.0f
 
-                if (score.userName == topScore.userName) {
-                    previousRank = i + 1
-                    speed = topScore.speed
+                // Find the previous and new rank of the player
+                for (i in topScores.size - 1 downTo 0) {
+                    val topScore = topScores[i]
+
+                    if (score.userName == topScore.userName) {
+                        previousRank = i + 1
+                        speed = topScore.speed
+                    }
+
+                    val nextTopScore = if (i > 0) topScores[i - 1] else TopScore("", Float.MAX_VALUE)
+
+                    if (score.speed > topScore.speed && score.speed <= nextTopScore.speed) {
+                        newRank = i + 1
+                        speed = score.speed
+                    }
                 }
 
-                val nextTopScore = if (i > 0) topScores[i - 1] else TopScore("", Float.MAX_VALUE)
-
-                if (score.speed > topScore.speed && score.speed <= nextTopScore.speed) {
-                    newRank = i + 1
-                    speed = score.speed
+                // The new rank cannot be worst the the previous rank
+                if (newRank > 0 && previousRank > 0 && newRank > previousRank) {
+                    newRank = 0
                 }
-            }
 
-            // The new rank cannot be worst the the previous rank
-            if (newRank > 0 && previousRank > 0 && newRank > previousRank) {
-                newRank = 0
-            }
+                // Update the top scores
+                if (newRank > 0) {
+                    when {
+                        previousRank == 0 -> {
+                            topScores.add(newRank - 1, TopScore(score.userName, speed))
 
-            // Update the top scores
-            if (newRank > 0) {
-                when {
-                    previousRank == 0 -> {
-                        topScores.add(newRank - 1, TopScore(score.userName, speed))
-
-                        if (topScores.size > size) {
-                            topScores.removeAt(size)
+                            if (topScores.size > size) {
+                                topScores.removeAt(size)
+                            }
+                        }
+                        previousRank > newRank -> {
+                            topScores.removeAt(previousRank - 1)
+                            topScores.add(newRank - 1, TopScore(score.userName, speed))
+                        }
+                        previousRank == newRank -> {
+                            topScores[previousRank - 1] = TopScore(score.userName, speed)
                         }
                     }
-                    previousRank > newRank -> {
-                        topScores.removeAt(previousRank - 1)
-                        topScores.add(newRank - 1, TopScore(score.userName, speed))
-                    }
-                    previousRank == newRank -> {
-                        topScores[previousRank - 1] = TopScore(score.userName, speed)
-                    }
                 }
-            }
 
-            // Update the player score
-            val rank = if (newRank > 0) newRank else previousRank
-            if (rank > 0) {
-                score.updateTops(rank, speed)
+                // Update the player score
+                val rank = if (newRank > 0) newRank else previousRank
+                if (rank > 0) {
+                    score.updateTops(rank, speed)
+                }
             }
         }
     }

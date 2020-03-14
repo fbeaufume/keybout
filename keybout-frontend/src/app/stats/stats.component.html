@@ -1,10 +1,10 @@
 <div class="container">
   <h4>Statistics</h4>
   <p>
-    <button class="btn btn-primary" (click)="reload()">Reload</button>
+    <button class="btn btn-primary mb-2" (click)="reload()">Reload</button>
   </p>
   <div *ngIf="(stats$ | async) as stats">
-    <table class="table w-auto">
+    <table class="table w-auto mb-3">
       <thead>
       <tr>
         <th scope="col">&nbsp;</th>
@@ -16,9 +16,9 @@
       <tbody>
       <tr>
         <td>Users</td>
-        <td>{{stats.users['current-count']}}</td>
-        <td>{{stats.users['max-count']}}</td>
-        <td>{{stats.users['total-count']}}</td>
+        <td>{{stats['users']['current-count']}}</td>
+        <td>{{stats['users']['max-count']}}</td>
+        <td>{{stats['users']['total-count']}}</td>
       </tr>
       <tr>
         <td>Declared games</td>
@@ -33,6 +33,6 @@
         <td>{{stats['running-games']['total-count']}}</td>
       </tr>
     </table>
-    <p>Uptime: {{stats.uptime}}</p>
+    <p>Uptime: {{stats['uptime']}}</p>
   </div>
 </div>

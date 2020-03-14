@@ -19,7 +19,8 @@ class CaptureGameService(
         calculusService: CalculusService,
         private val playService: PlayService,
         awardService: AwardService,
-        scheduler: ThreadPoolTaskScheduler) : BaseGameService(dictionaryService, calculusService, awardService, scheduler) {
+        scoreService: ScoreService,
+        scheduler: ThreadPoolTaskScheduler) : BaseGameService(dictionaryService, calculusService, awardService, scoreService, scheduler) {
 
     /**
      * Shared words by value. Used to keep track of who captured what.

@@ -1,16 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 import {GameStyleLabels, GameStyles, LanguageLabels, Languages} from '../play/model';
+import {PlayService} from '../play/play.service';
 
 @Component({
   selector: 'app-scores',
   templateUrl: './scores.component.html'
 })
-export class ScoresComponent implements OnInit {
+export class ScoresComponent {
 
-  constructor(private readonly http: HttpClient) {
+  constructor(private readonly http: HttpClient, public playService: PlayService) {
   }
 
   // Available game styles
@@ -40,7 +41,8 @@ export class ScoresComponent implements OnInit {
       return this.transpose(scores);
     }));
 
-  ngOnInit() {
+  get userName(): string {
+    return this.playService.userName;
   }
 
   reload() {
