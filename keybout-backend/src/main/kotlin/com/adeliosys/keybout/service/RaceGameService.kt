@@ -56,7 +56,7 @@ class RaceGameService(
         words.clear()
         for (session in players) {
             val userWords = mutableMapOf<String, Word>()
-            generatedWords.forEach { userWords[it.value] = it }
+            generatedWords.forEach { userWords[it.value] = it.copy() }
             words[session.userName] = userWords
         }
 
