@@ -19,7 +19,7 @@ enum class GameStyle(val isLetterStyle: Boolean, private val delay: Long) {
      * Replace one or more letters of the word by an underscore, e.g. "history" becomes "hist_r_".
      */
     @SerializedName("hidden")
-    HIDDEN(true, 8L) {
+    HIDDEN(true, 15L) {
         override fun transform(value: String, difficulty: Difficulty): String {
             val underscoreCount = when (difficulty) {
                 Difficulty.EASY -> 1
@@ -40,7 +40,7 @@ enum class GameStyle(val isLetterStyle: Boolean, private val delay: Long) {
      * Shuffle the letters, e.g. "history" becomes "shyriot".
      */
     @SerializedName("anagram")
-    ANAGRAM(true, 10L) {
+    ANAGRAM(true, 20L) {
         override fun transform(value: String, difficulty: Difficulty): String {
             var result: String
             do {
