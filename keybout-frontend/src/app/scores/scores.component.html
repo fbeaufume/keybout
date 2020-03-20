@@ -6,13 +6,13 @@
   </div>
   <div class="row mb-4">
     <div class="col-2">
-      <select class="form-control" id="inputStyle" [(ngModel)]="style" name="inputStyle" (change)="reload()">
-        <option *ngFor="let s of styles" [value]="s" [selected]="style == s">{{styleLabels[s].pascal}}</option>
+      <select class="form-control" id="inputStyle" [(ngModel)]="scoreTypeForm.style" name="inputStyle" (change)="styleChanged()">
+        <option *ngFor="let s of scoreTypeForm.styles" [value]="s" [selected]="scoreTypeForm.style == s">{{scoreTypeForm.styleLabels[s].pascal}}</option>
       </select>
     </div>
     <div class="col-2">
-      <select class="form-control" id="inputLanguage" [(ngModel)]="language" name="inputLanguage" (change)="reload()">
-        <option *ngFor="let l of languages" [value]="l" [selected]="language == l">{{languageLabels[l].pascal}}</option>
+      <select class="form-control" id="inputLanguage" [disabled]="scoreTypeForm.isLanguageDisabled()" [(ngModel)]="scoreTypeForm.language" name="inputLanguage" (change)="reload()">
+        <option *ngFor="let l of scoreTypeForm.languages" [value]="l" [selected]="scoreTypeForm.language == l">{{scoreTypeForm.languageLabels[l].pascal}}</option>
       </select>
     </div>
     <div class="col-2">

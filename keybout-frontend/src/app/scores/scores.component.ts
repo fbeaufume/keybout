@@ -2,18 +2,10 @@ import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
-import {GameStyleLabels, GameStyles, LanguageLabels, Languages} from '../play/model';
+import {GameStyle, GameStyleLabels, GameStyles, Language, LanguageLabels, Languages} from '../play/model';
 import {PlayService} from '../play/play.service';
 
-@Component({
-  selector: 'app-scores',
-  templateUrl: './scores.component.html'
-})
-export class ScoresComponent {
-
-  constructor(private readonly http: HttpClient, public playService: PlayService) {
-  }
-
+class ScoreTypeForm {
   // Available game styles
   styles = GameStyles;
   styleLabels = GameStyleLabels;
@@ -28,13 +20,44 @@ export class ScoresComponent {
   // Selected lang
   language = this.languages[0];
 
+  // Previously selected lang
+  previousLanguage = this.language;
+
+  styleChanged() {
+    // Switching to a style without language
+    if (this.style === GameStyle.CALCULUS) {
+      this.previousLanguage = this.language;
+      this.language = Language.NONE;
+    }
+    // Switching to a style with language
+    if (this.style !== GameStyle.CALCULUS && this.language === Language.NONE) {
+      this.language = this.previousLanguage;
+    }
+  }
+
+  isLanguageDisabled() {
+    return this.language === '-';
+  }
+}
+
+@Component({
+  selector: 'app-scores',
+  templateUrl: './scores.component.html'
+})
+export class ScoresComponent {
+
+  constructor(private readonly http: HttpClient, public playService: PlayService) {
+  }
+
+  scoreTypeForm = new ScoreTypeForm();
+
   readonly reload$ = new BehaviorSubject(undefined);
 
   readonly scores$ = this.reload$.pipe(
     switchMap(() => this.http.get('/api/scores', {
       params: {
-        style: this.style,
-        language: this.language
+        style: this.scoreTypeForm.style,
+        language: this.scoreTypeForm.language
       }
     })),
     map(scores => {
@@ -43,6 +66,11 @@ export class ScoresComponent {
 
   get userName(): string {
     return this.playService.userName;
+  }
+
+  styleChanged() {
+    this.scoreTypeForm.styleChanged();
+    this.reload();
   }
 
   reload() {

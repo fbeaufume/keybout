@@ -29,7 +29,14 @@ export const GameModeLabels = {
   race: {pascal: 'Race', lower: 'race'}
 };
 
-export const GameStyles = ['regular', 'hidden', 'anagram', 'calculus'];
+export enum GameStyle {
+  REGULAR = 'regular',
+  HIDDEN = 'hidden',
+  ANAGRAM = 'anagram',
+  CALCULUS = 'calculus'
+}
+
+export const GameStyles = [GameStyle.REGULAR, GameStyle.HIDDEN, GameStyle.ANAGRAM, GameStyle.CALCULUS];
 
 export const GameStyleLabels = {
   regular: {pascal: 'Regular', lower: 'regular'},
@@ -38,7 +45,13 @@ export const GameStyleLabels = {
   calculus: {pascal: 'Calculus', lower: 'calculus'}
 };
 
-export const Languages = ['en', 'fr'];
+export enum Language {
+  EN = 'en',
+  FR = 'fr',
+  NONE = '-'
+}
+
+export const Languages = [Language.EN, Language.FR];
 
 export const LanguageLabels = {
   en: {pascal: 'English', lower: 'english'},
