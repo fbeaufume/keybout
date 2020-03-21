@@ -25,28 +25,28 @@
       <thead>
       <tr>
         <th>&nbsp;</th>
-        <th colspan="2">Easy</th>
-        <th colspan="2">Normal</th>
-        <th colspan="2">Hard</th>
+        <th colspan="2"><span class="ml-5">Easy</span></th>
+        <th colspan="2"><span class="ml-5">Normal</span></th>
+        <th colspan="2"><span class="ml-5">Hard</span></th>
       </tr>
       </thead>
       <tbody>
       <tr>
         <td>#</td>
-        <td>Player</td>
+        <td><span class="ml-5">Player</span></td>
         <td>Speed</td>
-        <td>Player</td>
+        <td><span class="ml-5">Player</span></td>
         <td>Speed</td>
-        <td>Player</td>
+        <td><span class="ml-5">Player</span></td>
         <td>Speed</td>
       </tr>
       <tr *ngFor="let score of scores; let i = index">
         <td>{{i + 1}}</td>
-        <td [ngClass]="{'text-primary font-weight-bold': userName === score[0].userName}">{{score[0].userName}}</td>
+        <td [ngClass]="{'text-primary font-weight-bold': userName === score[0].userName}"><span class="ml-5">{{score[0].userName}}</span></td>
         <td [ngClass]="{'text-primary font-weight-bold': userName === score[0].userName}">{{score[0].speed  | number:'1.1-1'}}</td>
-        <td [ngClass]="{'text-primary font-weight-bold': userName === score[1].userName}">{{score[1].userName}}</td>
+        <td [ngClass]="{'text-primary font-weight-bold': userName === score[1].userName}"><span class="ml-5">{{score[1].userName}}</span></td>
         <td [ngClass]="{'text-primary font-weight-bold': userName === score[1].userName}">{{score[1].speed  | number:'1.1-1'}}</td>
-        <td [ngClass]="{'text-primary font-weight-bold': userName === score[2].userName}">{{score[2].userName}}</td>
+        <td [ngClass]="{'text-primary font-weight-bold': userName === score[2].userName}"><span class="ml-5">{{score[2].userName}}</span></td>
         <td [ngClass]="{'text-primary font-weight-bold': userName === score[2].userName}">{{score[2].speed  | number:'1.1-1'}}</td>
       </tr>
     </table>
