@@ -19,7 +19,7 @@ enum class GameStyle(val isLetterStyle: Boolean, private val delay: Long) {
      * Replace one or more letters of the word by an underscore, e.g. "history" becomes "hist_r_".
      */
     @SerializedName("hidden")
-    HIDDEN(true, 15L) {
+    HIDDEN(true, 10L) {
         override fun transform(value: String, difficulty: Difficulty): String {
             val underscoreCount = when (difficulty) {
                 Difficulty.EASY -> 1

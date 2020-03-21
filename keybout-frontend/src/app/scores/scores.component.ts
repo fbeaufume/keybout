@@ -36,7 +36,7 @@ class ScoreTypeForm {
   }
 
   isLanguageDisabled() {
-    return this.language === '-';
+    return this.language === Language.NONE;
   }
 }
 

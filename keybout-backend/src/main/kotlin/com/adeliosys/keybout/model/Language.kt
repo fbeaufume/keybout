@@ -17,8 +17,12 @@ enum class Language(val code: String) {
     companion object {
         fun realLanguages() = listOf(EN, FR)
 
-        fun getByCode(code: String, style: GameStyle) = try {
-            var language = valueOf(code.toUpperCase())
+        fun getByCode(code: String, style: GameStyle): Language {
+            var language = try {
+                valueOf(code.toUpperCase())
+            } catch (e: Exception) {
+                default
+            }
 
             if (style == GameStyle.CALCULUS) {
                 // Calculus style does not use any language
@@ -29,9 +33,7 @@ enum class Language(val code: String) {
                 language = default
             }
 
-            language
-        } catch (e: Exception) {
-            default
+            return language
         }
 
         private val default = EN;

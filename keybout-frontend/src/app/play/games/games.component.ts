@@ -1,24 +1,21 @@
 import {Component} from '@angular/core';
 import {
   ClientState,
-  Game,
-  GameModes,
-  GameModeLabels,
-  GameStyles,
-  GameStyleLabels,
-  Languages,
-  LanguageLabels,
   Difficulties,
-  DifficultyLabels
+  DifficultyLabels,
+  Game,
+  GameModeLabels,
+  GameModes,
+  GameStyle,
+  GameStyleLabels,
+  GameStyles,
+  Language,
+  LanguageLabels,
+  Languages
 } from '../model';
 import {PlayService} from '../play.service';
 
-@Component({
-  selector: 'app-games',
-  templateUrl: './games.component.html'
-})
-export class GamesComponent {
-
+class GameForm {
   // Available game modes
   modes = GameModes;
   modeLabels = GameModeLabels;
@@ -40,6 +37,9 @@ export class GamesComponent {
   // Selected lang
   language = this.languages[0];
 
+  // Previously selected lang
+  previousLanguage = this.language;
+
   // Available difficulties
   difficulties = Difficulties;
   difficultyLabels = DifficultyLabels;
@@ -47,8 +47,33 @@ export class GamesComponent {
   // Selected difficulty
   difficulty = this.difficulties[0];
 
+  styleChanged() {
+    // Switching to a style without language
+    if (this.style === GameStyle.CALCULUS) {
+      this.previousLanguage = this.language;
+      this.language = Language.NONE;
+    }
+    // Switching to a style with language
+    if (this.style !== GameStyle.CALCULUS && this.language === Language.NONE) {
+      this.language = this.previousLanguage;
+    }
+  }
+
+  isLanguageDisabled() {
+    return this.language === Language.NONE;
+  }
+}
+
+@Component({
+  selector: 'app-games',
+  templateUrl: './games.component.html'
+})
+export class GamesComponent {
+
   constructor(public playService: PlayService) {
   }
+
+  gameForm = new GameForm();
 
   get state(): ClientState {
     return this.playService.state;
@@ -75,9 +100,13 @@ export class GamesComponent {
     return this.state === ClientState.LOBBY;
   }
 
+  styleChanged() {
+    this.gameForm.styleChanged();
+  }
+
   // Create a new game
   create() {
-    this.playService.createGame(this.mode, this.style, this.language, this.difficulty);
+    this.playService.createGame(this.gameForm.mode, this.gameForm.style, this.gameForm.language, this.gameForm.difficulty);
   }
 
   canDeleteOrStart(id: number) {

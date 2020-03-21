@@ -48,7 +48,7 @@ export const GameStyleLabels = {
 export enum Language {
   EN = 'en',
   FR = 'fr',
-  NONE = '-'
+  NONE = 'none'
 }
 
 export const Languages = [Language.EN, Language.FR];
