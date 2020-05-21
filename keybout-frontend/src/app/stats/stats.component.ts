@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
+import {Stats} from "../play/model";
 
 @Component({
   selector: 'app-stats',
@@ -14,7 +15,7 @@ export class StatsComponent implements OnInit {
 
   readonly reload$ = new BehaviorSubject(undefined);
 
-  readonly stats$ = this.reload$.pipe(switchMap(() => this.http.get('/api/stats')));
+  readonly stats$: Observable<Stats> = this.reload$.pipe(switchMap(() => this.http.get<Stats>('/api/stats')));
 
   ngOnInit() {
   }

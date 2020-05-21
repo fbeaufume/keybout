@@ -115,3 +115,15 @@ export class Score {
   awardsNames: string[];
   progress: boolean;
 }
+
+export class Stats {
+  users: StatsItem;
+  declaredGames: StatsItem;
+  runningGames: StatsItem;
+}
+
+export class StatsItem {
+  currentCount: number;
+  maxCount: number;
+  totalCount: number;
+}
