@@ -29,3 +29,6 @@ or use your IDE.
 To build a single deployable fat jar containing the whole application,
 run `mvnw package -Pfull` from the home folder then use `keybout-backend/target/keybout-backend.jar`.
 Omit `-Pfull` if you prefer to separate the fontend and backend packages.
+
+The application uses an optional MongoDB database to persist some data,
+if the `spring.data.mongodb.uri` is defined.
