@@ -23,6 +23,7 @@ import org.springframework.core.env.Environment
 @EnableConfigurationProperties(MongoProperties::class)
 @ConditionalOnMissingBean(type = ["org.springframework.data.mongodb.MongoDbFactory"])
 @ConditionalOnProperty("spring.data.mongodb.uri")
+// TODO FBE simplify this
 class MongoConfig {
 
     @Bean

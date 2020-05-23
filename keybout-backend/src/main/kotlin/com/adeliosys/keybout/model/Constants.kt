@@ -72,6 +72,12 @@ object Constants {
      * Maximum number of scores.
      */
     const val SCORES_LENGTH = 10
+
+    /**
+     * Id of the persistent stats entity.
+     */
+    const val STATS_ID = "5ec9104a248e1b74a55cb6b3"
+
     /**
      * GSON instance used by several classes.
      */

@@ -12,4 +12,9 @@ class StatsController(private val statsService: StatsService) {
 
     @GetMapping("/stats")
     fun getStats(): StatsDto = statsService.getStats()
+
+    @GetMapping("/stats/save")
+    fun saveStats() {
+        statsService.saveStats()
+    }
 }
