@@ -22,3 +22,5 @@ spring.profiles: dev
 
 logging.level:
   com.adeliosys: TRACE
+
+# TODO FBE add a cloud profile for Heroku without date and time in the log

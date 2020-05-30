@@ -5,4 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.mongodb.repository.MongoRepository
 
 @ConditionalOnProperty("spring.data.mongodb.uri")
-interface StatsRepository : MongoRepository<Stats, String>
+interface StatsRepository : MongoRepository<Stats, String> {
+
+    fun findByDataType(dataType: String): Stats?
+}

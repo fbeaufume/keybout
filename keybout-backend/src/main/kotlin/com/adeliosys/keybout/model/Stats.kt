@@ -6,23 +6,26 @@ import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
 
 // TODO FBE add a last update date
+// TODO FBE add the uptime
 @Document(collection = "keybout_stats")
 @TypeAlias("Stats")
 class Stats(
-        @Id var id: String,
-        var type: String,
+        @Id var id: String?,
+        var dataType: String,
         var users: StatsItem,
         var declaredGames: StatsItem,
         var runningGames: StatsItem) {
-    constructor() : this("", "", StatsItem(), StatsItem(), StatsItem())
+    constructor() : this(null, "", StatsItem(), StatsItem(), StatsItem())
 
     constructor(
-            id: String,
-            type: String,
+            id: String?,
+            dataType: String,
             usersCounter: Counter,
             declaredGamesCounter: Counter,
             runningGamesCounter: Counter) :
-            this(id, type, StatsItem(usersCounter), StatsItem(declaredGamesCounter), StatsItem(runningGamesCounter))
+            this(id, dataType, StatsItem(usersCounter), StatsItem(declaredGamesCounter), StatsItem(runningGamesCounter))
+
+    fun describe() = "id=$id, users=${users.maxCount}/${users.totalCount}, declared=${declaredGames.maxCount}/${declaredGames.totalCount}, running=${runningGames.maxCount}/${runningGames.totalCount}"
 }
 
 class StatsItem(val maxCount: Int, val totalCount: Int) {

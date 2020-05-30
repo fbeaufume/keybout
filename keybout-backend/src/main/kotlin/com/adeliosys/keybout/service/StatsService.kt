@@ -1,13 +1,13 @@
 package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.api.PlayController
-import com.adeliosys.keybout.model.Constants.STATS_ID
 import com.adeliosys.keybout.model.Stats
 import com.adeliosys.keybout.model.StatsDto
 import com.adeliosys.keybout.repository.StatsRepository
 import com.adeliosys.keybout.util.getUptimeString
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
@@ -20,43 +20,61 @@ class StatsService(
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
+    @Value("\${application.data-type:dev}")
+    private lateinit var dataType: String
+
+    /**
+     * Generated ID of the persisted stats document.
+     */
+    private var id: String? = null
+
     @PostConstruct
     private fun postConstruct() {
-        logger.info("{} database persistence of stats", if (statsRepository == null) "Without" else "With")
+        logger.info("{} database persistence of stats and '{}' data type", if (statsRepository == null) "Without" else "With", dataType)
+        loadStats()
+    }
 
-        // Load the stats from the DB
-        statsRepository?.findById(STATS_ID)?.ifPresent { stats ->
-            logger.info("Loaded stats: users = {} / {}, declaredGames = {} / {}, runningGames = {} / {}",
-                    stats.users.maxCount,
-                    stats.users.totalCount,
-                    stats.declaredGames.maxCount,
-                    stats.declaredGames.totalCount,
-                    stats.runningGames.maxCount,
-                    stats.runningGames.totalCount)
-            playController.usersCounter.initialize(stats.users)
-            playService.declaredGamesCounter.initialize(stats.declaredGames)
-            playService.runningGamesCounter.initialize(stats.runningGames)
+    /**
+     * Load the stats from the DB or generate blank stats.
+     */
+    fun loadStats() {
+        if (statsRepository != null) {
+            val stats = statsRepository.findByDataType(dataType)
+            if (stats == null) {
+                logger.info("Found no stats")
+            } else {
+                id = stats.id
+                logger.info("Loaded the stats: {}", stats.describe())
+                playController.usersCounter.initialize(stats.users)
+                playService.declaredGamesCounter.initialize(stats.declaredGames)
+                playService.runningGamesCounter.initialize(stats.runningGames)
+            }
         }
     }
 
+    /**
+     * Return the current stats DTO for the REST API.
+     */
     fun getStats() = StatsDto(
             playController.usersCounter,
             playService.declaredGamesCounter,
             playService.runningGamesCounter,
             getUptimeString())
 
-    // TODO FBE the save stats periodically
-
-    // TODO FBE use a configuration parameter for the "type" (such as "dev" ou "prod")
-
-    // TODO FBE use a different ID for the "prod" stats
-
+    /**
+     * Save the stats to the database.
+     */
+    @Scheduled(initialDelay = 300000L, fixedRate = 300000L)
     fun saveStats() {
         statsRepository?.save(Stats(
-                STATS_ID,
-                "dev",
+                id,
+                dataType,
                 playController.usersCounter,
                 playService.declaredGamesCounter,
                 playService.runningGamesCounter))
+                ?.also {
+                    id = it.id
+                    logger.info("Saved the stats: {}", it.describe())
+                }
     }
 }
