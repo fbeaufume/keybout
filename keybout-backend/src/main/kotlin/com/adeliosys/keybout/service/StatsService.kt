@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
+import javax.annotation.PreDestroy
 
 @Service
 class StatsService(
@@ -64,7 +65,6 @@ class StatsService(
     /**
      * Save the stats to the database.
      */
-    // TODO FBE save the stats before shutdown
     @Scheduled(initialDelay = 300000L, fixedRate = 300000L)
     fun saveStats() {
         statsRepository?.save(Stats(
@@ -77,5 +77,11 @@ class StatsService(
                     id = it.id
                     logger.info("Saved the stats: {}", it.describe())
                 }
+    }
+
+    @PreDestroy
+    fun preDestroy() {
+        logger.info("The application is shutting down")
+        saveStats()
     }
 }
