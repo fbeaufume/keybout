@@ -64,6 +64,7 @@ class StatsService(
     /**
      * Save the stats to the database.
      */
+    // TODO FBE save the stats before shutdown
     @Scheduled(initialDelay = 300000L, fixedRate = 300000L)
     fun saveStats() {
         statsRepository?.save(Stats(
