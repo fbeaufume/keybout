@@ -117,13 +117,14 @@ export class Score {
 }
 
 export class Stats {
-  users: StatsItem;
-  declaredGames: StatsItem;
-  runningGames: StatsItem;
+  users: Measure;
+  declaredGames: Measure;
+  runningGames: Measure;
+  uptime: string;
 }
 
-export class StatsItem {
-  currentCount: number;
-  maxCount: number;
-  totalCount: number;
+export class Measure {
+  current: number;
+  max: number;
+  total: number;
 }

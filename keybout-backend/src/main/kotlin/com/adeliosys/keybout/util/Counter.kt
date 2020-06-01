@@ -1,6 +1,6 @@
 package com.adeliosys.keybout.util
 
-import com.adeliosys.keybout.model.StatsItem
+import com.adeliosys.keybout.model.Measure
 
 /**
  * A thread-safe incrementable and decrementable counter keeping track of the current, max and total values.
@@ -18,9 +18,9 @@ class Counter {
     fun getMax() = max
 
     @Synchronized
-    fun initialize(statsItem: StatsItem) {
-        max = statsItem.maxCount
-        total = statsItem.totalCount
+    fun initialize(measure: Measure) {
+        max = measure.max
+        total = measure.total
     }
 
     @Synchronized

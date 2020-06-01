@@ -3,9 +3,14 @@ package com.adeliosys.keybout.util
 import java.lang.management.ManagementFactory
 
 /**
+ * Return the current uptime in seconds.
+ */
+fun getUptimeSeconds() = ManagementFactory.getRuntimeMXBean().uptime / 1000
+
+/**
  * Return a formatted uptime such as "7h 23m 37s".
  */
-fun getUptimeString(): String = getUptimeString(ManagementFactory.getRuntimeMXBean().uptime / 1000)
+fun getUptimeString(): String = getUptimeString(getUptimeSeconds())
 
 /**
  * Return a formatted uptime such as "7h 23m 37s".

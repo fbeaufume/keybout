@@ -4,12 +4,14 @@ import com.adeliosys.keybout.api.PlayController
 import com.adeliosys.keybout.model.Stats
 import com.adeliosys.keybout.model.StatsDto
 import com.adeliosys.keybout.repository.StatsRepository
+import com.adeliosys.keybout.util.getUptimeSeconds
 import com.adeliosys.keybout.util.getUptimeString
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import java.lang.Long.max
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
@@ -29,16 +31,16 @@ class StatsService(
      */
     private var id: String? = null
 
+    private var uptimeMaxSeconds = 0L
+
+    private var uptimeTotalInitialSeconds = 0L
+
+    private var uptimeTotalSeconds = 0L
+
     @PostConstruct
     private fun postConstruct() {
         logger.info("{} database persistence of stats and '{}' data type", if (statsRepository == null) "Without" else "With", dataType)
-        loadStats()
-    }
 
-    /**
-     * Load the stats from the DB or generate blank stats.
-     */
-    fun loadStats() {
         if (statsRepository != null) {
             val stats = statsRepository.findByDataType(dataType)
             if (stats == null) {
@@ -49,6 +51,8 @@ class StatsService(
                 playController.usersCounter.initialize(stats.users)
                 playService.declaredGamesCounter.initialize(stats.declaredGames)
                 playService.runningGamesCounter.initialize(stats.runningGames)
+                uptimeMaxSeconds = stats.uptime.maxSeconds
+                uptimeTotalInitialSeconds = stats.uptime.totalSeconds
             }
         }
     }
@@ -56,6 +60,7 @@ class StatsService(
     /**
      * Return the current stats DTO for the REST API.
      */
+    // TODO FBE return current + max + total uptimes, and update the UI
     fun getStats() = StatsDto(
             playController.usersCounter,
             playService.declaredGamesCounter,
@@ -67,16 +72,34 @@ class StatsService(
      */
     @Scheduled(initialDelay = 300000L, fixedRate = 300000L)
     fun saveStats() {
+        updateUptime()
+
         statsRepository?.save(Stats(
                 id,
                 dataType,
                 playController.usersCounter,
                 playService.declaredGamesCounter,
-                playService.runningGamesCounter))
+                playService.runningGamesCounter,
+                uptimeMaxSeconds,
+                uptimeTotalSeconds))
                 ?.also {
                     id = it.id
                     logger.info("Saved the stats: {}", it.describe())
                 }
+    }
+
+    /**
+     * Update the uptime measures.
+     */
+    @Synchronized
+    private fun updateUptime() {
+        val uptimeSeconds = getUptimeSeconds()
+
+        // Update the max uptime
+        uptimeMaxSeconds = max(uptimeMaxSeconds, uptimeSeconds)
+
+        // Update the total uptime
+        uptimeTotalSeconds = uptimeTotalInitialSeconds + uptimeSeconds
     }
 
     @PreDestroy
