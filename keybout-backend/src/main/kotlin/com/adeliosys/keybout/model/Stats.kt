@@ -7,7 +7,6 @@ import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
-// TODO FBE add startup count
 // TODO FBE add creation date
 @Document(collection = "keybout_stats")
 @TypeAlias("Stats")
@@ -18,6 +17,7 @@ class Stats(
         var declaredGames: Measure = Measure(),
         var runningGames: Measure = Measure(),
         var uptime: Uptime = Uptime(),
+        var startupCount: Int = 0,
         val lastUpdate: Date = Date()) {
     constructor(
             id: String?,
@@ -26,10 +26,11 @@ class Stats(
             declaredGamesCounter: Counter,
             runningGamesCounter: Counter,
             maxSeconds: Long,
-            totalSeconds: Long) :
-            this(id, dataType, Measure(usersCounter), Measure(declaredGamesCounter), Measure(runningGamesCounter), Uptime(maxSeconds, totalSeconds), Date())
+            totalSeconds: Long,
+            startupCount: Int) :
+            this(id, dataType, Measure(usersCounter), Measure(declaredGamesCounter), Measure(runningGamesCounter), Uptime(maxSeconds, totalSeconds), startupCount, Date())
 
-    fun describe() = "users=${users.max}/${users.total}, declared=${declaredGames.max}/${declaredGames.total}, running=${runningGames.max}/${runningGames.total}, uptime=${uptime.maxSeconds}/${uptime.totalSeconds}"
+    fun describe() = "users=${users.max}/${users.total}, declared=${declaredGames.max}/${declaredGames.total}, running=${runningGames.max}/${runningGames.total}, uptime=${uptime.maxSeconds}/${uptime.totalSeconds}, startups=${startupCount}"
 }
 
 class Measure(var max: Int = 0, var total: Int = 0) {

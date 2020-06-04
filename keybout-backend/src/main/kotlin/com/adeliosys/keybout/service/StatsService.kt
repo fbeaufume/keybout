@@ -37,6 +37,8 @@ class StatsService(
 
     private var uptimeTotalSeconds = 0L
 
+    private var startupCount = 1
+
     @PostConstruct
     private fun postConstruct() {
         logger.info("{} database persistence of stats and '{}' data type", if (statsRepository == null) "Without" else "With", dataType)
@@ -53,6 +55,7 @@ class StatsService(
                 playService.runningGamesCounter.initialize(stats.runningGames)
                 uptimeMaxSeconds = stats.uptime.maxSeconds
                 uptimeTotalInitialSeconds = stats.uptime.totalSeconds
+                startupCount += stats.startupCount
             }
         }
     }
@@ -81,7 +84,8 @@ class StatsService(
                 playService.declaredGamesCounter,
                 playService.runningGamesCounter,
                 uptimeMaxSeconds,
-                uptimeTotalSeconds))
+                uptimeTotalSeconds,
+                startupCount))
                 ?.also {
                     id = it.id
                     logger.info("Saved the stats: {}", it.describe())
