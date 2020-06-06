@@ -120,11 +120,17 @@ export class Stats {
   users: Measure;
   declaredGames: Measure;
   runningGames: Measure;
-  uptime: string;
+  uptime: Uptime;
 }
 
 export class Measure {
   current: number;
   max: number;
   total: number;
+}
+
+export class Uptime {
+  current: string;
+  max: string;
+  total: string;
 }

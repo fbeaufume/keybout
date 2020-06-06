@@ -5,7 +5,6 @@ import com.adeliosys.keybout.model.Stats
 import com.adeliosys.keybout.model.StatsDto
 import com.adeliosys.keybout.repository.StatsRepository
 import com.adeliosys.keybout.util.getUptimeSeconds
-import com.adeliosys.keybout.util.getUptimeString
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -31,6 +30,7 @@ class StatsService(
      */
     private var id: String? = null
 
+    // TODO FBE move these 3 attributes to the Uptime class, with uptimeTotalInitialSeconds not being persisted
     private var uptimeMaxSeconds = 0L
 
     private var uptimeTotalInitialSeconds = 0L
@@ -63,12 +63,17 @@ class StatsService(
     /**
      * Return the current stats DTO for the REST API.
      */
-    // TODO FBE return current + max + total uptimes, and update the UI
-    fun getStats() = StatsDto(
-            playController.usersCounter,
-            playService.declaredGamesCounter,
-            playService.runningGamesCounter,
-            getUptimeString())
+    fun getStats(): StatsDto {
+        updateUptime()
+
+        return StatsDto(
+                playController.usersCounter,
+                playService.declaredGamesCounter,
+                playService.runningGamesCounter,
+                getUptimeSeconds(),
+                uptimeMaxSeconds,
+                uptimeTotalSeconds)
+    }
 
     /**
      * Save the stats to the database.

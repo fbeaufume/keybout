@@ -10,11 +10,6 @@ fun getUptimeSeconds() = ManagementFactory.getRuntimeMXBean().uptime / 1000
 /**
  * Return a formatted uptime such as "7h 23m 37s".
  */
-fun getUptimeString(): String = getUptimeString(getUptimeSeconds())
-
-/**
- * Return a formatted uptime such as "7h 23m 37s".
- */
 fun getUptimeString(uptimeInSec: Long): String =
     uptimeInSec.let {
         when {
