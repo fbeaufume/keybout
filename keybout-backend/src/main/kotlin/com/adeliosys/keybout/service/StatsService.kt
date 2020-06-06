@@ -44,12 +44,16 @@ class StatsService(
         logger.info("{} database persistence of stats and '{}' data type", if (statsRepository == null) "Without" else "With", dataType)
 
         if (statsRepository != null) {
+            var duration = -System.currentTimeMillis()
             val stats = statsRepository.findByDataType(dataType)
+            duration += System.currentTimeMillis()
+
             if (stats == null) {
-                logger.info("Found no stats")
+                logger.info("Found no stats in {} msec", duration)
             } else {
+                logger.info("Loaded the stats in {} msec: {}", duration, stats.describe())
+
                 id = stats.id
-                logger.info("Loaded the stats: {}", stats.describe())
                 playController.usersCounter.initialize(stats.users)
                 playService.declaredGamesCounter.initialize(stats.declaredGames)
                 playService.runningGamesCounter.initialize(stats.runningGames)
@@ -82,6 +86,7 @@ class StatsService(
     fun saveStats() {
         updateUptime()
 
+        val timestamp = System.currentTimeMillis()
         statsRepository?.save(Stats(
                 id,
                 dataType,
@@ -93,7 +98,7 @@ class StatsService(
                 startupCount))
                 ?.also {
                     id = it.id
-                    logger.info("Saved the stats: {}", it.describe())
+                    logger.info("Saved the stats in {} msec: {}", System.currentTimeMillis() - timestamp, it.describe())
                 }
     }
 
