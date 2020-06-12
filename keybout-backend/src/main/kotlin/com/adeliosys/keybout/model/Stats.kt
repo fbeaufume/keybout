@@ -50,7 +50,7 @@ class Uptime(val maxSeconds: Long = 0, val totalSeconds: Long = 0) {
 /**
  * DTO used by the REST API.
  */
-class StatsDto(usersCounter: Counter, declaredGamesCounter: Counter, runningGamesCounter: Counter, uptimeCurrent: Long, uptimeMax: Long, uptimeTotal: Long) {
+class StatsDto(usersCounter: Counter, declaredGamesCounter: Counter, runningGamesCounter: Counter, uptimeCurrent: Long, uptimeMax: Long, uptimeTotal: Long, val startups: Int) {
     val users = MeasureDto(usersCounter)
     val declaredGames = MeasureDto(declaredGamesCounter)
     val runningGames = MeasureDto(runningGamesCounter)

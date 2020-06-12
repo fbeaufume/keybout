@@ -76,7 +76,8 @@ class StatsService(
                 playService.runningGamesCounter,
                 getUptimeSeconds(),
                 uptimeMaxSeconds,
-                uptimeTotalSeconds)
+                uptimeTotalSeconds,
+                startupCount)
     }
 
     /**
