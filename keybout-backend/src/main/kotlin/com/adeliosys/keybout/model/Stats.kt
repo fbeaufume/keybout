@@ -7,7 +7,6 @@ import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
-// TODO FBE add creation date
 @Document(collection = "keybout_stats")
 @TypeAlias("Stats")
 class Stats(

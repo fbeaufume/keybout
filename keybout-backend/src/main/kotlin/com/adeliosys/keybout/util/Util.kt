@@ -8,15 +8,19 @@ import java.lang.management.ManagementFactory
 fun getUptimeSeconds() = ManagementFactory.getRuntimeMXBean().uptime / 1000
 
 /**
- * Return a formatted uptime such as "7h 23m 37s".
+ * Return a formatted uptime such as "7h 03m 42s".
  */
-// TODO FBE return "1m 06s" instead of "1m 6s"
 fun getUptimeString(uptimeInSec: Long): String =
     uptimeInSec.let {
         when {
-            it >= 86400 -> "${it / 86400}d ${it.rem(86400) / 3600}h ${it.rem(3600) / 60}m ${it.rem(60)}s"
-            it >= 3600 -> "${it / 3600}h ${it.rem(3600) / 60}m ${it.rem(60)}s"
-            it >= 60 -> "${it / 60}m ${it.rem(60)}s"
+            it >= 86400 -> "${it / 86400}d ${pad(it.rem(86400) / 3600)}h ${pad(it.rem(3600) / 60)}m ${pad(it.rem(60))}s"
+            it >= 3600 -> "${it / 3600}h ${pad(it.rem(3600) / 60)}m ${pad(it.rem(60))}s"
+            it >= 60 -> "${it / 60}m ${pad(it.rem(60))}s"
             else -> "${it}s"
         }
     }
+
+/**
+ * Prepend single digit longs with a zero, i.e. 6 -> "06".
+ */
+fun pad(i: Long) = i.toString().padStart(2, '0')
