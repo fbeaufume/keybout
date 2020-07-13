@@ -1,6 +1,6 @@
 package com.adeliosys.keybout.config
 
-import com.mongodb.MongoClient
+import com.mongodb.client.MongoClient
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
