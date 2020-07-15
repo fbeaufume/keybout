@@ -30,7 +30,6 @@ class StatsService(
      */
     private var id: String? = null
 
-    // TODO FBE move these 3 attributes to the Uptime class, with uptimeTotalInitialSeconds not being persisted
     private var uptimeMaxSeconds = 0L
 
     private var uptimeTotalInitialSeconds = 0L
