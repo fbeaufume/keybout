@@ -758,9 +758,7 @@ cycle
 cyclique
 cygne
 céder
-cédé
 côté
-cœur
 daim
 dalmatien
 dame
@@ -821,7 +819,6 @@ diminution
 dindon
 dire
 direct
-directe
 directement
 directeur
 direction
@@ -870,7 +867,6 @@ don
 donation
 donc
 donner
-donnée
 dont
 dormir
 dorénavant
@@ -904,7 +900,6 @@ dynamique
 dynamisme
 débarrasser
 débat
-débats
 débit
 débiteur
 début
@@ -965,14 +960,12 @@ désert
 désigner
 désir
 désoler
-désolé
 désormais
 détail
 détente
 déterminant
 déterminer
 détester
-détient
 détour
 détriment
 détruire
