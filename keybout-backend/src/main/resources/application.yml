@@ -12,13 +12,13 @@ logging.level:
 
 ---
 
-spring.profiles: color
+spring.config.activate.on-profile: color
 
 spring.output.ansi.enabled: ALWAYS
 
 ---
 
-spring.profiles: dev
+spring.config.activate.on-profile: dev
 
 logging.level:
   com.adeliosys: TRACE

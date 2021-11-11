@@ -11,6 +11,8 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 class WebSocketConfig(private val playController: PlayController) : WebSocketConfigurer {
 
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(playController, "/api/websocket").setAllowedOrigins("*").withSockJS()
+        registry.addHandler(playController, "/api/websocket")
+            .setAllowedOrigins("http://localhost:4200","http://localhost:8080", "https://keybout.herokuapp.com")
+            .withSockJS()
     }
 }
