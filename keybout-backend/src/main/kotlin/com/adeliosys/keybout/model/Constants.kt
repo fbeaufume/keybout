@@ -74,6 +74,11 @@ object Constants {
     const val SCORES_LENGTH = 10
 
     /**
+     * The number of recent startup dates to keep.
+     */
+    const val STARTUP_DATES_LENGTH = 10
+
+    /**
      * GSON instance used by several classes.
      */
     val GSON = Gson()

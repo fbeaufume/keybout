@@ -10,26 +10,40 @@ import java.util.*
 @Document(collection = "keybout_stats")
 @TypeAlias("Stats")
 class Stats(
-        @Id var id: String? = null,
-        var dataType: String = "",
-        var users: Measure = Measure(),
-        var declaredGames: Measure = Measure(),
-        var runningGames: Measure = Measure(),
-        var uptime: Uptime = Uptime(),
-        var startupCount: Int = 0,
-        val lastUpdate: Date = Date()) {
+    @Id var id: String? = null,
+    var dataType: String = "",
+    var users: Measure = Measure(),
+    var declaredGames: Measure = Measure(),
+    var runningGames: Measure = Measure(),
+    var uptime: Uptime = Uptime(),
+    var startupCount: Int = 0,
+    var startupDates: List<Date> = mutableListOf(),
+    val lastUpdate: Date = Date()
+) {
     constructor(
-            id: String?,
-            dataType: String,
-            usersCounter: Counter,
-            declaredGamesCounter: Counter,
-            runningGamesCounter: Counter,
-            maxSeconds: Long,
-            totalSeconds: Long,
-            startupCount: Int) :
-            this(id, dataType, Measure(usersCounter), Measure(declaredGamesCounter), Measure(runningGamesCounter), Uptime(maxSeconds, totalSeconds), startupCount, Date())
+        id: String?,
+        dataType: String,
+        usersCounter: Counter,
+        declaredGamesCounter: Counter,
+        runningGamesCounter: Counter,
+        maxSeconds: Long,
+        totalSeconds: Long,
+        startupCount: Int,
+        startupDates: List<Date>
+    ) : this(
+        id,
+        dataType,
+        Measure(usersCounter),
+        Measure(declaredGamesCounter),
+        Measure(runningGamesCounter),
+        Uptime(maxSeconds, totalSeconds),
+        startupCount,
+        startupDates,
+        Date()
+    )
 
-    fun describe() = "users=${users.max}/${users.total}, declared=${declaredGames.max}/${declaredGames.total}, running=${runningGames.max}/${runningGames.total}, uptime=${uptime.maxSeconds}/${uptime.totalSeconds}, startups=${startupCount}"
+    fun describe() =
+        "users=${users.max}/${users.total}, declared=${declaredGames.max}/${declaredGames.total}, running=${runningGames.max}/${runningGames.total}, uptime=${uptime.maxSeconds}/${uptime.totalSeconds}, startups=${startupCount}"
 }
 
 class Measure(var max: Int = 0, var total: Int = 0) {
@@ -49,7 +63,15 @@ class Uptime(val maxSeconds: Long = 0, val totalSeconds: Long = 0) {
 /**
  * DTO used by the REST API.
  */
-class StatsDto(usersCounter: Counter, declaredGamesCounter: Counter, runningGamesCounter: Counter, uptimeCurrent: Long, uptimeMax: Long, uptimeTotal: Long, val startups: Int) {
+class StatsDto(
+    usersCounter: Counter,
+    declaredGamesCounter: Counter,
+    runningGamesCounter: Counter,
+    uptimeCurrent: Long,
+    uptimeMax: Long,
+    uptimeTotal: Long,
+    val startups: Int
+) {
     val users = MeasureDto(usersCounter)
     val declaredGames = MeasureDto(declaredGamesCounter)
     val runningGames = MeasureDto(runningGamesCounter)
