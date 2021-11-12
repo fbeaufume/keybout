@@ -2,13 +2,12 @@ package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.api.PlayController
 import com.adeliosys.keybout.model.Constants.STARTUP_DATES_LENGTH
-import com.adeliosys.keybout.model.Stats
+import com.adeliosys.keybout.model.StatsDocument
 import com.adeliosys.keybout.model.StatsDto
 import com.adeliosys.keybout.repository.StatsRepository
 import com.adeliosys.keybout.util.getUptimeSeconds
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.lang.Long.max
@@ -21,19 +20,12 @@ class StatsService(
     private val playController: PlayController,
     private val playService: PlayService,
     private val statsRepository: StatsRepository?
-) {
+) : DatabaseAwareService() {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     /**
-     * Since the same database server is used for data of all application environments, this attribute is used
-     * to differentiate them. It contains the environment name such as "dev" or "prod".
-     */
-    @Value("\${application.data-type:dev}")
-    private lateinit var dataType: String
-
-    /**
-     * Generated ID of the persisted stats document.
+     * ID of the persistent stats document.
      */
     private var id: String? = null
 
@@ -55,11 +47,14 @@ class StatsService(
      */
     private var startupDates = mutableListOf<Date>().apply { add(startupDate) }
 
+    /**
+     * Load the previous stats from the database.
+     */
     @PostConstruct
     private fun postConstruct() {
         logger.info(
-            "{} database persistence of stats and '{}' data type",
-            if (statsRepository == null) "Without" else "With",
+            "Database persistence of stats is {} and data type is '{}'",
+            if (statsRepository == null) "disabled" else "enabled",
             dataType
         )
 
@@ -106,6 +101,7 @@ class StatsService(
         )
     }
 
+    // TODO FBE move the initial delay and fixed rate to a constant
     /**
      * Save the stats to the database.
      */
@@ -115,7 +111,7 @@ class StatsService(
 
         val timestamp = System.currentTimeMillis()
         statsRepository?.save(
-            Stats(
+            StatsDocument(
                 id,
                 dataType,
                 playController.usersCounter,

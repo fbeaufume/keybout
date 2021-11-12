@@ -1,4 +1,13 @@
+@file:Suppress("unused")
+
 package com.adeliosys.keybout.model
+
+import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.TypeAlias
+import org.springframework.data.mongodb.core.mapping.Document
+import java.util.*
+
+typealias GameType = Triple<GameStyle, Language, Difficulty>
 
 /**
  * A player score during a game.
@@ -33,11 +42,11 @@ class Score(val userName: String) {
     // Top speed, if ranked (used only in race games)
     var topSpeed = 0.0f
 
-    constructor(userName: String, speed: Float): this(userName) {
+    constructor(userName: String, speed: Float) : this(userName) {
         this.speed = speed
     }
 
-    constructor(rank: Int, speed: Float): this("") {
+    constructor(rank: Int, speed: Float) : this("") {
         topRank = rank
         topSpeed = speed
     }
@@ -76,22 +85,56 @@ class Score(val userName: String) {
      * Update the top rank and top speed.
      */
     fun updateTops(rank: Int, speed: Float) {
-        topRank = rank;
-        topSpeed = speed;
+        topRank = rank
+        topSpeed = speed
     }
 
     private fun getTimestamp() = System.currentTimeMillis()
 }
 
 /**
- * DTO used for notifications sent to the frontend.
+ * Persistent top scores of the application. In the database there is one document instance per environment name.
  */
-class ScoreDto(val userName: String, val points: Int, val speed: Float, val awards: Int?)
+@Document(collection = "keybout_top_scores")
+@TypeAlias("TopScores")
+class TopScoresDocument(
+    @Id var id: String? = null,
+    var dataType: String = "",
+    val topScores: MutableList<TopScores> = mutableListOf(),
+    val lastUpdate: Date = Date()
+) {
+    constructor(
+        id: String?,
+        dataType: String,
+        topScoresByType: MutableMap<GameType, MutableList<TopScore>>
+    ) : this(id, dataType) {
+        topScoresByType.forEach { (k, v) ->
+            topScores.add(TopScores(k.first, k.second, k.third, v))
+        }
+    }
+}
+
+/**
+ * Top scores of a game type.
+ */
+data class TopScores(
+    var style: GameStyle = GameStyle.REGULAR,
+    var language: Language = Language.EN,
+    var difficulty: Difficulty = Difficulty.NORMAL,
+    var scores: MutableList<TopScore> = mutableListOf()
+) {
+    fun getGameType() = GameType(style, language, difficulty)
+}
 
 /**
  * Score of a ranked player.
  */
 data class TopScore(val userName: String = "-", val speed: Float = 0.0f)
+
+/**
+ * DTO used for notifications sent to the frontend.
+ */
+class ScoreDto(val userName: String, val points: Int, val speed: Float, val awards: Int?)
 
 /**
  * DTO used to send all the top scores for a given category.

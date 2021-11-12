@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.adeliosys.keybout.model
 
 import com.adeliosys.keybout.util.Counter
@@ -7,9 +9,12 @@ import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
+/**
+ * Persistent stats of the application. In the database there is one document instance per environment name.
+ */
 @Document(collection = "keybout_stats")
 @TypeAlias("Stats")
-class Stats(
+class StatsDocument(
     @Id var id: String? = null,
     var dataType: String = "",
     var users: Measure = Measure(),
@@ -17,7 +22,7 @@ class Stats(
     var runningGames: Measure = Measure(),
     var uptime: Uptime = Uptime(),
     var startupCount: Int = 0,
-    var startupDates: List<Date> = mutableListOf(),
+    var startupDates: List<Date> = listOf(),
     val lastUpdate: Date = Date()
 ) {
     constructor(

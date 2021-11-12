@@ -10,9 +10,15 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api")
 class StatsController(private val statsService: StatsService) {
 
+    /**
+     * Return the application stats.
+     */
     @GetMapping("/stats")
     fun getStats(): StatsDto = statsService.getStats()
 
+    /**
+     * Force an immediate save of the application stats.
+     */
     @GetMapping("/stats/save")
     fun saveStats() {
         statsService.saveStats()

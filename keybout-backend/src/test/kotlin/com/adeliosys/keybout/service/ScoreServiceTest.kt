@@ -8,18 +8,16 @@ import com.adeliosys.keybout.model.GameStyle.REGULAR
 import com.adeliosys.keybout.model.Language.EN
 import com.adeliosys.keybout.model.Language.FR
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.MethodOrderer.Alphanumeric
+import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestMethodOrder
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(Alphanumeric::class)
+@TestMethodOrder(MethodOrderer.MethodName::class)
 class ScoreServiceTest {
 
-    private val size = 3
-
-    private val service = ScoreService(size)
+    private val service = ScoreService(null).apply { size = 3 }
 
     @Test
     fun `step 01 empty scores`() {
