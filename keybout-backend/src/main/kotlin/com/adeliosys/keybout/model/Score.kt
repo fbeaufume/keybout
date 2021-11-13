@@ -99,15 +99,15 @@ class Score(val userName: String) {
 @TypeAlias("TopScores")
 class TopScoresDocument(
     @Id var id: String? = null,
-    var dataType: String = "",
+    var environmentName: String = "",
     val topScores: MutableList<TopScores> = mutableListOf(),
     val lastUpdate: Date = Date()
 ) {
     constructor(
         id: String?,
-        dataType: String,
+        environmentName: String,
         topScoresByType: MutableMap<GameType, MutableList<TopScore>>
-    ) : this(id, dataType) {
+    ) : this(id, environmentName) {
         topScoresByType.forEach { (k, v) ->
             topScores.add(TopScores(k.first, k.second, k.third, v))
         }

@@ -40,14 +40,14 @@ class ScoreService(
     @Synchronized
     private fun postConstruct() {
         logger.info(
-            "Database persistence of top scores is {} and data type is '{}'",
+            "Database persistence of top scores is {} and environment name is '{}'",
             if (scoreRepository == null) "disabled" else "enabled",
-            dataType
+            environmentName
         )
 
         if (scoreRepository != null) {
             var duration = -System.currentTimeMillis()
-            val topScores = scoreRepository.findByDataType(dataType)
+            val topScores = scoreRepository.findByEnvironmentName(environmentName)
             duration += System.currentTimeMillis()
 
             if (topScores == null) {
@@ -171,7 +171,7 @@ class ScoreService(
         scoreRepository?.save(
             TopScoresDocument(
                 id,
-                dataType,
+                environmentName,
                 topScoresByType
             )
         )?.also {

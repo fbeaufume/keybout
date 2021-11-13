@@ -54,14 +54,14 @@ class StatsService(
     @PostConstruct
     private fun postConstruct() {
         logger.info(
-            "Database persistence of stats is {} and data type is '{}'",
+            "Database persistence of stats is {} and environment name is '{}'",
             if (statsRepository == null) "disabled" else "enabled",
-            dataType
+            environmentName
         )
 
         if (statsRepository != null) {
             var duration = -System.currentTimeMillis()
-            val stats = statsRepository.findByDataType(dataType)
+            val stats = statsRepository.findByEnvironmentName(environmentName)
             duration += System.currentTimeMillis()
 
             if (stats == null) {
@@ -113,7 +113,7 @@ class StatsService(
         statsRepository?.save(
             StatsDocument(
                 id,
-                dataType,
+                environmentName,
                 playController.usersCounter,
                 playService.declaredGamesCounter,
                 playService.runningGamesCounter,

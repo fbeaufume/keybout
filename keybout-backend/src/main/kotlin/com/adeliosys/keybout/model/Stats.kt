@@ -16,7 +16,7 @@ import java.util.*
 @TypeAlias("Stats")
 class StatsDocument(
     @Id var id: String? = null,
-    var dataType: String = "",
+    var environmentName: String = "",
     var users: Measure = Measure(),
     var declaredGames: Measure = Measure(),
     var runningGames: Measure = Measure(),
@@ -27,7 +27,7 @@ class StatsDocument(
 ) {
     constructor(
         id: String?,
-        dataType: String,
+        environmentName: String,
         usersCounter: Counter,
         declaredGamesCounter: Counter,
         runningGamesCounter: Counter,
@@ -37,7 +37,7 @@ class StatsDocument(
         startupDates: List<Date>
     ) : this(
         id,
-        dataType,
+        environmentName,
         Measure(usersCounter),
         Measure(declaredGamesCounter),
         Measure(runningGamesCounter),

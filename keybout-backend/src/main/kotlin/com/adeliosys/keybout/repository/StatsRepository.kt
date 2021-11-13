@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository
 @ConditionalOnProperty("spring.data.mongodb.uri")
 interface StatsRepository : MongoRepository<StatsDocument, String> {
 
-    fun findByDataType(dataType: String): StatsDocument?
+    fun findByEnvironmentName(environmentName: String): StatsDocument?
 }
