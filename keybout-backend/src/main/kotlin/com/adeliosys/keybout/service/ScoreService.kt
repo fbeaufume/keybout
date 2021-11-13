@@ -1,6 +1,7 @@
 package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.model.*
+import com.adeliosys.keybout.model.Constants.DATA_SAVE_PERIOD
 import com.adeliosys.keybout.model.Constants.SCORES_LENGTH
 import com.adeliosys.keybout.repository.ScoreRepository
 import org.slf4j.Logger
@@ -160,11 +161,10 @@ class ScoreService(
         }
     }
 
-    // TODO FBE move the initial delay and fixed rate to a constant
     /**
      * Save the top scores to the database.
      */
-    @Scheduled(initialDelay = 300000L, fixedRate = 300000L)
+    @Scheduled(initialDelay = DATA_SAVE_PERIOD, fixedRate = DATA_SAVE_PERIOD)
     @Synchronized
     fun saveTopScores() {
         val timestamp = System.currentTimeMillis()

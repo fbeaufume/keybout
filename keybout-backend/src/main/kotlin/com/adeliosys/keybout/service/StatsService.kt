@@ -1,6 +1,7 @@
 package com.adeliosys.keybout.service
 
 import com.adeliosys.keybout.api.PlayController
+import com.adeliosys.keybout.model.Constants.DATA_SAVE_PERIOD
 import com.adeliosys.keybout.model.Constants.STARTUP_DATES_LENGTH
 import com.adeliosys.keybout.model.StatsDocument
 import com.adeliosys.keybout.model.StatsDto
@@ -101,11 +102,10 @@ class StatsService(
         )
     }
 
-    // TODO FBE move the initial delay and fixed rate to a constant
     /**
      * Save the stats to the database.
      */
-    @Scheduled(initialDelay = 300000L, fixedRate = 300000L)
+    @Scheduled(initialDelay = DATA_SAVE_PERIOD, fixedRate = DATA_SAVE_PERIOD)
     fun saveStats() {
         updateUptime()
 

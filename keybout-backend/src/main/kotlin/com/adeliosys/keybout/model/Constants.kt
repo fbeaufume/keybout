@@ -79,6 +79,11 @@ object Constants {
     const val STARTUP_DATES_LENGTH = 10
 
     /**
+     * Period in msec between two consecutive data saves. 600000L is 10 minutes.
+     */
+    const val DATA_SAVE_PERIOD = 600000L
+
+    /**
      * GSON instance used by several classes.
      */
     val GSON = Gson()
