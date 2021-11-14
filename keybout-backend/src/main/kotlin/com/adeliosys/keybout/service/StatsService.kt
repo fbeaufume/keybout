@@ -16,8 +16,6 @@ import java.util.*
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
-// TODO FBE do not save the data if we could not load them
-
 @Service
 class StatsService(
     private val playController: PlayController,
@@ -62,27 +60,33 @@ class StatsService(
         )
 
         if (statsRepository != null) {
-            var duration = -System.currentTimeMillis()
-            val stats = statsRepository.findByEnvironmentName(environmentName)
-            duration += System.currentTimeMillis()
+            try {
+                var duration = -System.currentTimeMillis()
+                val stats = statsRepository.findByEnvironmentName(environmentName)
+                duration += System.currentTimeMillis()
 
-            if (stats == null) {
-                logger.info("Found no stats in {} msec", duration)
-            } else {
-                logger.info("Loaded the stats in {} msec: {}", duration, stats.describe())
+                if (stats == null) {
+                    logger.info("Found no stats in {} msec", duration)
+                } else {
+                    logger.info("Loaded the stats in {} msec: {}", duration, stats.describe())
 
-                id = stats.id
-                playController.usersCounter.initialize(stats.users)
-                playService.declaredGamesCounter.initialize(stats.declaredGames)
-                playService.runningGamesCounter.initialize(stats.runningGames)
-                uptimeMaxSeconds = stats.uptime.maxSeconds
-                uptimeTotalInitialSeconds = stats.uptime.totalSeconds
-                startupCount += stats.startupCount
+                    id = stats.id
+                    playController.usersCounter.initialize(stats.users)
+                    playService.declaredGamesCounter.initialize(stats.declaredGames)
+                    playService.runningGamesCounter.initialize(stats.runningGames)
+                    uptimeMaxSeconds = stats.uptime.maxSeconds
+                    uptimeTotalInitialSeconds = stats.uptime.totalSeconds
+                    startupCount += stats.startupCount
 
-                startupDates.addAll(stats.startupDates)
-                if (startupDates.size > STARTUP_DATES_LENGTH) {
-                    startupDates = startupDates.subList(0, STARTUP_DATES_LENGTH)
+                    startupDates.addAll(stats.startupDates)
+                    if (startupDates.size > STARTUP_DATES_LENGTH) {
+                        startupDates = startupDates.subList(0, STARTUP_DATES_LENGTH)
+                    }
                 }
+
+                dataLoadSucceeded = true
+            } catch (e: Exception) {
+                logger.error("Failed to load the stats: {}", e.toString())
             }
         }
     }
@@ -109,28 +113,30 @@ class StatsService(
      */
     @Scheduled(initialDelay = DATA_SAVE_PERIOD, fixedRate = DATA_SAVE_PERIOD)
     fun saveStats() {
-        try {
-            updateUptime()
+        if (statsRepository != null && dataLoadSucceeded) {
+            try {
+                updateUptime()
 
-            val timestamp = System.currentTimeMillis()
-            statsRepository?.save(
-                StatsDocument(
-                    id,
-                    environmentName,
-                    playController.usersCounter,
-                    playService.declaredGamesCounter,
-                    playService.runningGamesCounter,
-                    uptimeMaxSeconds,
-                    uptimeTotalSeconds,
-                    startupCount,
-                    startupDates
-                )
-            )?.also {
-                id = it.id
-                logger.info("Saved the stats in {} msec: {}", System.currentTimeMillis() - timestamp, it.describe())
+                val timestamp = System.currentTimeMillis()
+                statsRepository.save(
+                    StatsDocument(
+                        id,
+                        environmentName,
+                        playController.usersCounter,
+                        playService.declaredGamesCounter,
+                        playService.runningGamesCounter,
+                        uptimeMaxSeconds,
+                        uptimeTotalSeconds,
+                        startupCount,
+                        startupDates
+                    )
+                ).also {
+                    id = it.id
+                    logger.info("Saved the stats in {} msec: {}", System.currentTimeMillis() - timestamp, it.describe())
+                }
+            } catch (e: Exception) {
+                logger.error("Failed to save the stats: {}", e.toString())
             }
-        } catch (e: Exception) {
-            logger.error("Failed to save the stats: {}", e.toString())
         }
     }
 

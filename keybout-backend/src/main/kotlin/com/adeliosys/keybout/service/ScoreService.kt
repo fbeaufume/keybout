@@ -8,11 +8,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import java.lang.Exception
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
-
-// TODO FBE do not save the data if we could not load them
 
 /**
  * Keep the best scores in memory.
@@ -49,20 +46,26 @@ class ScoreService(
         )
 
         if (scoreRepository != null) {
-            var duration = -System.currentTimeMillis()
-            val topScores = scoreRepository.findByEnvironmentName(environmentName)
-            duration += System.currentTimeMillis()
+            try {
+                var duration = -System.currentTimeMillis()
+                val topScores = scoreRepository.findByEnvironmentName(environmentName)
+                duration += System.currentTimeMillis()
 
-            if (topScores == null) {
-                logger.info("Found no top scores in {} msec", duration)
-            } else {
-                logger.info("Loaded the top scores in {} msec", duration)
+                if (topScores == null) {
+                    logger.info("Found no top scores in {} msec", duration)
+                } else {
+                    logger.info("Loaded the top scores in {} msec", duration)
 
-                id = topScores.id
+                    id = topScores.id
 
-                topScores.topScores.forEach {
-                    topScoresByType[it.getGameType()] = it.scores
+                    topScores.topScores.forEach {
+                        topScoresByType[it.getGameType()] = it.scores
+                    }
                 }
+
+                dataLoadSucceeded = true
+            } catch (e: Exception) {
+                logger.error("Failed to load the top scores: {}", e.toString())
             }
         }
     }
@@ -170,21 +173,23 @@ class ScoreService(
     @Scheduled(initialDelay = DATA_SAVE_PERIOD, fixedRate = DATA_SAVE_PERIOD)
     @Synchronized
     fun saveTopScores() {
-        try {
-            val timestamp = System.currentTimeMillis()
-            scoreRepository?.save(
-                TopScoresDocument(
-                    id,
-                    environmentName,
-                    topScoresByType
-                )
-            )?.also {
-                id = it.id
+        if (scoreRepository != null && dataLoadSucceeded) {
+            try {
+                val timestamp = System.currentTimeMillis()
+                scoreRepository.save(
+                    TopScoresDocument(
+                        id,
+                        environmentName,
+                        topScoresByType
+                    )
+                ).also {
+                    id = it.id
+                }
+
                 logger.info("Saved the top scores in {} msec", System.currentTimeMillis() - timestamp)
+            } catch (e: Exception) {
+                logger.error("Failed to save the top scores: {}", e.toString())
             }
-        }
-        catch (e: Exception) {
-            logger.error("Failed to save the top scores: {}", e.toString())
         }
     }
 
