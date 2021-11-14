@@ -16,6 +16,8 @@ import java.util.*
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
+// TODO FBE do not save the data if we could not load them
+
 @Service
 class StatsService(
     private val playController: PlayController,
@@ -107,24 +109,28 @@ class StatsService(
      */
     @Scheduled(initialDelay = DATA_SAVE_PERIOD, fixedRate = DATA_SAVE_PERIOD)
     fun saveStats() {
-        updateUptime()
+        try {
+            updateUptime()
 
-        val timestamp = System.currentTimeMillis()
-        statsRepository?.save(
-            StatsDocument(
-                id,
-                environmentName,
-                playController.usersCounter,
-                playService.declaredGamesCounter,
-                playService.runningGamesCounter,
-                uptimeMaxSeconds,
-                uptimeTotalSeconds,
-                startupCount,
-                startupDates
-            )
-        )?.also {
-            id = it.id
-            logger.info("Saved the stats in {} msec: {}", System.currentTimeMillis() - timestamp, it.describe())
+            val timestamp = System.currentTimeMillis()
+            statsRepository?.save(
+                StatsDocument(
+                    id,
+                    environmentName,
+                    playController.usersCounter,
+                    playService.declaredGamesCounter,
+                    playService.runningGamesCounter,
+                    uptimeMaxSeconds,
+                    uptimeTotalSeconds,
+                    startupCount,
+                    startupDates
+                )
+            )?.also {
+                id = it.id
+                logger.info("Saved the stats in {} msec: {}", System.currentTimeMillis() - timestamp, it.describe())
+            }
+        } catch (e: Exception) {
+            logger.error("Failed to save the stats: {}", e.toString())
         }
     }
 

@@ -8,8 +8,11 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import java.lang.Exception
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
+
+// TODO FBE do not save the data if we could not load them
 
 /**
  * Keep the best scores in memory.
@@ -167,16 +170,21 @@ class ScoreService(
     @Scheduled(initialDelay = DATA_SAVE_PERIOD, fixedRate = DATA_SAVE_PERIOD)
     @Synchronized
     fun saveTopScores() {
-        val timestamp = System.currentTimeMillis()
-        scoreRepository?.save(
-            TopScoresDocument(
-                id,
-                environmentName,
-                topScoresByType
-            )
-        )?.also {
-            id = it.id
-            logger.info("Saved the top scores in {} msec", System.currentTimeMillis() - timestamp)
+        try {
+            val timestamp = System.currentTimeMillis()
+            scoreRepository?.save(
+                TopScoresDocument(
+                    id,
+                    environmentName,
+                    topScoresByType
+                )
+            )?.also {
+                id = it.id
+                logger.info("Saved the top scores in {} msec", System.currentTimeMillis() - timestamp)
+            }
+        }
+        catch (e: Exception) {
+            logger.error("Failed to save the top scores: {}", e.toString())
         }
     }
 
