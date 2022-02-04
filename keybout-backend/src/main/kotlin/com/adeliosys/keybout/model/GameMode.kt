@@ -14,7 +14,7 @@ enum class GameMode(public val type: Class<out BaseGameService>) {
 
     companion object {
         fun getByCode(code: String) = try {
-            valueOf(code.toUpperCase())
+            valueOf(code.uppercase())
         } catch (e: Exception) {
             CAPTURE
         }

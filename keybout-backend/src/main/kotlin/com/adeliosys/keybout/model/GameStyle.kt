@@ -61,7 +61,7 @@ enum class GameStyle(val isLetterStyle: Boolean, private val delay: Long) {
         val letterStyles = values().filter { it.isLetterStyle }
 
         fun getByCode(code: String) = try {
-            valueOf(code.toUpperCase())
+            valueOf(code.uppercase())
         } catch (e: Exception) {
             REGULAR
         }

@@ -35,7 +35,7 @@ class AwardService {
         if (trackLongest) {
             isLongestAvailable = true
 
-            longestLength = words.maxBy { it.value.length }!!.value.length
+            longestLength = words.maxByOrNull { it.value.length }!!.value.length
         }
         else {
             isLongestAvailable = false

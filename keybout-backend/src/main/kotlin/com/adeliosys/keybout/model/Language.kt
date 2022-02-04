@@ -19,7 +19,7 @@ enum class Language(val code: String) {
 
         fun getByCode(code: String, style: GameStyle): Language {
             var language = try {
-                valueOf(code.toUpperCase())
+                valueOf(code.uppercase())
             } catch (e: Exception) {
                 default
             }

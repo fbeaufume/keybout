@@ -10,7 +10,7 @@ private val logger = LoggerFactory.getLogger("DictionaryCleaner")
 /**
  * Clean the dictionary files, i.e. sort the words, remove duplicates, etc.
  */
-fun main(args: Array<String>) {
+fun main() {
     Language.realLanguages().forEach { lang ->
         logger.info("Processing '{}' dictionary", lang)
         var duration = -System.currentTimeMillis()
@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
             }
 
             // Lowercase the word
-            val word2 = word1.toLowerCase()
+            val word2 = word1.uppercase()
             if (word2 != word1) {
                 lowercaseCount++
             }
