@@ -34,7 +34,7 @@ class DictionaryService {
 
         val words = mutableListOf<String>()
 
-        javaClass.getResource("/words-${language.code}.txt").openStream().bufferedReader(Charsets.UTF_8).readLines().forEach {
+        javaClass.getResource("/data/words-${language.code}.txt")!!.openStream().bufferedReader(Charsets.UTF_8).readLines().forEach {
             if (it.length in MIN_WORD_LENGTH..MAX_WORD_LENGTH) {
                 words.add(it)
             }
