@@ -146,7 +146,7 @@ class PlayService(private val applicationContext: ApplicationContext) {
             // Notify other users
             sendMessage(lobbySessions.values, GamesListNotification(declaredGames.values))
 
-            logger.info("Started game {} ({} player{}, '{}' mode, '{}' style, '{}' language, '{}' difficulty, running game count is {}",
+            logger.info("Started game {} ({} player{}, '{}' mode, '{}' style, '{}' language, '{}' difficulty), running game count is {}",
                     descriptor.id,
                     players.size,
                     if (players.size > 1) "s" else "",
