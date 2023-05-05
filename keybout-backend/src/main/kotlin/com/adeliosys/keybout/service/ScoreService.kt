@@ -4,12 +4,12 @@ import com.adeliosys.keybout.model.*
 import com.adeliosys.keybout.model.Constants.DATA_SAVE_PERIOD
 import com.adeliosys.keybout.model.Constants.SCORES_LENGTH
 import com.adeliosys.keybout.repository.ScoreRepository
+import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
 
 /**
  * Keep the best scores in memory.
@@ -148,10 +148,12 @@ class ScoreService(
                                 topScores.removeAt(size)
                             }
                         }
+
                         previousRank > newRank -> {
                             topScores.removeAt(previousRank - 1)
                             topScores.add(newRank - 1, TopScore(score.userName, speed))
                         }
+
                         previousRank == newRank -> {
                             topScores[previousRank - 1] = TopScore(score.userName, speed)
                         }

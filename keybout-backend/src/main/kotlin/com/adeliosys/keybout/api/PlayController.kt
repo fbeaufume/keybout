@@ -13,6 +13,7 @@ import com.adeliosys.keybout.model.Constants.ACTION_START_ROUND
 import com.adeliosys.keybout.service.PlayService
 import com.adeliosys.keybout.service.UserNameService
 import com.adeliosys.keybout.util.*
+import jakarta.annotation.PostConstruct
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -21,7 +22,6 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
-import javax.annotation.PostConstruct
 
 /**
  * Receive WebSocket messages, connects and disconnects,

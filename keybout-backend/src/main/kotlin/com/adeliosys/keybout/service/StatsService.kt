@@ -7,14 +7,14 @@ import com.adeliosys.keybout.model.StatsDocument
 import com.adeliosys.keybout.model.StatsDto
 import com.adeliosys.keybout.repository.StatsRepository
 import com.adeliosys.keybout.util.getUptimeSeconds
+import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.lang.Long.max
 import java.util.*
-import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
 
 @Service
 class StatsService(
