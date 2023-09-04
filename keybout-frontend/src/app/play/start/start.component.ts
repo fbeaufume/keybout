@@ -15,6 +15,7 @@ export class StartComponent {
   countdown = COUNTDOWN; // Current value of the countdown
 
   constructor(public playService: PlayService) {
+    // TODO FBE unsubscribe somewhere ?
     this.playService.stateObservable$.subscribe(state => {
       if (state === ClientState.STARTED) {
         this.startCountdown();

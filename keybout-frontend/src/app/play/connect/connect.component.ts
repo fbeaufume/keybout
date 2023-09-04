@@ -12,6 +12,7 @@ export class ConnectComponent {
   @ViewChild('outerDiv', {static: true}) outerDiv: ElementRef;
 
   constructor(private router: Router, public playService: PlayService) {
+    // TODO FBE unsubscribe somewhere ?
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd && event.url === '/play' && this.isVisible()) {
         setTimeout(() => {

@@ -13,6 +13,7 @@ export class GameComponent {
   inputWord = '';
 
   constructor(public playService: PlayService) {
+    // TODO FBE unsubscribe somewhere ?
     this.playService.stateObservable$.subscribe(state => {
       if (state === ClientState.RUNNING) {
         // Give the focus to the input element,
