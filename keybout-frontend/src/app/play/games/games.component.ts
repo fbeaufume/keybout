@@ -14,6 +14,8 @@ import {
   Languages
 } from '../model';
 import {PlayService} from '../play.service';
+import { FormsModule } from '@angular/forms';
+import { NgIf, NgFor } from '@angular/common';
 
 class GameForm {
   // Available game modes
@@ -65,8 +67,10 @@ class GameForm {
 }
 
 @Component({
-  selector: 'app-games',
-  templateUrl: './games.component.html'
+    selector: 'app-games',
+    templateUrl: './games.component.html',
+    standalone: true,
+    imports: [NgIf, NgFor, FormsModule]
 })
 export class GamesComponent {
 

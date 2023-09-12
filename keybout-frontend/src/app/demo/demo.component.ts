@@ -4,8 +4,9 @@ import {ClientState, Game} from '../play/model';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-demo',
-  templateUrl: './demo.component.html'
+    selector: 'app-demo',
+    templateUrl: './demo.component.html',
+    standalone: true
 })
 export class DemoComponent implements OnInit {
 

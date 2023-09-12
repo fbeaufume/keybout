@@ -1,10 +1,13 @@
 import {Component} from '@angular/core';
 import {ClientState, Game, Score} from '../model';
 import {PlayService} from '../play.service';
+import { NgIf, NgClass, NgFor, DecimalPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-results',
-  templateUrl: './results.component.html'
+    selector: 'app-results',
+    templateUrl: './results.component.html',
+    standalone: true,
+    imports: [NgIf, NgClass, NgFor, DecimalPipe]
 })
 export class ResultsComponent {
 

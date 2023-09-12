@@ -2,10 +2,14 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {ClientState} from '../model';
 import {PlayService} from '../play.service';
 import {NavigationEnd, Router} from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-connect',
-  templateUrl: './connect.component.html'
+    selector: 'app-connect',
+    templateUrl: './connect.component.html',
+    standalone: true,
+    imports: [NgIf, FormsModule]
 })
 export class ConnectComponent {
 

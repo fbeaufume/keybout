@@ -1,10 +1,14 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {ClientState, GameMode, Word} from '../model';
 import {PlayService} from '../play.service';
+import { FormsModule } from '@angular/forms';
+import { NgIf, NgFor, UpperCasePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-game',
-  templateUrl: './game.component.html'
+    selector: 'app-game',
+    templateUrl: './game.component.html',
+    standalone: true,
+    imports: [NgIf, NgFor, FormsModule, UpperCasePipe]
 })
 export class GameComponent {
 

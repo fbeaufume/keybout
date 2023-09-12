@@ -4,6 +4,8 @@ import {BehaviorSubject} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 import {GameStyle, GameStyleLabels, GameStyles, Language, LanguageLabels, Languages} from '../play/model';
 import {PlayService} from '../play/play.service';
+import { NgFor, NgIf, NgClass, AsyncPipe, DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 class ScoreTypeForm {
   // Available game styles
@@ -41,8 +43,10 @@ class ScoreTypeForm {
 }
 
 @Component({
-  selector: 'app-scores',
-  templateUrl: './scores.component.html'
+    selector: 'app-scores',
+    templateUrl: './scores.component.html',
+    standalone: true,
+    imports: [FormsModule, NgFor, NgIf, NgClass, AsyncPipe, DecimalPipe]
 })
 export class ScoresComponent {
 

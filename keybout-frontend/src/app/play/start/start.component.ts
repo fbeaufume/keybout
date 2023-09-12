@@ -1,12 +1,15 @@
 import {Component} from '@angular/core';
 import {ClientState, Game} from '../model';
 import {PlayService} from '../play.service';
+import { NgIf } from '@angular/common';
 
 const COUNTDOWN = 5; // Total duration of the countdown
 
 @Component({
-  selector: 'app-start',
-  templateUrl: './start.component.html'
+    selector: 'app-start',
+    templateUrl: './start.component.html',
+    standalone: true,
+    imports: [NgIf]
 })
 export class StartComponent {
 

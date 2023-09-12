@@ -20,29 +20,27 @@ import {DocumentationComponent} from './documentation/documentation.component';
 import {AboutComponent} from './about/about.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    PlayComponent,
-    ConnectComponent,
-    GamesComponent,
-    StartComponent,
-    GameComponent,
-    ResultsComponent,
-    DemoComponent,
-    ScoresComponent,
-    StatsComponent,
-    DocumentationComponent,
-    AboutComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    AppRoutingModule,
-    HttpClientModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        AppRoutingModule,
+        HttpClientModule,
+        HomeComponent,
+        PlayComponent,
+        ConnectComponent,
+        GamesComponent,
+        StartComponent,
+        GameComponent,
+        ResultsComponent,
+        DemoComponent,
+        ScoresComponent,
+        StatsComponent,
+        DocumentationComponent,
+        AboutComponent
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }
