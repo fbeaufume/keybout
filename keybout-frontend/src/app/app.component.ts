@@ -1,10 +1,14 @@
 import {Component} from '@angular/core';
 import {ClientState} from './play/model';
 import {PlayService} from './play/play.service';
+import { NgIf } from '@angular/common';
+import { RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html'
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    standalone: true,
+    imports: [RouterLinkActive, RouterLink, NgIf, RouterOutlet]
 })
 export class AppComponent {
 
