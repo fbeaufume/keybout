@@ -29,7 +29,7 @@ When a round is over, this page displays the results:
 
 ## Usage
 
-Prerequisites: Java 8+, Node.js 10+ with NPM
+Prerequisites: Java 17+, Node.js 16+ with NPM
 
 To start the frontend locally, run `npm install` then `ng serve` in `keybout-frontend`
 or use your IDE.
