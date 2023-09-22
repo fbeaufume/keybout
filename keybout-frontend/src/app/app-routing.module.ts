@@ -19,6 +19,7 @@ const routes: Routes = [
   {path: 'about', component: AboutComponent},
 ];
 
+// TODO FBE keep routing but remove the routing module ?
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]

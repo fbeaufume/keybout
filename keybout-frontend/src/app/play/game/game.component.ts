@@ -12,7 +12,7 @@ import { NgIf, NgFor, UpperCasePipe } from '@angular/common';
 })
 export class GameComponent {
 
-  @ViewChild('outerDiv', {static: true}) outerDiv: ElementRef;
+  @ViewChild('outerDiv', {static: true}) outerDiv!: ElementRef;
 
   inputWord = '';
 

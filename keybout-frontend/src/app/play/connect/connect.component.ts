@@ -13,7 +13,7 @@ import { NgIf } from '@angular/common';
 })
 export class ConnectComponent {
 
-  @ViewChild('outerDiv', {static: true}) outerDiv: ElementRef;
+  @ViewChild('outerDiv', {static: true}) outerDiv!: ElementRef;
 
   constructor(private router: Router, public playService: PlayService) {
     // TODO FBE unsubscribe somewhere ?

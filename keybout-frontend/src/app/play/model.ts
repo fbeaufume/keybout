@@ -114,6 +114,15 @@ export class Score {
   awards: number;
   awardsNames: string[];
   progress: boolean;
+
+  constructor(userName: string, points: number, speed: number, awards: number, awardsNames: string[], progress: boolean) {
+    this.userName = userName;
+    this.points = points;
+    this.speed = speed;
+    this.awards = awards;
+    this.awardsNames = awardsNames;
+    this.progress = progress;
+  }
 }
 
 export class Stats {
@@ -121,16 +130,35 @@ export class Stats {
   declaredGames: Measure;
   runningGames: Measure;
   uptime: Uptime;
+
+  constructor(users: Measure, declaredGames: Measure, runningGames: Measure, uptime: Uptime) {
+    this.users = users;
+    this.declaredGames = declaredGames;
+    this.runningGames = runningGames;
+    this.uptime = uptime;
+  }
 }
 
 export class Measure {
   current: number;
   max: number;
   total: number;
+
+  constructor(current: number, max: number, total: number) {
+    this.current = current;
+    this.max = max;
+    this.total = total;
+  }
 }
 
 export class Uptime {
   current: string;
   max: string;
   total: string;
+
+  constructor(current: string, max: string, total: string) {
+    this.current = current;
+    this.max = max;
+    this.total = total;
+  }
 }

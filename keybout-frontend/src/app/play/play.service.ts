@@ -3,16 +3,15 @@ import * as SockJS from 'sockjs-client';
 import {Subject} from 'rxjs/internal/Subject';
 import {
   ClientState,
-  GameMode,
+  DifficultyLabels,
   Game,
-  Word,
-  Score,
+  GameMode,
   GameModeLabels,
   GameStyleLabels,
   LanguageLabels,
-  DifficultyLabels
+  Score,
+  Word
 } from './model';
-import {environment} from '../../environments/environment';
 
 // Contains the play state and communicates with the backend (by sending actions and receiving notifications)
 @Injectable({
@@ -22,7 +21,7 @@ export class PlayService {
 
   static adminMode = localStorage.getItem('admin') === 'true';
 
-  state: ClientState;
+  state: ClientState = ClientState.UNIDENTIFIED;
 
   socket: SockJS; // lazy initialized during the first "Connect"
 
@@ -60,7 +59,7 @@ export class PlayService {
 
   gameOver = false;
 
-  errorMessage: string;
+  errorMessage: string = '';
 
   // Subject used for state change notification
   private stateSubject = new Subject<ClientState>();
@@ -72,14 +71,14 @@ export class PlayService {
   wordsMap: Map<string, Word> = new Map();
 
   // Used to display the words
-  wordsArray: Word[];
+  wordsArray: Word[] = [];
 
   // Number of available words, used to display a wait message at the end of a race game round
   availableWords = 0;
 
   // Logs are active during development or when using the admin mode
   static log(message: string) {
-    if (!environment.production || this.adminMode) {
+    if (this.adminMode) {
       console.log(`PlayService: ${message}`);
     }
   }
@@ -110,7 +109,7 @@ export class PlayService {
 
   connect() {
     this.changeState(ClientState.IDENTIFYING);
-    this.errorMessage = null;
+    this.errorMessage = '';
 
     if (this.socket != null) {
       this.send(`connect ${this.attemptedUserName}`);
@@ -126,7 +125,7 @@ export class PlayService {
         this.send(`connect ${this.attemptedUserName}`);
       };
 
-      this.socket.onmessage = m => {
+      this.socket.onmessage = (m: { data: string; }) => {
         PlayService.log(`Received '${m.data}'`);
 
         const data = JSON.parse(m.data);
@@ -231,13 +230,13 @@ export class PlayService {
         }
       };
 
-      this.socket.onerror = e => {
+      this.socket.onerror = (e: any) => {
         PlayService.log(`Socket error: ${e}`);
         this.socket.close();
       };
 
       this.socket.onclose = () => {
-        if (this.quitting === false) {
+        if (!this.quitting) {
           this.errorMessage = (this.state >= ClientState.LOBBY) ? 'Disconnected from the server' : 'Cannot connect to the server';
         } else {
           this.quitting = false;
@@ -313,8 +312,9 @@ export class PlayService {
     }
   }
 
-  // Update the displayed words
-  updateWords(words) {
+  // Update the displayed words,
+  // sample words: [['blame', 'User1', 'b_ame'], ['patch', '', 'pa_ch']]
+  updateWords(words: string[][]) {
     this.wordsMap.clear();
     let availableWords = 0;
 
@@ -364,7 +364,8 @@ export class PlayService {
     PlayService.log(`roundId=${this.roundId}`);
     if (this.roundId > 1) {
       this.gameScores.forEach(score => {
-        score.progress = this.roundScoresByUser.get(score.userName).speed >= score.speed;
+        const roundScore = this.roundScoresByUser.get(score.userName);
+        score.progress = roundScore != undefined && roundScore.speed >= score.speed;
       });
     }
   }

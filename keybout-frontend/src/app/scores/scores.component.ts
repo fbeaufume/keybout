@@ -81,12 +81,10 @@ export class ScoresComponent {
     this.reload$.next(undefined);
   }
 
+  // Generic transposition of a matrix, e.g. [['A','B','C'],['a','b','c']] to [['A','a'],['B','b'],['C','c']],
+  // where first 'map' iterates over the inner array (3 elements in the example) and
+  // second 'map' iterates over the outer array (2 elements in the example)
   transpose(scores) {
-    // Generic transposition of a matrix, e.g. [['A','B','C'],['a','b','c']] to [['A','a'],['B','b'],['C','c']],
-    // where first 'map' iterates over the inner array (3 elements in the example) and
-    // second 'map' iterates over the outer array (2 elements in the example)
-    // return matrix[0].map((_, i) => matrix.map(row => row[i]));
-
     return scores[0].scores.map((_, i) => scores.map(row => ({
       userName: row.scores[i].userName,
       speed: row.scores[i].speed
