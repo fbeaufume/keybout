@@ -39,7 +39,7 @@ export class PlayService {
   games: Game[] = [];
 
   // Game created or joined by the user
-  game: Game;
+  game: Game | null = null;
 
   // Scores of the round that ended
   roundScores: Score[] = [];
@@ -88,23 +88,23 @@ export class PlayService {
   }
 
   isGameMode(gameMode: GameMode): boolean {
-    return this.game.mode === gameMode;
+    return this.game!.mode === gameMode;
   }
 
   getGameModeLower(): string {
-    return GameModeLabels[this.game.mode].lower;
+    return GameModeLabels.get(this.game!.mode)!.lower;
   }
 
   getGameStyleLower(): string {
-    return GameStyleLabels[this.game.style].lower;
+    return GameStyleLabels.get(this.game!.style)!.lower;
   }
 
   getLanguageLower(): string {
-    return LanguageLabels[this.game.language].lower;
+    return LanguageLabels.get(this.game!.language)!.lower;
   }
 
   getDifficultyLower(): string {
-    return DifficultyLabels[this.game.difficulty].lower;
+    return DifficultyLabels.get(this.game!.difficulty)!.lower;
   }
 
   connect() {
@@ -287,7 +287,7 @@ export class PlayService {
   }
 
   // Update the displayed games list
-  updateGamesList(games) {
+  updateGamesList(games: Game[]) {
     this.userName = this.attemptedUserName;
     let state = ClientState.LOBBY;
 

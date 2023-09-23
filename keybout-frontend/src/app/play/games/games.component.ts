@@ -88,7 +88,7 @@ export class GamesComponent {
   }
 
   get gameId(): number {
-    return this.playService.game.id;
+    return this.playService.game!.id;
   }
 
   // Is this component visible

@@ -35,7 +35,7 @@ export class ResultsComponent {
   }
 
   get game(): Game {
-    return this.playService.game;
+    return this.playService.game!;
   }
 
   get userName(): string {

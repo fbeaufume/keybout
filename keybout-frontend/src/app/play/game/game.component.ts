@@ -46,7 +46,7 @@ export class GameComponent {
 
   // Return the class attribute for a given word
   getClass(label: string) {
-    switch (this.playService.wordsMap.get(label).userName) {
+    switch (this.playService.wordsMap.get(label)!.userName) {
       case '':
         return 'btn btn-primary btn-lg mr-2 mb-2 larger';
       case this.playService.userName:

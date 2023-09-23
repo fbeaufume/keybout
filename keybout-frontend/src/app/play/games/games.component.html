@@ -13,10 +13,10 @@
     </thead>
     <tbody>
     <tr *ngFor="let game of games">
-      <td>{{gameForm.modeLabels[game.mode].pascal}}</td>
-      <td>{{gameForm.styleLabels[game.style].pascal}}</td>
-      <td>{{gameForm.languageLabels[game.language].pascal}}</td>
-      <td>{{gameForm.difficultyLabels[game.difficulty].pascal}}</td>
+      <td>{{gameForm.modeLabels.get(game.mode)!.pascal}}</td>
+      <td>{{gameForm.styleLabels.get(game.style)!.pascal}}</td>
+      <td>{{gameForm.languageLabels.get(game.language)!.pascal}}</td>
+      <td>{{gameForm.difficultyLabels.get(game.difficulty)!.pascal}}</td>
       <td>
         <div>{{game.creator}}</div>
         <div *ngFor="let player of game.players">{{player}}</div>
@@ -40,7 +40,7 @@
       <label for="inputMode" class="col-sm-2 col-form-label">Mode</label>
       <div class="col-sm-3">
         <select class="form-control" id="inputMode" [(ngModel)]="gameForm.mode" name="inputMode">
-          <option *ngFor="let m of gameForm.modes" [value]="m" [selected]="gameForm.mode == m">{{gameForm.modeLabels[m].pascal}}</option>
+          <option *ngFor="let m of gameForm.modes" [value]="m" [selected]="gameForm.mode == m">{{gameForm.modeLabels.get(m)!.pascal}}</option>
         </select>
       </div>
     </div>
@@ -48,7 +48,7 @@
       <label for="inputStyle" class="col-sm-2 col-form-label">Style</label>
       <div class="col-sm-3">
         <select class="form-control" id="inputStyle" [(ngModel)]="gameForm.style" name="inputStyle" (change)="styleChanged()">
-          <option *ngFor="let s of gameForm.styles" [value]="s" [selected]="gameForm.style == s">{{gameForm.styleLabels[s].pascal}}</option>
+          <option *ngFor="let s of gameForm.styles" [value]="s" [selected]="gameForm.style == s">{{gameForm.styleLabels.get(s)!.pascal}}</option>
         </select>
       </div>
     </div>
@@ -56,7 +56,7 @@
       <label for="inputLanguage" class="col-sm-2 col-form-label">Language</label>
       <div class="col-sm-3">
         <select class="form-control" id="inputLanguage" [disabled]="gameForm.isLanguageDisabled()" [(ngModel)]="gameForm.language" name="inputLanguage">
-          <option *ngFor="let l of gameForm.languages" [value]="l" [selected]="gameForm.language == l">{{gameForm.languageLabels[l].pascal}}</option>
+          <option *ngFor="let l of gameForm.languages" [value]="l" [selected]="gameForm.language == l">{{gameForm.languageLabels.get(l)!.pascal}}</option>
         </select>
       </div>
     </div>
@@ -64,7 +64,7 @@
       <label for="inputDifficulty" class="col-sm-2 col-form-label">Difficulty</label>
       <div class="col-sm-3">
         <select class="form-control" id="inputDifficulty" [(ngModel)]="gameForm.difficulty" name="inputDifficulty">
-          <option *ngFor="let d of gameForm.difficulties" [value]="d" [selected]="gameForm.difficulty == d">{{gameForm.difficultyLabels[d].pascal}}</option>
+          <option *ngFor="let d of gameForm.difficulties" [value]="d" [selected]="gameForm.difficulty == d">{{gameForm.difficultyLabels.get(d)!.pascal}}</option>
         </select>
       </div>
     </div>

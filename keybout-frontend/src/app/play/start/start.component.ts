@@ -47,7 +47,7 @@ export class StartComponent {
   }
 
   get game(): Game {
-    return this.playService.game;
+    return this.playService.game!;
   }
 
   // Is this component visible

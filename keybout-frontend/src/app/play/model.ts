@@ -24,10 +24,16 @@ export enum GameMode {
 
 export const GameModes = [GameMode.CAPTURE, GameMode.RACE];
 
-export const GameModeLabels = {
-  capture: {pascal: 'Capture', lower: 'capture'},
-  race: {pascal: 'Race', lower: 'race'}
-};
+export interface Label {
+  // The pascal case of the label, i.e. 'Hello'
+  pascal: string;
+  // The lower case of the label, i.e. 'hello
+  lower: string;
+}
+
+export const GameModeLabels: Map<string, Label> = new Map<string, Label>([
+  [GameMode.CAPTURE, {pascal: 'Capture', lower: 'capture'}],
+  [GameMode.RACE, {pascal: 'Race', lower: 'race'}]]);
 
 export enum GameStyle {
   REGULAR = 'regular',
@@ -38,12 +44,11 @@ export enum GameStyle {
 
 export const GameStyles = [GameStyle.REGULAR, GameStyle.HIDDEN, GameStyle.ANAGRAM, GameStyle.CALCULUS];
 
-export const GameStyleLabels = {
-  regular: {pascal: 'Regular', lower: 'regular'},
-  hidden: {pascal: 'Hidden', lower: 'hidden'},
-  anagram: {pascal: 'Anagram', lower: 'anagram'},
-  calculus: {pascal: 'Calculus', lower: 'calculus'}
-};
+export const GameStyleLabels: Map<string, Label> = new Map<string, Label>([
+  [GameStyle.REGULAR, {pascal: 'Regular', lower: 'regular'}],
+  [GameStyle.HIDDEN, {pascal: 'Hidden', lower: 'hidden'}],
+  [GameStyle.ANAGRAM, {pascal: 'Anagram', lower: 'anagram'}],
+  [GameStyle.CALCULUS, {pascal: 'Calculus', lower: 'calculus'}]]);
 
 export enum Language {
   EN = 'en',
@@ -53,19 +58,23 @@ export enum Language {
 
 export const Languages = [Language.EN, Language.FR];
 
-export const LanguageLabels = {
-  en: {pascal: 'English', lower: 'english'},
-  fr: {pascal: 'French', lower: 'french'},
-  none: {pascal: '-', lower: '-'}
-};
+export const LanguageLabels: Map<string, Label> = new Map<string, Label>([
+  [Language.EN, {pascal: 'English', lower: 'english'}],
+  [Language.FR, {pascal: 'French', lower: 'french'}],
+  [Language.NONE, {pascal: '-', lower: '-'}]]);
 
-export const Difficulties = ['easy', 'normal', 'hard'];
+export enum Difficulty {
+  EASY = 'easy',
+  NORMAL = 'normal',
+  HARD = 'hard'
+}
 
-export const DifficultyLabels = {
-  easy: {pascal: 'Easy', lower: 'easy'},
-  normal: {pascal: 'Normal', lower: 'normal'},
-  hard: {pascal: 'Hard', lower: 'hard'},
-};
+export const Difficulties = [Difficulty.EASY, Difficulty.NORMAL, Difficulty.HARD];
+
+export const DifficultyLabels: Map<string, Label> = new Map<string, Label>([
+  [Difficulty.EASY, {pascal: 'Easy', lower: 'easy'}],
+  [Difficulty.NORMAL, {pascal: 'Normal', lower: 'normal'}],
+  [Difficulty.HARD, {pascal: 'Hard', lower: 'hard'}]]);
 
 export class Game {
   id: number;
