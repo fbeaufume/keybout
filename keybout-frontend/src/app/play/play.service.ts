@@ -23,7 +23,7 @@ export class PlayService {
 
   state: ClientState = ClientState.UNIDENTIFIED;
 
-  socket: SockJS; // lazy initialized during the first "Connect"
+  socket: WebSocket | null = null; // lazy initialized during the first "Connect"
 
   // User name attempted by the user
   attemptedUserName = '';
@@ -232,7 +232,7 @@ export class PlayService {
 
       this.socket.onerror = (e: any) => {
         PlayService.log(`Socket error: ${e}`);
-        this.socket.close();
+        this.socket?.close();
       };
 
       this.socket.onclose = () => {
@@ -253,7 +253,7 @@ export class PlayService {
     this.attemptedUserName = '';
     this.userName = '';
     this.quitting = true;
-    this.socket.close();
+    this.socket?.close();
   }
 
   createGame(mode: string, style: string, language: string, difficulty: string) {
@@ -396,6 +396,6 @@ export class PlayService {
   // Send an action to the server
   send(message: string) {
     PlayService.log(`Sending '${message}'`);
-    this.socket.send(message);
+    this.socket?.send(message);
   }
 }
