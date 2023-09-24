@@ -116,6 +116,7 @@ export class Word {
   }
 }
 
+// A score at the end of a round
 export class Score {
   userName: string;
   points: number;
@@ -134,6 +135,18 @@ export class Score {
   }
 }
 
+// A high score provided by the backend
+export class HighScore {
+  userName: string;
+  speed: number;
+
+  constructor(userName: string, speed: number) {
+    this.userName = userName;
+    this.speed = speed;
+  }
+}
+
+// Some backend statistics
 export class Stats {
   users: Measure;
   declaredGames: Measure;

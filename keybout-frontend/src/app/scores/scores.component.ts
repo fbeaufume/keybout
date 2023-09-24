@@ -81,9 +81,92 @@ export class ScoresComponent {
     this.reload$.next(undefined);
   }
 
-  // Generic transposition of a matrix, e.g. [['A','B','C'],['a','b','c']] to [['A','a'],['B','b'],['C','c']],
-  // where first 'map' iterates over the inner array (3 elements in the example) and
-  // second 'map' iterates over the outer array (2 elements in the example)
+  // TODO FBE enable strict mode in tsconfig and add types in this method (such as HighScore)
+  // Transpose a high scores matrix, i.e. convert:
+  // [
+  // 	{
+  // 		"style": "REGULAR",
+  // 		"language": "EN",
+  // 		"difficulty": "EASY",
+  // 		"scores": [
+  // 			{
+  // 				"userName": "John",
+  // 				"speed": 43.047783
+  // 			},
+  // 			{
+  // 				"userName": "Tom",
+  // 				"speed": 27.728994
+  // 			},
+  //      ...
+  // 		]
+  // 	},
+  // 	{
+  // 		"style": "REGULAR",
+  // 		"language": "EN",
+  // 		"difficulty": "NORMAL",
+  // 		"scores": [
+  // 			{
+  // 				"userName": "-",
+  // 				"speed": 0
+  // 			},
+  // 			{
+  // 				"userName": "-",
+  // 				"speed": 0
+  // 			},
+  //      ...
+  // 		]
+  // 	},
+  // 	{
+  // 		"style": "REGULAR",
+  // 		"language": "EN",
+  // 		"difficulty": "HARD",
+  // 		"scores": [
+  // 			{
+  // 				"userName": "-",
+  // 				"speed": 0
+  // 			},
+  // 			{
+  // 				"userName": "-",
+  // 				"speed": 0
+  // 			},
+  //      ...
+  // 		]
+  // 	}
+  // ]
+  // into:
+  // [
+  // 	[
+  // 		{
+  // 			"userName": "John",
+  // 			"speed": 43.047783
+  // 		},
+  // 		{
+  // 			"userName": "-",
+  // 			"speed": 0
+  // 		},
+  // 		{
+  // 			"userName": "-",
+  // 			"speed": 0
+  // 		}
+  // 	],
+  // 	[
+  // 		{
+  // 			"userName": "Tom",
+  // 			"speed": 27.728994
+  // 		},
+  // 		{
+  // 			"userName": "-",
+  // 			"speed": 0
+  // 		},
+  // 		{
+  // 			"userName": "-",
+  // 			"speed": 0
+  // 		}
+  // 	],
+  //  ...
+  // ]
+  // The first 'map' method iterates over the inner array,
+  // and the second 'map' method iterates over the outer array
   transpose(scores) {
     return scores[0].scores.map((_, i) => scores.map(row => ({
       userName: row.scores[i].userName,
