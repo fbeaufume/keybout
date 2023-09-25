@@ -135,52 +135,35 @@ export class Score {
   }
 }
 
+// The high scores for a given style, language and difficulty
+export interface HighScoreGroup {
+  scores: HighScore[];
+  // The backend provides others attributes, but they are not used by the frontend
+}
+
 // A high score provided by the backend
-export class HighScore {
+export interface HighScore {
   userName: string;
   speed: number;
-
-  constructor(userName: string, speed: number) {
-    this.userName = userName;
-    this.speed = speed;
-  }
+  // The backend provides others attributes, but they are not used by the frontend
 }
 
 // Some backend statistics
-export class Stats {
+export interface Stats {
   users: Measure;
   declaredGames: Measure;
   runningGames: Measure;
   uptime: Uptime;
-
-  constructor(users: Measure, declaredGames: Measure, runningGames: Measure, uptime: Uptime) {
-    this.users = users;
-    this.declaredGames = declaredGames;
-    this.runningGames = runningGames;
-    this.uptime = uptime;
-  }
 }
 
-export class Measure {
+export interface Measure {
   current: number;
   max: number;
   total: number;
-
-  constructor(current: number, max: number, total: number) {
-    this.current = current;
-    this.max = max;
-    this.total = total;
-  }
 }
 
-export class Uptime {
+export interface Uptime {
   current: string;
   max: string;
   total: string;
-
-  constructor(current: string, max: string, total: string) {
-    this.current = current;
-    this.max = max;
-    this.total = total;
-  }
 }

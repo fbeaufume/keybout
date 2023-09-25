@@ -2,10 +2,19 @@ import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
-import {GameStyle, GameStyleLabels, GameStyles, Language, LanguageLabels, Languages} from '../play/model';
+import {
+  GameStyle,
+  GameStyleLabels,
+  GameStyles,
+  HighScore,
+  HighScoreGroup,
+  Language,
+  LanguageLabels,
+  Languages
+} from '../play/model';
 import {PlayService} from '../play/play.service';
-import { NgFor, NgIf, NgClass, AsyncPipe, DecimalPipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {AsyncPipe, DecimalPipe, NgClass, NgFor, NgIf} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 class ScoreTypeForm {
   // Available game styles
@@ -43,10 +52,10 @@ class ScoreTypeForm {
 }
 
 @Component({
-    selector: 'app-scores',
-    templateUrl: './scores.component.html',
-    standalone: true,
-    imports: [FormsModule, NgFor, NgIf, NgClass, AsyncPipe, DecimalPipe]
+  selector: 'app-scores',
+  templateUrl: './scores.component.html',
+  standalone: true,
+  imports: [FormsModule, NgFor, NgIf, NgClass, AsyncPipe, DecimalPipe]
 })
 export class ScoresComponent {
 
@@ -58,14 +67,14 @@ export class ScoresComponent {
   readonly reload$ = new BehaviorSubject(undefined);
 
   readonly scores$ = this.reload$.pipe(
-    switchMap(() => this.http.get('/api/scores', {
+    switchMap(() => this.http.get<HighScoreGroup[]>('/api/scores', {
       params: {
         style: this.scoreTypeForm.style,
         language: this.scoreTypeForm.language
       }
     })),
-    map(scores => {
-      return this.transpose(scores);
+    map(highScoreGroups => {
+      return this.transpose(highScoreGroups);
     }));
 
   get userName(): string {
@@ -81,7 +90,6 @@ export class ScoresComponent {
     this.reload$.next(undefined);
   }
 
-  // TODO FBE enable strict mode in tsconfig and add types in this method (such as HighScore)
   // Transpose a high scores matrix, i.e. convert:
   // [
   // 	{
@@ -167,8 +175,8 @@ export class ScoresComponent {
   // ]
   // The first 'map' method iterates over the inner array,
   // and the second 'map' method iterates over the outer array
-  transpose(scores) {
-    return scores[0].scores.map((_, i) => scores.map(row => ({
+  transpose(highScoreGroups: HighScoreGroup[]): HighScore[][] {
+    return highScoreGroups[0].scores.map((_, i) => highScoreGroups.map(row => ({
       userName: row.scores[i].userName,
       speed: row.scores[i].speed
     })));
