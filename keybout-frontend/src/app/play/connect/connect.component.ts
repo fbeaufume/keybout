@@ -1,15 +1,15 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {ClientState} from '../model';
 import {PlayService} from '../play.service';
 import {NavigationEnd, Router} from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {NgIf} from '@angular/common';
 
 @Component({
-    selector: 'app-connect',
-    templateUrl: './connect.component.html',
-    standalone: true,
-    imports: [NgIf, FormsModule]
+  selector: 'app-connect',
+  templateUrl: './connect.component.html',
+  standalone: true,
+  imports: [NgIf, FormsModule]
 })
 export class ConnectComponent {
 
@@ -50,13 +50,27 @@ export class ConnectComponent {
   }
 
   canConnect(): boolean {
-    return this.state === ClientState.UNIDENTIFIED;
+    return this.state === ClientState.UNIDENTIFIED && this.userName != '' && this.userName.length <= 16;
   }
 
   connect() {
     // Prevent 'Enter' key from the HTML input
     if (this.canConnect()) {
       this.playService.connect();
+    }
+  }
+
+  isConnecting(): boolean {
+    return this.state <= ClientState.IDENTIFYING;
+  }
+
+  // The Enter key can be used to connect to the server
+  @HostListener('document:keyup.enter', ['$event'])
+  processKeyboardShortcut(event: KeyboardEvent) {
+    event.preventDefault();
+
+    if (this.canConnect()) {
+      this.connect();
     }
   }
 }

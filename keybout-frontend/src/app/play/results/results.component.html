@@ -79,12 +79,12 @@
   </div>
   <br>
   <div *ngIf="!isGameOver() && isGameManager()" class="text-center">
-    <button class="btn btn-primary" [disabled]="!canStart()" (click)="startNextRound()">Start next round</button>
+    <button class="btn btn-primary" [disabled]="!canStartOrQuit()" (click)="startNextRound()">Start next round</button>
   </div>
   <div *ngIf="!isGameOver() && !isGameManager()" class="text-center">
     Waiting for the game manager to start the next round...
   </div>
   <div *ngIf="isGameOver()" class="text-center">
-    <button class="btn btn-primary" [disabled]="!canQuit()" (click)="quitGame()">Done</button>
+    <button class="btn btn-primary" [disabled]="!canStartOrQuit()" (click)="quitGame()">Done</button>
   </div>
 </div>

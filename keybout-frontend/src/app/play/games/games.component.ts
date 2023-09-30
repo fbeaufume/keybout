@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {
   ClientState,
   Difficulties,
@@ -14,8 +14,8 @@ import {
   Languages
 } from '../model';
 import {PlayService} from '../play.service';
-import { FormsModule } from '@angular/forms';
-import { NgIf, NgFor } from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {NgFor, NgIf} from '@angular/common';
 
 class GameForm {
   // Available game modes
@@ -67,10 +67,10 @@ class GameForm {
 }
 
 @Component({
-    selector: 'app-games',
-    templateUrl: './games.component.html',
-    standalone: true,
-    imports: [NgIf, NgFor, FormsModule]
+  selector: 'app-games',
+  templateUrl: './games.component.html',
+  standalone: true,
+  imports: [NgIf, NgFor, FormsModule]
 })
 export class GamesComponent {
 
@@ -144,4 +144,18 @@ export class GamesComponent {
   leave() {
     this.playService.leaveGame();
   }
+
+  // The Enter key can be used to create a new game or start the created game
+  @HostListener('document:keyup.enter', ['$event'])
+  processKeyboardShortcut(event: KeyboardEvent) {
+    event.preventDefault();
+
+    if (this.canCreate()) {
+      this.create();
+    } else if (this.state == ClientState.CREATED) {
+      this.start();
+    }
+  }
+
+  // TODO FBE add Backspace and/or Suppr shortcut to leave or delete the game
 }

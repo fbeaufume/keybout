@@ -1,5 +1,7 @@
 <app-connect></app-connect>
 <app-games></app-games>
 <app-start></app-start>
-<app-game></app-game>
+<!-- If ResultsComponent is declared after GameComponent, then the Enter short cut from GameComponent will actually
+also trigger the Enter shortcut from the ResultsComponent, meaning that the scores page will not be displayed. -->
 <app-results></app-results>
+<app-game></app-game>

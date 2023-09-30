@@ -1,14 +1,14 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {ClientState, GameMode, Word} from '../model';
 import {PlayService} from '../play.service';
-import { FormsModule } from '@angular/forms';
-import { NgIf, NgFor, UpperCasePipe } from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {NgIf, NgFor, UpperCasePipe} from '@angular/common';
 
 @Component({
-    selector: 'app-game',
-    templateUrl: './game.component.html',
-    standalone: true,
-    imports: [NgIf, NgFor, FormsModule, UpperCasePipe]
+  selector: 'app-game',
+  templateUrl: './game.component.html',
+  standalone: true,
+  imports: [NgIf, NgFor, FormsModule, UpperCasePipe]
 })
 export class GameComponent {
 
@@ -85,5 +85,15 @@ export class GameComponent {
 
   viewScores() {
     this.playService.changeState(ClientState.SCORES);
+  }
+
+  // The Enter key can be used to view the scores
+  @HostListener('document:keyup.enter', ['$event'])
+  processKeyboardShortcut(event: KeyboardEvent) {
+    event.preventDefault();
+
+    if (this.canViewScores()) {
+      this.viewScores()
+    }
   }
 }
