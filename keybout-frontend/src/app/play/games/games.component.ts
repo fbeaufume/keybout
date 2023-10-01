@@ -146,16 +146,26 @@ export class GamesComponent {
   }
 
   // The Enter key can be used to create a new game or start the created game
-  @HostListener('document:keyup.enter', ['$event'])
-  processKeyboardShortcut(event: KeyboardEvent) {
-    event.preventDefault();
+  // and the Backspace or Delete keys can be used to leave or delete a game
+  @HostListener('document:keyup', ['$event'])
+  onKey(event: KeyboardEvent) {
+    if (event.key == 'Enter') {
+      event.preventDefault();
 
-    if (this.canCreate()) {
-      this.create();
-    } else if (this.state == ClientState.CREATED) {
-      this.start();
+      if (this.canCreate()) {
+        this.create();
+      } else if (this.state == ClientState.CREATED) {
+        this.start();
+      }
+
+    } else if (event.key == 'Backspace' || event.key == 'Delete') {
+      event.preventDefault();
+
+      if (this.state === ClientState.JOINED) {
+        this.leave();
+      } else if (this.state === ClientState.CREATED) {
+        this.delete();
+      }
     }
   }
-
-  // TODO FBE add Backspace and/or Suppr shortcut to leave or delete the game
 }

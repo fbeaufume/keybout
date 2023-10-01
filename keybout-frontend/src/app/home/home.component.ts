@@ -14,7 +14,7 @@ export class HomeComponent {
 
   // The Enter key can be used to go to the connect screen
   @HostListener('document:keyup.enter', ['$event'])
-  processKeyboardShortcut(event: KeyboardEvent) {
+  onEnterKey(event: KeyboardEvent) {
     event.preventDefault();
 
     this.router.navigate(['/play']);

@@ -85,7 +85,7 @@ export class ResultsComponent {
 
   // The Enter key can be used to start the next round or quit
   @HostListener('document:keyup.enter', ['$event'])
-  processKeyboardShortcut(event: KeyboardEvent) {
+  onEnterKey(event: KeyboardEvent) {
     event.preventDefault();
 
     if (this.canStartOrQuit() && !this.isGameOver() && this.isGameManager()) {

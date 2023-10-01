@@ -89,7 +89,7 @@ export class GameComponent {
 
   // The Enter key can be used to view the scores
   @HostListener('document:keyup.enter', ['$event'])
-  processKeyboardShortcut(event: KeyboardEvent) {
+  onEnterKey(event: KeyboardEvent) {
     event.preventDefault();
 
     if (this.canViewScores()) {

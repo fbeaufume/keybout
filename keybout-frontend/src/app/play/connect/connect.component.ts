@@ -66,7 +66,7 @@ export class ConnectComponent {
 
   // The Enter key can be used to connect to the server
   @HostListener('document:keyup.enter', ['$event'])
-  processKeyboardShortcut(event: KeyboardEvent) {
+  onEnterKey(event: KeyboardEvent) {
     event.preventDefault();
 
     if (this.canConnect()) {
