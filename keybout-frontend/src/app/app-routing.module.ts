@@ -14,8 +14,8 @@ const routes: Routes = [
   {path: 'play', component: PlayComponent},
   {path: 'demo', component: DemoComponent},
   {path: 'scores', component: ScoresComponent},
-  {path: 'stats', component: StatsComponent},
-  {path: 'docs', component: DocumentationComponent},
+  {path: 'statistics', component: StatsComponent},
+  {path: 'documentation', component: DocumentationComponent},
   {path: 'about', component: AboutComponent},
 ];
 
