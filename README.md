@@ -8,22 +8,30 @@ WebSocket, Java EE 7 and Java.
 
 This second version, started in 2019, is a full rewrite based on Angular, SockJS, Spring Boot and Kotlin.
 
-The application home page:
+The application home page briefly describes the application:
 
 ![Home page](doc/keybout-1.png)
 
-The page used to create a join a game:
+The games page is used to create a new game or join an existing one.
+
+When creating a new game you can choose several attributes such as:
+- The mode: **capture** (the first player to type a word wins it) or **race** (each player has to type all words)
+- The style: **regular** (words are displayed as is), **hidden** (some word letters are hidden), **anagram** (the word letters are mixed),
+  **calculus** (simple math operations are displayed instead of words)
+- The language of the words: english or french
 
 ![Game creation](doc/keybout-2.png)
 
-The main page of the game:
-- Blue words are available, quickly type them (some letters are missing since this game uses the "hidden" style)
-- Green words were won by the current player
-- Red words were won by other players
+The game page is where the action happens:
+- **Blue** words are available, quickly type them (some letters are missing since this game uses the hidden style)
+- **Green** words were won by the current player
+- **Red** words were won by other players
 
 ![Gameplay](doc/keybout-3.png)
 
-When a round is over, this page displays the results:
+When a round is over, the scores page displays the results for the current round as well as for all rounds of the current game.
+
+If also displays the players type speed (in words per minutes) as well as several awards (for example who typed the first word).
 
 ![Scores](doc/keybout-4.png)
 
