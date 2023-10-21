@@ -37,23 +37,23 @@ If also displays the players type speed (in words per minutes) as well as severa
 
 ## Usage
 
-Prerequisites: Java 17+, Node.js 16+ with NPM
+Prerequisites: Java 17, Node.js 16+ with NPM
 
 To start the frontend locally, run `npm install` then `ng serve` in `keybout-frontend`
-or use your IDE.
+folder or use your IDE.
 
 To start the backend locally, run `mvnw spring-boot:run` in `keybout-backend`
-or use your IDE.
+folder or use your IDE.
 
 To build a single deployable fat jar containing the whole application,
 run `mvnw package -Pfull` from the home folder then use `keybout-backend/target/keybout-backend.jar`.
-Omit `-Pfull` if you prefer to separate the fontend and backend packages.
+Omit `-Pfull` if you prefer to separate the frontend and backend packages.
 
 The application uses an optional MongoDB database to persist some data,
 if the `spring.data.mongodb.uri` is defined.
 
 To run in production, deploy the fat jar and run with several environment variables:
 - APPLICATION_DATATYPE: "prod"
-- LOG_DATEFORMAT_PATTERN: optional, use an empty string (i.e. two consecutive double quotes) to disable the timestamp
-in the Spring logs when the cloud platform (such as Heroku) adds its own timestamp
+- LOG_DATEFORMAT_PATTERN: optional, use an empty string (i.e. two consecutive double quotes) to disable
+  the timestamp in the Spring logs when the cloud platform (such as Heroku) adds its own timestamp
 - SPRING_DATA_MONGODB_URI: optional, the MongoDB URI
