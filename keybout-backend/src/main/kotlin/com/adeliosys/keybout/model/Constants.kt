@@ -41,7 +41,7 @@ object Constants {
     /**
      * Minimum length of a player name.
      */
-    const val MIN_NAME_LENGTH = 2
+    const val MIN_NAME_LENGTH = 1
 
     /**
      * Maximum length of a player name.
