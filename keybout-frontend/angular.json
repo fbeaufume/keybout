@@ -71,10 +71,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "keybout-frontend:build:production"
+              "buildTarget": "keybout-frontend:build:production"
             },
             "development": {
-              "browserTarget": "keybout-frontend:build:development"
+              "buildTarget": "keybout-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +82,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "keybout-frontend:build"
+            "buildTarget": "keybout-frontend:build"
           }
         },
         "test": {
