@@ -72,12 +72,12 @@ class ScoreService(
 
     @Synchronized
     fun getTopScores(style: GameStyle, language: Language): List<TopScoresDto> =
-        MutableList(Difficulty.values().size) {
+        MutableList(Difficulty.entries.size) {
             TopScoresDto(
                 style,
                 language,
-                Difficulty.values()[it],
-                getTopScoresInternal(style, language, Difficulty.values()[it])
+                Difficulty.entries[it],
+                getTopScoresInternal(style, language, Difficulty.entries[it])
             )
         }
 

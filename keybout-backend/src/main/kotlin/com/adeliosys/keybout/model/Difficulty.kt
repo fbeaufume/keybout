@@ -26,7 +26,7 @@ enum class Difficulty(
     companion object {
         fun getByCode(code: String) = try {
             valueOf(code.uppercase())
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             EASY
         }
     }

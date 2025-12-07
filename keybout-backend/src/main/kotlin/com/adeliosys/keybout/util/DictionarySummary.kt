@@ -52,7 +52,7 @@ fun main() {
         logger.info("Words count: {}", wordsCount)
 
         GameStyle.letterStyles.forEach { style ->
-            Difficulty.values().forEach { difficulty ->
+            Difficulty.entries.forEach { difficulty ->
                 var count = 0;
                 val range = difficulty.getLetterRange(style)
                 for (i in range) {

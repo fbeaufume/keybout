@@ -10,7 +10,7 @@ abstract class DatabaseAwareService {
     /**
      * True when the data could be loaded successfully.
      */
-    protected var dataLoadSucceeded: Boolean = false;
+    protected var dataLoadSucceeded: Boolean = false
 
     /**
      * Since the same database server is used for data of all application environments, this attribute is used

@@ -5,7 +5,7 @@ import com.adeliosys.keybout.service.CaptureGameService
 import com.adeliosys.keybout.service.RaceGameService
 import com.google.gson.annotations.SerializedName
 
-enum class GameMode(public val type: Class<out BaseGameService>) {
+enum class GameMode(val type: Class<out BaseGameService>) {
 
     @SerializedName("capture")
     CAPTURE(CaptureGameService::class.java),
@@ -15,7 +15,7 @@ enum class GameMode(public val type: Class<out BaseGameService>) {
     companion object {
         fun getByCode(code: String) = try {
             valueOf(code.uppercase())
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             CAPTURE
         }
     }

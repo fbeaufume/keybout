@@ -94,7 +94,7 @@ class PlayController(private val userNameService: UserNameService, private val p
                                 processed = true
                                 try {
                                     playService.joinGame(session, action.arguments[0].toLong())
-                                } catch (e: NumberFormatException) {
+                                } catch (_: NumberFormatException) {
                                     logger.warn("Invalid game ID in message '{}' for {}", message, session.description)
                                 }
                             }

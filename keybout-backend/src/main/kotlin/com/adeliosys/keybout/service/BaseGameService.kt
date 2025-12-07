@@ -201,14 +201,14 @@ abstract class BaseGameService(
     @Synchronized
     open fun removeUser(session: WebSocketSession): Boolean {
         if (players.remove(session)) {
-            if (players.size > 0 && session.userName == manager) {
+            if (players.isNotEmpty() && session.userName == manager) {
                 // Choose a new manager
                 manager = players[0].userName
                 sendMessage(players, ManagerNotification(manager))
             }
 
             // The game has ended because there is no player left
-            return players.size <= 0
+            return players.isEmpty()
         }
         return false
     }

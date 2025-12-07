@@ -19,7 +19,7 @@ class CalculusServiceTest {
     @TestFactory
     fun generateWords(): List<DynamicTest> {
         val tests = mutableListOf<DynamicTest>()
-        Difficulty.values().forEach { difficulty ->
+        Difficulty.entries.forEach { difficulty ->
             tests.add(DynamicTest.dynamicTest("generate $difficulty") {
                 generateOperations(difficulty)
             })
@@ -72,7 +72,7 @@ class CalculusServiceTest {
     private fun toInt(string: String, display: String): Int {
         return try {
             string.toInt()
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             fail("'$string' from '$display' is not a number")
         }
     }
