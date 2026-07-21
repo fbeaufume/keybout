@@ -50,10 +50,10 @@ run `mvnw package -Pfull` from the home folder then use `keybout-backend/target/
 Omit `-Pfull` if you prefer to separate the frontend and backend packages.
 
 The application uses an optional MongoDB database to persist some data,
-if the `spring.data.mongodb.uri` is defined.
+if the `spring.mongodb.uri` is defined.
 
 To run in production, deploy the fat jar and run with several environment variables:
 - APPLICATION_DATATYPE: "prod"
 - LOG_DATEFORMAT_PATTERN: optional, use an empty string (i.e. two consecutive double quotes) to disable
   the timestamp in the Spring logs when the cloud platform (such as Heroku) adds its own timestamp
-- SPRING_DATA_MONGODB_URI: optional, the MongoDB URI
+- SPRING_MONGODB_URI: optional, the MongoDB URI

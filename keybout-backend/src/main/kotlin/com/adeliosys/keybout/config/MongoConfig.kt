@@ -1,22 +1,34 @@
 package com.adeliosys.keybout.config
 
+import com.mongodb.ConnectionString
 import com.mongodb.client.MongoClient
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import com.mongodb.client.MongoClients
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
-import org.springframework.boot.autoconfigure.mongo.MongoProperties
-import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 
 /**
- * Custom MongoDB configuration class inspired by [org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration].
- * Enables MongoDB support only if "spring.data.mongodb.uri" property is defined,
+ * Enable MongoDB support only if "spring.mongodb.uri" property is defined
  * instead of connecting to localhost:27017 by default.
  */
-@Configuration(proxyBeanMethods = false)
-@ConditionalOnClass(MongoClient::class)
-@EnableConfigurationProperties(MongoProperties::class)
-@ConditionalOnMissingBean(type = ["org.springframework.data.mongodb.MongoDbFactory"])
-@ConditionalOnProperty("spring.data.mongodb.uri")
-class MongoConfig : MongoAutoConfiguration()
+@Configuration
+@ConditionalOnProperty("spring.mongodb.uri")
+@EnableMongoRepositories
+class MongoConfig {
+
+    @Bean
+    fun mongoClient(
+        @Value("\${spring.mongodb.uri}") uri: String
+    ): MongoClient = MongoClients.create(uri)
+
+    @Bean
+    fun mongoDatabaseFactory(
+        mongoClient: MongoClient,
+        @Value("\${spring.mongodb.uri}") uri: String
+    ): org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory =
+        org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory(
+            mongoClient, ConnectionString(uri).database!!
+        )
+}

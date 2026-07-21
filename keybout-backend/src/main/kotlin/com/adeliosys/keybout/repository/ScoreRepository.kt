@@ -4,7 +4,7 @@ import com.adeliosys.keybout.model.TopScoresDocument
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.mongodb.repository.MongoRepository
 
-@ConditionalOnProperty("spring.data.mongodb.uri")
+@ConditionalOnProperty("spring.mongodb.uri")
 interface ScoreRepository : MongoRepository<TopScoresDocument, String> {
 
     fun findByEnvironmentName(environmentName: String): TopScoresDocument?
