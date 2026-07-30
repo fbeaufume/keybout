@@ -6,12 +6,41 @@ import com.adeliosys.keybout.model.Word
 import org.springframework.stereotype.Service
 import kotlin.random.Random
 import kotlin.random.nextInt
+import kotlin.math.pow
 
 /**
  * Provide the calculus for a round.
  */
 @Service
 class CalculusService {
+
+    /**
+     * Generate random numbers
+     */
+    public fun generateNumbers(count: Int, difficulty: Difficulty): Pair<List<Word>, Int> {
+        val words = mutableListOf<Word>()
+        var attempts = 0
+
+        while (words.size < count && attempts < MAX_GENERATOR_ATTEMPTS) {
+            val numberLenght = Random.nextInt(difficulty.numberRange)
+            val number = Random.nextInt(10.toDouble().pow(numberLenght - 1).toInt()..(10.toDouble().pow(numberLenght) - 1).toInt())
+            val word = Word("$number", "$number")
+
+            // val numberLenght = Random.nextInt(difficulty.numberRange) - 1
+            // var digits = mutableListOf<Int>(Random.nextInt(1..9))
+            // for (i in 0..numberLenght) {
+            //     digits.add(Random.nextInt(0..9))
+            // }
+            // val p = digits.joinToString(prefix = "", postfix = "", separator = "")
+            // val word = Word("$p", "$p")
+
+            addIfNoConflict(word, words)
+
+            attempts++
+        }
+
+        return Pair(words, attempts)
+    }
 
     /**
      * Generate random operations

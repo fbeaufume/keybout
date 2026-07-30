@@ -36,9 +36,24 @@ enum class GameStyle(val isLetterStyle: Boolean, private val delay: Long) {
             return result
         }
     },
+
+    @SerializedName("reverse")
+    REVERSE(true, 7L) {
+        override fun transform(value: String, difficulty: Difficulty): String {
+            return String(value.toList().reversed().toCharArray())
+        }
+    },
+
+    @SerializedName("alphabetical")
+    ALPHABETICAL(true, 20L) {
+        override fun transform(value: String, difficulty: Difficulty): String {
+            return String(value.toList().sorted().toCharArray())
+        }
+    },
+
     /**
-     * Shuffle the letters, e.g. "history" becomes "shyriot".
-     */
+        * Shuffle the letters, e.g. "history" becomes "shyriot".
+        */
     @SerializedName("anagram")
     ANAGRAM(true, 20L) {
         override fun transform(value: String, difficulty: Difficulty): String {
@@ -48,6 +63,14 @@ enum class GameStyle(val isLetterStyle: Boolean, private val delay: Long) {
             } while (result == value)
             return result
         }
+    },
+
+    /**
+        * Shuffle the letters, e.g. "history" becomes "shyriot".
+        */
+    @SerializedName("number")
+    NUMBER(false, 5L) {
+        override fun transform(value: String, difficulty: Difficulty): String = value
     },
     /**
      * Use a calculus, e.g. "16 + 7".

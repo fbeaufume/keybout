@@ -103,6 +103,7 @@ abstract class BaseGameService(
 
     fun generateWords(): List<Word> {
         return when (style) {
+            GameStyle.NUMBER -> calculusService.generateNumbers(effectiveWordsCount, difficulty).first
             GameStyle.CALCULUS -> calculusService.generateOperations(effectiveWordsCount, difficulty).first
             else -> dictionaryService.generateWords(language, effectiveWordsCount, style, difficulty).first
         }

@@ -17,7 +17,7 @@ The games page is used to create a new game or join an existing one.
 When creating a new game you can choose several attributes such as:
 - The mode: **capture** (the first player to type a word wins it) or **race** (each player has to type all words)
 - The style: **regular** (words are displayed as is), **hidden** (some word letters are hidden), **anagram** (the word letters are mixed),
-  **calculus** (simple math operations are displayed instead of words)
+  **calculus** (simple math operations are displayed instead of words), etc.
 - The language of the words: english or french
 
 ![Game creation](doc/keybout-2.png)

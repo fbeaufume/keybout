@@ -38,17 +38,24 @@ export const GameModeLabels: Map<string, Label> = new Map<string, Label>([
 export enum GameStyle {
   REGULAR = 'regular',
   HIDDEN = 'hidden',
+  REVERSE = 'reverse',
+  ALPHABETICAL = 'alphabetical',
   ANAGRAM = 'anagram',
+  NUMBER = 'number',
   CALCULUS = 'calculus'
 }
 
-export const GameStyles = [GameStyle.REGULAR, GameStyle.HIDDEN, GameStyle.ANAGRAM, GameStyle.CALCULUS];
+export const GameStyles = [GameStyle.REGULAR, GameStyle.HIDDEN, GameStyle.REVERSE, GameStyle.ALPHABETICAL, GameStyle.ANAGRAM, GameStyle.NUMBER, GameStyle.CALCULUS];
 
 export const GameStyleLabels: Map<string, Label> = new Map<string, Label>([
   [GameStyle.REGULAR, {pascal: 'Regular', lower: 'regular'}],
   [GameStyle.HIDDEN, {pascal: 'Hidden', lower: 'hidden'}],
+  [GameStyle.REVERSE, {pascal: 'Reverse', lower: 'reverse'}],
+  [GameStyle.ALPHABETICAL, {pascal: 'Alphabetical', lower: 'alphabetical'}],
   [GameStyle.ANAGRAM, {pascal: 'Anagram', lower: 'anagram'}],
-  [GameStyle.CALCULUS, {pascal: 'Calculus', lower: 'calculus'}]]);
+  [GameStyle.NUMBER, {pascal: 'Number', lower: 'number'}],
+  [GameStyle.CALCULUS, {pascal: 'Calculus', lower: 'calculus'}]
+]);
 
 export enum Language {
   EN = 'en',

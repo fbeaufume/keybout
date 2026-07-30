@@ -31,6 +31,16 @@ class GameStyleTest {
     }
 
     @Test
+    fun reverse() {
+        assertEquals("drowrepus", GameStyle.REVERSE.transform("superword", Difficulty.EASY))
+    }
+
+    @Test
+    fun alphabetical() {
+        assertEquals("aahlp", GameStyle.ALPHABETICAL.transform("alpha", Difficulty.EASY))
+    }
+
+    @Test
     fun anagram() {
         val result = GameStyle.ANAGRAM.transform("range", Difficulty.EASY)
         assertEquals(5, result.length)
